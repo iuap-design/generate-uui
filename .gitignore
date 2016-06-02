@@ -3,6 +3,13 @@ logs
 *.log
 npm-debug.log*
 
+# ignore project
+datatable
+iuap-design
+tree
+grid
+datetimepicker
+
 # Runtime data
 pids
 *.pid
