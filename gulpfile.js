@@ -1,5 +1,7 @@
 var gulp = require('gulp');
-var $ = require('gulp-load-plugins');
+var concat = require('gulp-concat');
+var rename = require('gulp-rename');
+var uglify = require('gulp-uglify');
 
 var pathOfJS = [
   'iuap-design/dist/js/u-ui.js',
@@ -13,21 +15,22 @@ var pathOfCSS = [
 ]
 
 var pathOfCopyCSS = [
-  'iuap-design/dist/css/u-extends.css',
+  'iuap-design/dist/css/u-extend.css',
   'iuap-design/dist/css/font-awesome.css'
 ]
 
 gulp.task('js', function(){
   gulp.src( pathOfJS )
-    .pipe($.concat())
-    .pipe(rename('u.js'))
+    .pipe(concat('u.js'))
+    .pipe(gulp.dest('dist/js'))
+    .pipe(uglify())
+    .pipe(rename('u.min.js'))
     .pipe(gulp.dest('dist/js'))
 })
 
 gulp.task('css', function(){
   gulp.src( pathOfCSS )
-    .pipe($.concat())
-    .pipe(rename('u.css'))
+    .pipe(concat('u.css'))
     .pipe(gulp.dest('dist/css'))
 })
 
