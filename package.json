@@ -1,0 +1,27 @@
+{
+  "name": "generate-uui",
+  "version": "1.0.0",
+  "description": "合并构建UUI",
+  "main": "gulpfile.js",
+  "scripts": {
+    "build": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iuap-design/generate-uui.git"
+  },
+  "keywords": [
+    "iuap",
+    "design"
+  ],
+  "author": "guoyongfeng",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iuap-design/generate-uui/issues"
+  },
+  "homepage": "https://github.com/iuap-design/generate-uui#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-load-plugins": "^1.2.4"
+  }
+}
