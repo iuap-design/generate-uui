@@ -3,6 +3,13 @@ var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 
+var uuiPkg = require('./package.json');
+
+var uuiDist = 'dist/uui/' + uuiPkg.version;
+
+
+var distModules = ['iuap-design','datatable','datetimepicker','grid']
+
 var pathOfJS = [
   'iuap-design/dist/js/u-ui.js',
   'datatable/dist/js/u-model.js',
@@ -22,26 +29,42 @@ var pathOfCopyCSS = [
 gulp.task('js', function(){
   gulp.src( pathOfJS )
     .pipe(concat('u.js'))
-    .pipe(gulp.dest('dist/js'))
+    .pipe(gulp.dest( uuiDist + '/js'))
     .pipe(uglify())
     .pipe(rename('u.min.js'))
-    .pipe(gulp.dest('dist/js'))
+    .pipe(gulp.dest(uuiDist + '/js'))
 })
 
 gulp.task('css', function(){
   gulp.src( pathOfCSS )
     .pipe(concat('u.css'))
-    .pipe(gulp.dest('dist/css'))
+    .pipe(gulp.dest(uuiDist + '/css'))
 })
 
 gulp.task('copycss', function(){
   gulp.src( pathOfCopyCSS )
-    .pipe(gulp.dest('dist/css'))
+    .pipe(gulp.dest(uuiDist + '/css'))
 })
 
 gulp.task('copyfont', function(){
   gulp.src('iuap-design/dist/fonts/*')
-    .pipe(gulp.dest('dist/fonts'))
+    .pipe(gulp.dest(uuiDist + '/fonts'))
 })
 
-gulp.task('default', ['css', 'js', 'copycss', 'copyfont'])
+function getDistDir(moduleDir){
+  var publishPkg = require('./' + moduleDir + '/package.json');
+  var publishDist = 'dist/' + moduleDir + '/' + publishPkg.version;
+  return publishDist;
+}
+
+function publishModule(moduleName){
+  gulp.src(moduleName + '/dist/**').pipe(gulp.dest(getDistDir(moduleName)));
+}
+
+gulp.task('publishModules', function(){
+  for(var pm of distModules){
+    publishModule(pm);
+  }
+})
+
+gulp.task('default', ['css', 'js', 'copycss', 'copyfont', 'publishModules'])
