@@ -23,7 +23,20 @@ var pathOfCSS = [
 
 var pathOfCopyCSS = [
   'iuap-design/dist/css/u-extend.css',
-  'iuap-design/dist/css/font-awesome.css'
+  'iuap-design/dist/css/font-awesome.css',
+  'grid/dist/css/grid.css',
+  'grid/dist/css/grid.min.css',
+  'tree/dist/css/tree.css'
+  // 'tree/dist/css/tree.min.css',
+]
+
+var pathOfCopyJS = [
+  'iuap-design/dist/js/u-ui.js',
+  'datatable/dist/js/u-model.js',
+  'grid/dist/js/u-grid.js',
+  'grid/dist/js/u-grid.min.js',
+  'tree/dist/js/u-tree.js',
+  'tree/dist/js/u-tree.min.js'
 ]
 
 gulp.task('js', function(){
@@ -44,6 +57,11 @@ gulp.task('css', function(){
 gulp.task('copycss', function(){
   gulp.src( pathOfCopyCSS )
     .pipe(gulp.dest(uuiDist + '/css'))
+})
+
+gulp.task('copyjs', function(){
+  gulp.src(pathOfCopyJS)
+    .pipe(gulp.dest(uuiDist + '/js'))
 })
 
 gulp.task('copyfont', function(){
@@ -67,4 +85,4 @@ gulp.task('publishModules', function(){
   }
 })
 
-gulp.task('default', ['css', 'js', 'copycss', 'copyfont', 'publishModules'])
+gulp.task('default', ['css', 'js', 'copycss', 'copyjs','copyfont', 'publishModules'])
