@@ -33,6 +33,9 @@ var pathOfCopyCSS = [
 
 var pathOfCopyJS = [
   'iuap-design/dist/js/u-ui.js',
+  'iuap-design/dist/js/u-ui.min.js',
+  'iuap-design/dist/js/u-polyfill.js',
+  'iuap-design/dist/js/u-polyfill.min.js',
   'datatable/dist/js/u-model.js',
   'grid/dist/js/u-grid.js',
   'grid/dist/js/u-grid.min.js',
