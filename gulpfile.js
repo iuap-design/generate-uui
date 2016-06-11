@@ -3,11 +3,10 @@ var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var minifycss = require('gulp-minify-css');
-
+var exec = require('child_process').exec;
 var uuiPkg = require('./package.json');
 
 var uuiDist = 'dist/uui/' + uuiPkg.version;
-
 
 var distModules = ['iuap-design','datatable','datetimepicker','grid']
 
@@ -91,5 +90,13 @@ gulp.task('publishModules', function(){
     publishModule(pm);
   }
 })
+
+// 在 gulp 中执行 shell 命令
+gulp.task('shell', function() {
+  exec('sh fetch.sh', function(err) {
+    if (err) return err;
+    // if (typeof cb == 'function') cb();
+  });
+});
 
 gulp.task('default', ['css', 'js', 'copycss', 'copyjs','copyfont', 'publishModules'])
