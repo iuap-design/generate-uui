@@ -27,7 +27,6 @@ var pathOfCopyCSS = [
   'grid/dist/css/grid.css',
   'grid/dist/css/grid.min.css',
   'tree/dist/css/tree.css'
-  // 'tree/dist/css/tree.min.css',
 ]
 
 var pathOfCopyJS = [
