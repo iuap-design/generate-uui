@@ -10,7 +10,7 @@ prodName=(
   "grid"
 )
 
-# 代码下载
+# 下载
 for name in ${prodName[@]}
 do
   prodDir="$cdir/$name"
