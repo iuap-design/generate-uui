@@ -10,6 +10,11 @@ tree
 grid
 datetimepicker
 
+dist/datatable
+dist/iuap-design
+dist/tree
+dist/grid
+dist/datetimepicker
 
 # Runtime data
 pids
