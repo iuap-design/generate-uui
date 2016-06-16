@@ -17,7 +17,6 @@ dist/grid
 dist/datetimepicker
 dist/uui
 
-
 # Runtime data
 pids
 *.pid
