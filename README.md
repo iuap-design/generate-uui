@@ -16,6 +16,8 @@ $ npm run build
 
 ## 产出资源
 
+所有资源使用CDN的路径，比如想访问 `model.js`，则完整路径为 `http://design.yyuap.com/static/datatable/3.0.1/js/model.js`。
+
 ```
 ├─datatable
 │  └─3.0.1
