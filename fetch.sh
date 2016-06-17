@@ -10,6 +10,7 @@ prodName=(
   "grid"
 )
 
+
 # 更新下载
 for name in ${prodName[@]}
 do
