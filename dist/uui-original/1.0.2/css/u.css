@@ -4801,7 +4801,7 @@ $color-accent: $palette-pink-A200 !default;
 .u-radio {
   position: relative;
   font-size: 13px;
-  line-height: 24px;
+  line-height: 32px;
   display: inline-block;
   box-sizing: border-box;
   margin: 0;
@@ -4813,7 +4813,7 @@ $color-accent: $palette-pink-A200 !default;
     padding-left: 24px; }
 
 .u-radio-button {
-  line-height: 24px; }
+  line-height: 32px; }
   .u-radio.is-upgraded .u-radio-button {
     position: absolute;
     width: 0;
@@ -4829,7 +4829,7 @@ $color-accent: $palette-pink-A200 !default;
 
 .u-radio-outer-circle {
   position: absolute;
-  top: 4px;
+  top: 8px;
   left: 0;
   display: inline-block;
   box-sizing: border-box;
@@ -4852,7 +4852,7 @@ $color-accent: $palette-pink-A200 !default;
   position: absolute;
   z-index: 1;
   margin: 0;
-  top: 8px;
+  top: 12px;
   left: 4px;
   box-sizing: border-box;
   width: 8px;
@@ -4889,7 +4889,7 @@ $color-accent: $palette-pink-A200 !default;
 .u-radio-ripple-container {
   position: absolute;
   z-index: 2;
-  top: -9px;
+  top: -5px;
   left: -13px;
   box-sizing: border-box;
   width: 42px;
@@ -7517,32 +7517,32 @@ $color-accent: $palette-pink-A200 !default;
   left: 50%;
   margin-left: -4px;
   border-width: 4px 4px 0;
-  border-top-color: #ff9800; }
+  border-top-color: #3f51b5; }
 
 .tooltip.right .tooltip-arrow {
   top: 50%;
   margin-top: -4px;
   left: -4px;
   border-width: 4px 4px 4px 0px;
-  border-right-color: #ff9800; }
+  border-right-color: #3f51b5; }
 
 .tooltip.left .tooltip-arrow {
   right: -4px;
   top: 50%;
   border-width: 4px 0px 4px 4px;
-  border-left-color: #ff9800;
+  border-left-color: #3f51b5;
   margin-top: -4px; }
 
 .tooltip.bottom .tooltip-arrow {
   left: 50%;
   top: -4px;
   border-width: 0px 4px 4px 4px;
-  border-bottom-color: #ff9800;
+  border-bottom-color: #3f51b5;
   margin-left: -4px; }
 
 .tooltip .tooltip-inner {
   color: #fff;
-  background-color: #ff9800; }
+  background-color: #3f51b5; }
 
 .tooltip-inner {
   max-width: 200px;
@@ -8833,7 +8833,7 @@ $color-accent: $palette-pink-A200 !default;
     .u-breadcrumb > li + li:before {
       content: "/ ";
       padding: 0 5px;
-      color: rgb(57,73,171); }
+      color: rgb(63,81,181); }
     .u-breadcrumb > li .icon {
       text-decoration: none; }
       .u-breadcrumb > li .icon:before {

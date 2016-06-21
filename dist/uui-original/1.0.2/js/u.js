@@ -124,7 +124,10 @@ u.extend(u, {
 												if(!e)
 													e = typeof event != 'undefined' && event?event:window.event;
 												element["uEvent"][eventName].forEach(function(fn){
-													e.target = e.target || e.srcElement;//兼容IE8
+													try{
+														e.target = e.target || e.srcElement;//兼容IE8
+													}catch(e){
+													}
 													if(fn)
 														fn.call(element,e)
 												})
@@ -246,7 +249,7 @@ u.extend(u, {
 			if(arguments.length > 2){
 				element.style[csstext] = val
 			}else{
-				u.getStyle(element,csstext)
+				return u.getStyle(element,csstext)
 			}
 		}
 
@@ -6344,9 +6347,22 @@ dialogMode.prototype.create = function(){
 			oThis.close();
 		});
 	}
-	
+	if(this.lazyShow) {
+        this.templateDom.style.display = 'none';
+        this.overlayDiv.style.display = 'none';
+    }
     document.body.appendChild(this.templateDom);
 };
+
+dialogMode.prototype.show = function(){
+    this.templateDom.style.display = 'block';
+    this.overlayDiv.style.display = 'block';
+}
+
+dialogMode.prototype.hide = function(){
+    this.templateDom.style.display = 'none';
+    this.overlayDiv.style.display = 'none';
+}
 
 dialogMode.prototype.close = function(){
 	if(this.contentDom){
@@ -6359,6 +6375,44 @@ dialogMode.prototype.close = function(){
 
 u.dialog = function(options){
 	return new dialogMode(options);
+}
+
+/**
+ * 对话框向导
+ * @param options:  {dialogs: [{content:".J-goods-pro-add-1-dialog",hasCloseMenu:false},
+                               {content:".J-goods-pro-add-2-dialog",hasCloseMenu:false},
+                            ]
+                    }
+ */
+u.dialogWizard = function(options) {
+    var dialogs = [], curIndex = 0;
+    options.dialogs = options.dialogs || [],
+    len = options.dialogs.length;
+    if(len == 0) {
+        throw new Error('未加入对话框');
+    }
+    for(var i = 0;i < len; i++) {
+        dialogs.push(u.dialog(u.extend(options.dialogs[i], {lazyShow: true})));
+    }
+    var wizard = function() {
+    }
+    wizard.prototype.show = function() {
+        dialogs[curIndex].show();
+    }
+    wizard.prototype.next = function() {
+        dialogs[curIndex].hide();
+        dialogs[++curIndex].show();
+    }
+    wizard.prototype.prev = function() {
+        dialogs[curIndex].hide();
+        dialogs[--curIndex].show();
+    }
+    wizard.prototype.close = function() {
+        for(var i = 0; i < len; i++) {
+            dialogs[i].close();
+        }
+    }
+    return new wizard();
 }
 
 u.Multilang = u.BaseComponent.extend({
@@ -9943,6 +9997,7 @@ u.Combo = u.BaseComponent.extend({
             this.hide();
         }.bind(this);
         u.on(document,'click',callback);
+        u.on(document.body,'touchend',callback)
         // document.addEventListener('click', callback);
 
     },
@@ -10709,7 +10764,10 @@ u.Tooltip.prototype = {
         };
         //tip模板对应的dom
         this.tipDom = u.makeDOM(this.options.template);
-         u.addClass(this.tipDom,this.options.placement);
+        u.addClass(this.tipDom,this.options.placement);
+        if(this.options.colorLevel){
+             u.addClass(this.tipDom,this.options.colorLevel);
+         }
         this.arrrow = this.tipDom.querySelector('.tooltip-arrow');
 
         // tip容器,默认为当前元素的parent
@@ -14717,7 +14775,13 @@ Row.fn.getData = function () {
                     data[key].value = _dateToUTCString(data[key].value)
                 }
             } else if(meta[key].type == 'child') {
-                data[key].value = this.getValue(key).getDataByRule(DataTable.SUBMIT.all);
+                var chiddt = this.getValue(key),
+                    rs = chiddt.rows(),
+                    cds = [];
+                for(var i=0;i < rs.length;i++) {
+                    cds.push(rs[i].getData());
+                }
+                data[key].value = JSON.stringify(cds);
             }
         }
     }
@@ -16184,38 +16248,75 @@ u.DateTimeAdapter = u.BaseAdapter.extend({
 		//	this.options.format = "YYYY-MM-DD HH:mm:ss";
 		//this.formater = new $.DateFormater(this.maskerMeta.format);
 		//this.masker = new DateTimeMasker(this.maskerMeta);
-
-		this.comp = new u.DateTimePicker({el:this.element,format:this.maskerMeta.format});
+		var op;
+		if(u.isMobile){
+			op = {
+				theme:"ios",
+				mode:"scroller",
+				lang: "zh",  
+				cancelText: null,
+				onSelect:function(val){
+					self.setValue(val);
+				}
+			}
+			this.element = this.element.querySelector("input");
+			if(this.adapterType == 'date'){
+				$(this.element).mobiscroll().date(op);
+			}else{
+				$(this.element).mobiscroll().datetime(op);
+			}
+		}else{
+			this.comp = new u.DateTimePicker({el:this.element,format:this.maskerMeta.format});
+		}
+		
 		this.element['u.DateTimePicker'] = this.comp;
 
-
-		this.comp.on('select', function(event){
-			/*self.slice = true;
-			if(self.dataModel){
-				if (this.options.type === 'u-date')
-					self.dataModel.setValue(self.field, u.date.format(event.value,'YYYY-MM-DD'));
-				else
-					self.dataModel.setValue(self.field, u.date.format(event.value,'YYYY-MM-DD HH:mm:ss'));
-			}
-			self.slice = false;*/
-			self.setValue(event.value);
-		});
+		if(!u.isMobile){
+			this.comp.on('select', function(event){
+				self.setValue(event.value);
+			});
+		}
 		if(this.dataModel){
 			this.dataModel.ref(this.field).subscribe(function(value) {
 				self.modelValueChange(value);
 			});
 			if(this.startField){
 				this.dataModel.ref(this.startField).subscribe(function(value) {
-					self.comp.setStartDate(value);
-					if(self.comp.date < u.date.getDateObj(value) || !value){
-						self.dataModel.setValue(self.field,'');
+					if(u.isMobile){
+						var valueObj = u.date.getDateObj(value);
+						op.minDate = valueObj;
+						if(self.adapterType == 'date'){
+							$(self.element).mobiscroll().date(op);
+						}else{
+							$(self.element).mobiscroll().datetime(op);
+						}
+						var nowDate = u.date.getDateObj(self.dataModel.getValue(self.field));
+						if(nowDate < valueObj || !value){
+							self.dataModel.setValue(self.field,'');
+						}
+					}else{
+						self.comp.setStartDate(value);
+						if(self.comp.date < u.date.getDateObj(value) || !value){
+							self.dataModel.setValue(self.field,'');
+						}
 					}
+					
 				});
 			}
 			if(this.startField){
 				var startValue = this.dataModel.getValue(this.startField);
-				if(startValue)
-					self.comp.setStartDate(startValue);
+				if(startValue){
+					if(u.isMobile){
+						op.minDate = u.date.getDateObj(startValue);
+						if(this.adapterType == 'date'){
+							$(this.element).mobiscroll().date(op);
+						}else{
+							$(this.element).mobiscroll().datetime(op);
+						}
+					}else{
+						self.comp.setStartDate(startValue);
+					}
+				}
 			}
 			
 		}
@@ -16224,12 +16325,25 @@ u.DateTimeAdapter = u.BaseAdapter.extend({
 	modelValueChange: function(value){
 		if (this.slice) return;
 		this.trueValue = value;
-		this.comp.setDate(value);
+		if(u.isMobile){
+			if(value){
+				if (this.options.type === 'u-date'){
+					value = u.date.format(value,'YYYY-MM-DD');
+				}else{
+					value = u.date.format(value,'YYYY-MM-DD HH:mm:ss');
+				}
+				$(this.element).scroller('setDate', u.date.getDateObj(value), true);
+			}
+		}else{
+			this.comp.setDate(value);
+		}
+		
 	},
 	setFormat: function(format){
 		if (this.maskerMeta.format == format) return;
 		this.maskerMeta.format = format;
-		this.comp.setFormat(format);
+		if(!u.isMobile)
+			this.comp.setFormat(format);
 		//this.formater = new $.DateFormater(this.maskerMeta.format);
 		//this.masker = new DateTimeMasker(this.maskerMeta);
 	},
@@ -16250,15 +16364,24 @@ u.DateTimeAdapter = u.BaseAdapter.extend({
         if (enable === true || enable === 'true') {
             this.enable = true;
             this.element.removeAttribute('readonly');
-            this.comp._input.removeAttribute('readonly');
+            if(u.isMobile){
+
+            }else{
+            	this.comp._input.removeAttribute('readonly');
+            }
             u.removeClass(this.element.parentNode,'disablecover');
         } else if (enable === false || enable === 'false') {
             this.enable = false;
             this.element.setAttribute('readonly', 'readonly');
-            this.comp._input.setAttribute('readonly', 'readonly');
+            if(u.isMobile){
+
+            }else{
+            	this.comp._input.setAttribute('readonly', 'readonly');
+            }
             u.addClass(this.element.parentNode,'disablecover');
         }
-        this.comp.setEnable(enable);
+        if(!u.isMobile)
+        	this.comp.setEnable(enable);
     }
 
 });

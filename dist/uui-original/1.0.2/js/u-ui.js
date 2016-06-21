@@ -124,7 +124,10 @@ u.extend(u, {
 												if(!e)
 													e = typeof event != 'undefined' && event?event:window.event;
 												element["uEvent"][eventName].forEach(function(fn){
-													e.target = e.target || e.srcElement;//兼容IE8
+													try{
+														e.target = e.target || e.srcElement;//兼容IE8
+													}catch(e){
+													}
 													if(fn)
 														fn.call(element,e)
 												})
@@ -246,7 +249,7 @@ u.extend(u, {
 			if(arguments.length > 2){
 				element.style[csstext] = val
 			}else{
-				u.getStyle(element,csstext)
+				return u.getStyle(element,csstext)
 			}
 		}
 
@@ -6344,9 +6347,22 @@ dialogMode.prototype.create = function(){
 			oThis.close();
 		});
 	}
-	
+	if(this.lazyShow) {
+        this.templateDom.style.display = 'none';
+        this.overlayDiv.style.display = 'none';
+    }
     document.body.appendChild(this.templateDom);
 };
+
+dialogMode.prototype.show = function(){
+    this.templateDom.style.display = 'block';
+    this.overlayDiv.style.display = 'block';
+}
+
+dialogMode.prototype.hide = function(){
+    this.templateDom.style.display = 'none';
+    this.overlayDiv.style.display = 'none';
+}
 
 dialogMode.prototype.close = function(){
 	if(this.contentDom){
@@ -6359,6 +6375,44 @@ dialogMode.prototype.close = function(){
 
 u.dialog = function(options){
 	return new dialogMode(options);
+}
+
+/**
+ * 对话框向导
+ * @param options:  {dialogs: [{content:".J-goods-pro-add-1-dialog",hasCloseMenu:false},
+                               {content:".J-goods-pro-add-2-dialog",hasCloseMenu:false},
+                            ]
+                    }
+ */
+u.dialogWizard = function(options) {
+    var dialogs = [], curIndex = 0;
+    options.dialogs = options.dialogs || [],
+    len = options.dialogs.length;
+    if(len == 0) {
+        throw new Error('未加入对话框');
+    }
+    for(var i = 0;i < len; i++) {
+        dialogs.push(u.dialog(u.extend(options.dialogs[i], {lazyShow: true})));
+    }
+    var wizard = function() {
+    }
+    wizard.prototype.show = function() {
+        dialogs[curIndex].show();
+    }
+    wizard.prototype.next = function() {
+        dialogs[curIndex].hide();
+        dialogs[++curIndex].show();
+    }
+    wizard.prototype.prev = function() {
+        dialogs[curIndex].hide();
+        dialogs[--curIndex].show();
+    }
+    wizard.prototype.close = function() {
+        for(var i = 0; i < len; i++) {
+            dialogs[i].close();
+        }
+    }
+    return new wizard();
 }
 
 u.Multilang = u.BaseComponent.extend({
@@ -9943,6 +9997,7 @@ u.Combo = u.BaseComponent.extend({
             this.hide();
         }.bind(this);
         u.on(document,'click',callback);
+        u.on(document.body,'touchend',callback)
         // document.addEventListener('click', callback);
 
     },
@@ -10709,7 +10764,10 @@ u.Tooltip.prototype = {
         };
         //tip模板对应的dom
         this.tipDom = u.makeDOM(this.options.template);
-         u.addClass(this.tipDom,this.options.placement);
+        u.addClass(this.tipDom,this.options.placement);
+        if(this.options.colorLevel){
+             u.addClass(this.tipDom,this.options.colorLevel);
+         }
         this.arrrow = this.tipDom.querySelector('.tooltip-arrow');
 
         // tip容器,默认为当前元素的parent

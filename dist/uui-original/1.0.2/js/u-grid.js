@@ -1125,7 +1125,7 @@
 						if(td.children[0].innerHTML.indexOf('u-grid-content-tree-span')   !=  -1){
 							var span =  td.children[0].children[1];
 						}else{
-							td.innerHTML = '<div class="u-grid-content-td-div"></div>';
+							// td.innerHTML = '<div class="u-grid-content-td-div"></div>'; //如果是树表的话第一列显示会有问题，等出现其他问题之后再修改此处
 							var span =  td.children[0];
 						}
 						if(span){
