@@ -8,11 +8,11 @@ var uuiPkg = require('./package.json');
 
 var uuiDist = 'dist/uui/' + uuiPkg.version;
 
-var distModules = ['iuap-design', 'datatable', 'datetimepicker', 'grid', 'tree']
+var distModules = ['iuap-design', '', 'datetimepicker', 'grid', 'tree']
 
 var pathOfJS = [
   'iuap-design/dist/js/u-ui.js',
-  'datatable/dist/js/u-model.js',
+  '/dist/js/u-model.js',
   'datetimepicker/dist/js/u-date.js'
 ]
 
@@ -34,7 +34,7 @@ var pathOfCopyJS = [
   'iuap-design/dist/js/u-ui.min.js',
   'iuap-design/dist/js/u-polyfill.js',
   'iuap-design/dist/js/u-polyfill.min.js',
-  'datatable/dist/js/u-model.js',
+  '/dist/js/u-model.js',
   'grid/dist/js/u-grid.js',
   'grid/dist/js/u-grid.min.js',
   'tree/dist/js/u-tree.js',
