@@ -80,6 +80,7 @@ function getDistDir(moduleDir){
   return publishDist;
 }
 
+
 function publishModule(moduleName){
   gulp.src(moduleName + '/dist/**').pipe(gulp.dest(getDistDir(moduleName)));
 }
