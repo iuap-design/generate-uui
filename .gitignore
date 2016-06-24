@@ -3,6 +3,9 @@ logs
 *.log
 npm-debug.log*
 
+.DS_Store
+dist/.DS_Store
+
 # ignore project
 datatable
 iuap-design

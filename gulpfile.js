@@ -34,11 +34,12 @@ var pathOfCopyJS = [
   'iuap-design/dist/js/u-ui.min.js',
   'iuap-design/dist/js/u-polyfill.js',
   'iuap-design/dist/js/u-polyfill.min.js',
-  '/dist/js/u-model.js',
   'grid/dist/js/u-grid.js',
   'grid/dist/js/u-grid.min.js',
   'tree/dist/js/u-tree.js',
-  'tree/dist/js/u-tree.min.js'
+  'tree/dist/js/u-tree.min.js',
+  'kero/dist/js/u-model.js',
+  'kero/dist/js/u-model.min.js'
 ]
 
 gulp.task('js', function(){
