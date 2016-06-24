@@ -12,8 +12,8 @@ var distModules = ['iuap-design', '', 'datetimepicker', 'grid', 'tree']
 
 var pathOfJS = [
   'iuap-design/dist/js/u-ui.js',
-  '/dist/js/u-model.js',
-  'datetimepicker/dist/js/u-date.js'
+  'kero/dist/js/u-model.js',
+  'iuap-design/dist/js/u-core.js'
 ]
 
 var pathOfCSS = [
@@ -39,7 +39,9 @@ var pathOfCopyJS = [
   'tree/dist/js/u-tree.js',
   'tree/dist/js/u-tree.min.js',
   'kero/dist/js/u-model.js',
-  'kero/dist/js/u-model.min.js'
+  'kero/dist/js/u-model.min.js',
+  'datetimepicker/dist/js/u-date.js',
+  'datetimepicker/dist/js/u-date.min.js'
 ]
 
 gulp.task('js', function(){
