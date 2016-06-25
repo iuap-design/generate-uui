@@ -12,6 +12,7 @@ iuap-design
 tree
 grid
 datetimepicker
+kero
 
 dist/datatable
 dist/iuap-design
@@ -19,6 +20,7 @@ dist/tree
 dist/grid
 dist/datetimepicker
 dist/uui
+dist/kero
 
 # Runtime data
 pids
