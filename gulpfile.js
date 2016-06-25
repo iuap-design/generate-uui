@@ -24,7 +24,6 @@ var pathOfCSS = [
 var pathOfCopyCSS = [
   'iuap-design/dist/css/u-extend.css',
   'iuap-design/dist/css/u-extend.min.css',
-  // 'iuap-design/dist/css/font-awesome.css',
   'grid/dist/css/grid.css',
   'grid/dist/css/grid.min.css',
   'tree/dist/css/tree.css',
