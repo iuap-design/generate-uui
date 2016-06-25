@@ -94,6 +94,11 @@ gulp.task('copyfont', function(){
     .pipe(gulp.dest(uuiDist + '/fonts/font-awesome'))
 })
 
+gulp.task('copyimage', function(){
+  gulp.src('iuap-design/dist/images/**')
+    .pipe(gulp.dest(uuiDist + '/images/'))
+})
+
 function getDistDir(moduleDir){
   var publishPkg = require('./' + moduleDir + '/package.json');
   var publishDist = 'dist/' + moduleDir + '/' + publishPkg.version;
@@ -119,7 +124,7 @@ gulp.task('shell', function() {
   });
 });
 
-gulp.task('default', ['css', 'js', 'copycss', 'copyjs','copyfont', 'publishModules'],function(){
+gulp.task('default', ['css', 'js', 'copycss', 'copyjs','copyfont', 'copyimage', 'publishModules'],function(){
   gulp.run('origin');
 })
 
