@@ -12,8 +12,7 @@ var distModules = ['iuap-design', '', 'datetimepicker', 'grid', 'tree']
 
 var pathOfJS = [
   'iuap-design/dist/js/u-ui.js',
-  'kero/dist/js/u-model.js',
-  'iuap-design/dist/js/u-core.js'
+  'kero/dist/js/u-model.js'
 ]
 
 var pathOfCSS = [
