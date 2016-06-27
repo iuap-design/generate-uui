@@ -27,6 +27,8 @@ var pathOfCSS = [
 var pathOfCopyCSS = [
   'iuap-design/dist/css/u-extend.css',
   'iuap-design/dist/css/u-extend.min.css',
+  'iuap-design/dist/css/font-awesome.css',
+  'iuap-design/dist/css/font-awesome.min.css',
   'grid/dist/css/grid.css',
   'grid/dist/css/grid.min.css',
   'tree/dist/css/tree.css',
@@ -137,8 +139,8 @@ gulp.task('copyjs', function(){
 })
 
 gulp.task('copyfont', function(){
-  gulp.src('iuap-design/dist/fonts/font-awesome/*/*')
-    .pipe(gulp.dest(uuiDist + '/fonts/font-awesome'))
+  gulp.src('iuap-design/dist/fonts/*')
+    .pipe(gulp.dest(uuiDist + '/fonts/'))
 })
 
 gulp.task('copyimage', function(){
