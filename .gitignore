@@ -14,6 +14,7 @@ grid
 datetimepicker
 kero
 
+dist/kero
 dist/datatable
 dist/iuap-design
 dist/tree
