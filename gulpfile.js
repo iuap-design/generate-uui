@@ -13,6 +13,7 @@ var distModules = ['iuap-design', '', 'datetimepicker', 'grid', 'tree']
 
 var pathOfJS = [
   'iuap-design/dist/js/u-ui.js',
+  'datetimepicker/dist/js/u-date.js',
   'kero/dist/js/u-model.js'
 ]
 
@@ -39,9 +40,15 @@ var pathTree = [
   'tree/dist/js/u-tree.js'
 ]
 
-var pathOfCopyJS = [
+var pathUI = [
   'iuap-design/dist/js/u-ui.js',
-  'iuap-design/dist/js/u-ui.min.js',
+  'datetimepicker/dist/js/u-date.js'
+]
+
+
+var pathOfCopyJS = [
+  // 'iuap-design/dist/js/u-ui.js',
+  // 'iuap-design/dist/js/u-ui.min.js',
   'iuap-design/dist/js/u-polyfill.js',
   'iuap-design/dist/js/u-polyfill.min.js',
   // 'grid/dist/js/u-grid.js',
@@ -94,6 +101,16 @@ gulp.task('treejs', function() {
     .pipe(uglify())
     .pipe(rename('u-tree.min.js'))
     .pipe(gulp.dest(uuiDist + '/js'))
+})
+
+gulp.task('uiconcat', function() {
+  gulp.src( pathUI)
+    .pipe(concat('u-ui.js'))
+    .pipe(gulp.dest( uuiDist + '/js'))
+    .pipe(uglify())
+    .pipe(rename('u-ui.min.js'))
+    .pipe(gulp.dest(uuiDist + '/js'))
+
 })
 
 
@@ -152,7 +169,7 @@ gulp.task('shell', function() {
   });
 });
 
-gulp.task('default', ['css', 'js', 'gridjs', 'treejs', 'copycss', 'copyjs','copyfont', 'copyimage', 'publishModules'],function(){
+gulp.task('default', ['css', 'js', 'uiconcat', 'gridjs', 'treejs', 'copycss', 'copyjs','copyfont', 'copyimage', 'publishModules'],function(){
   gulp.run('origin');
 })
 
