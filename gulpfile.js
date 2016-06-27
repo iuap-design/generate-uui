@@ -17,8 +17,8 @@ var pathOfJS = [
 ]
 
 var pathOfCSS = [
-  'iuap-design/dist/css/u.css'
-  // 'datetimepicker/dist/css/date.css'
+  'iuap-design/dist/css/u.css',
+  'datetimepicker/dist/css/date.css'
 ]
 
 var pathOfCopyCSS = [
@@ -30,15 +30,24 @@ var pathOfCopyCSS = [
   'tree/dist/css/tree.min.css'
 ]
 
+var pathGrid = [
+  'kero/dist/js/grid.kero.js',
+  'grid/dist/js/u-grid.js'
+]
+var pathTree = [
+  'kero/dist/js/tree.kero.js',
+  'tree/dist/js/u-tree.js'
+]
+
 var pathOfCopyJS = [
   'iuap-design/dist/js/u-ui.js',
   'iuap-design/dist/js/u-ui.min.js',
   'iuap-design/dist/js/u-polyfill.js',
   'iuap-design/dist/js/u-polyfill.min.js',
-  'grid/dist/js/u-grid.js',
-  'grid/dist/js/u-grid.min.js',
-  'tree/dist/js/u-tree.js',
-  'tree/dist/js/u-tree.min.js',
+  // 'grid/dist/js/u-grid.js',
+  // 'grid/dist/js/u-grid.min.js',
+  // 'tree/dist/js/u-tree.js',
+  // 'tree/dist/js/u-tree.min.js',
   'kero/dist/js/u-model.js',
   'kero/dist/js/u-model.min.js',
   'datetimepicker/dist/js/u-date.js',
@@ -68,6 +77,26 @@ gulp.task('js', function(){
     .pipe(rename('u.min.js'))
     .pipe(gulp.dest(uuiDist + '/js'))
 })
+
+gulp.task('gridjs', function() {
+  gulp.src( pathGrid )
+    .pipe(concat('u-grid.js'))
+    .pipe(gulp.dest( uuiDist + '/js'))
+    .pipe(uglify())
+    .pipe(rename('u-grid.min.js'))
+    .pipe(gulp.dest(uuiDist + '/js'))
+})
+
+gulp.task('treejs', function() {
+  gulp.src( pathTree )
+    .pipe(concat('u-tree.js'))
+    .pipe(gulp.dest( uuiDist + '/js'))
+    .pipe(uglify())
+    .pipe(rename('u-tree.min.js'))
+    .pipe(gulp.dest(uuiDist + '/js'))
+})
+
+
 
 gulp.task('css', function(){
   gulp.src( pathOfCSS )
@@ -123,7 +152,7 @@ gulp.task('shell', function() {
   });
 });
 
-gulp.task('default', ['css', 'js', 'copycss', 'copyjs','copyfont', 'copyimage', 'publishModules'],function(){
+gulp.task('default', ['css', 'js', 'gridjs', 'treejs', 'copycss', 'copyjs','copyfont', 'copyimage', 'publishModules'],function(){
   gulp.run('origin');
 })
 
