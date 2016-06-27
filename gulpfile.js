@@ -6,8 +6,10 @@ var uglify = require('gulp-uglify');
 var minifycss = require('gulp-minify-css');
 var exec = require('child_process').exec;
 var uuiPkg = require('./package.json');
+var originVersion = '2.1'
 
 var uuiDist = 'dist/uui/' + uuiPkg.version;
+var originDist = 'dist/uui/' + originVersion;
 
 var distModules = ['iuap-design', '', 'datetimepicker', 'grid', 'tree']
 
@@ -208,29 +210,29 @@ var originGlobs = {
 
 gulp.task('originlocales', function() {
    gulp.src('./compatible/locales/en/*')
-    .pipe(gulp.dest(uuiDist + '/origin/locales/en'));
+    .pipe(gulp.dest(originDist + '/origin/locales/en'));
   gulp.src('./compatible/locales/en_US/*')
-    .pipe(gulp.dest(uuiDist + '/origin/locales/en_US'));
+    .pipe(gulp.dest(originDist + '/origin/locales/en_US'));
     gulp.src('./compatible/locales/en-US/*')
-    .pipe(gulp.dest(uuiDist + '/origin/locales/en-US'));
+    .pipe(gulp.dest(originDist + '/origin/locales/en-US'));
     gulp.src('./compatible/locales/zh/*')
-    .pipe(gulp.dest(uuiDist + '/origin/locales/zh'));
+    .pipe(gulp.dest(originDist + '/origin/locales/zh'));
     gulp.src('./compatible/locales/zh-CN/*')
-    .pipe(gulp.dest(uuiDist + '/origin/locales/zh-CN'));
+    .pipe(gulp.dest(originDist + '/origin/locales/zh-CN'));
     gulp.src('./compatible/locales/zh_CN/*')
-    .pipe(gulp.dest(uuiDist + '/origin/locales/zh_CN'));
+    .pipe(gulp.dest(originDist + '/origin/locales/zh_CN'));
 });
 
 gulp.task('originexternal', function() {
   return gulp.src('./compatible/external/*')  /*liuyk需要复制过去*/
-    .pipe(gulp.dest(uuiDist + '/origin/external'))
+    .pipe(gulp.dest(originDist + '/origin/external'))
 });
 
 
 gulp.task('originassets', ['originlocales', 'originexternal'], function(){
   return gulp.src('./compatible/assets/**')
     //.pipe(gulp.dest('dist/originassets'))
-        .pipe(gulp.dest(uuiDist + '/origin'))
+        .pipe(gulp.dest(originDist + '/origin'))
 });
 
 ///////////////////////////////////////
@@ -239,30 +241,30 @@ gulp.task('originassets', ['originlocales', 'originexternal'], function(){
 gulp.task('originbizcorejs',function(){
   return gulp.src('./compatible/biz/biz.core.js')
     .pipe(concat('u.biz.core.js'))
-    .pipe(gulp.dest(uuiDist + '/origin/js'))
+    .pipe(gulp.dest(originDist + '/origin/js'))
     .pipe(uglify())
     .on('error', errHandle)
     .pipe(concat('u.biz.core.min.js'))
-    .pipe(gulp.dest(uuiDist + '/origin/js'));
+    .pipe(gulp.dest(originDist + '/origin/js'));
 });
 
 gulp.task('originbizjs',function(){
   return gulp.src(originGlobs.bizjs)
     .pipe(concat('u.biz.js'))
-    .pipe(gulp.dest(uuiDist + '/origin/js'))
+    .pipe(gulp.dest(originDist + '/origin/js'))
     .pipe(uglify())
     .on('error', errHandle)
     .pipe(rename('u.biz.min.js'))
-    .pipe(gulp.dest(uuiDist + '/origin/js'));
+    .pipe(gulp.dest(originDist + '/origin/js'));
 });
 
 gulp.task('originujs',function(){
   return gulp.src(originGlobs.js)
     .pipe(concat('u.js'))
-    .pipe(gulp.dest(uuiDist + '/origin/js'))
+    .pipe(gulp.dest(originDist + '/origin/js'))
     .pipe(uglify()).on('error', errHandle)
         .pipe(rename('u.min.js'))
-        .pipe(gulp.dest(uuiDist + '/origin/js'));
+        .pipe(gulp.dest(originDist + '/origin/js'));
 });
 
 gulp.task('originjs', ['originbizcorejs','originbizjs','originujs'],function() {
@@ -276,16 +278,16 @@ gulp.task('originless:ui', function() {
     return gulp.src('./compatible/less/import.less')
         .pipe(less())
         .pipe(rename('oldu.css'))
-        .pipe(gulp.dest(uuiDist + '/origin/css'));
+        .pipe(gulp.dest(originDist + '/origin/css'));
 });
 
 gulp.task('originless',['originless:ui'], function() {
   return gulp.src([uuiDist + '/css/u.css',uuiDist + '/origin/css/oldu.css','./compatible/css/u.css',uuiDist + '/css/grid.css'])
     .pipe(concat('u.css'))
-    .pipe(gulp.dest(uuiDist + '/origin/css'))
+    .pipe(gulp.dest(originDist + '/origin/css'))
   .pipe(minifycss())
   .pipe(concat('u.min.css'))
-  .pipe(gulp.dest(uuiDist + '/origin/css'));
+  .pipe(gulp.dest(originDist + '/origin/css'));
 
 });
 ///////////////////////////////////////

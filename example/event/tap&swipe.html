@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>移动事件实现</title>
+
+<style type="text/css">
+div{
+	width:100%;
+	height:100px;
+}
+
+.div-swipe{
+	background:red;
+}
+
+.div-swipeleft{
+	background:yellow;
+}
+
+.div-swiperight{
+	background:red;
+}
+
+.div-tap{
+	background:yellow;
+}
+
+.div-taphold{
+	background:red;
+}
+</style>
+</head>
+<body>
+	
+	<div class='div-swipe'>
+        swipe:当用户在元素上水平滑动时触发。
+    </div>
+
+	<div class='div-swipeleft'>
+        swipeleft:当用户从左划过元素超过 30px 时触发。
+    </div>
+
+	<div class='div-swiperight'>
+        swiperight:当用户从右划过元素超过 30px 时触发。
+    </div>
+
+	<div class='div-tap'>
+        tap:当用户敲击某元素时触发。
+    </div>
+
+	<div class='div-taphold'>
+        taphold:当元素敲击某元素并保持一秒时触发。
+    </div>
+
+
+
+<script src="../../vendor/uui/js/u.js"></script>
+<script src="../../src/core/core/event.js"></script>
+<script type="text/javascript">
+changeColor = function(t){
+	old = t.style.background;
+	if(old == 'green')
+		t.style.background = 'blue';
+	else
+		t.style.background = 'green';
+}
+
+var swipeDiv = document.querySelector('.div-swipe');
+
+u.on(swipeDiv,'swipe',function(){
+	changeColor(this);
+	console.log("div-swipe");
+});
+
+var swipeleftDiv = document.querySelector('.div-swipeleft');
+
+u.on(swipeleftDiv,'swipeleft',function(){
+	changeColor(this);
+	console.log("div-swipeleft");
+});
+
+var swiperightDiv = document.querySelector('.div-swiperight');
+
+u.on(swiperightDiv,'swiperight',function(){
+	changeColor(this);
+	console.log("div-swiperight");
+});
+
+
+var tapDiv = document.querySelector('.div-tap');
+
+u.on(tapDiv,'tap',function(e){
+	changeColor(this);
+	console.log("div-tap");
+});
+
+var tapholdDiv = document.querySelector('.div-taphold');
+
+
+u.on(tapholdDiv,'taphold',function(e){
+
+	changeColor(this);
+	console.log("div-taphold");
+});
+// 源生的事件，方向改变事件
+window.addEventListener('orientationchange', function(e) {
+	if(window.orientation == 0){ //竖屏
+		alert(1)
+	}else{//横屏
+		alert(2);
+	}
+});
+</script>
+</body>
+</html>
