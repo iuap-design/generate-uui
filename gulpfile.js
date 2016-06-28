@@ -139,7 +139,7 @@ gulp.task('copyjs', function(){
 })
 
 gulp.task('copyfont', function(){
-  gulp.src('iuap-design/dist/fonts/*')
+  gulp.src('iuap-design/dist/fonts/**')
     .pipe(gulp.dest(uuiDist + '/fonts/'))
 })
 
