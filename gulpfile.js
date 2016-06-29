@@ -6,7 +6,7 @@ var uglify = require('gulp-uglify');
 var minifycss = require('gulp-minify-css');
 var exec = require('child_process').exec;
 var uuiPkg = require('./package.json');
-var originVersion = '2.1'
+var originVersion = '2.0.1'
 
 var makeumd = require('./makeumd.js');
 
@@ -29,6 +29,8 @@ var pathOfCSS = [
 var pathOfCopyCSS = [
     'iuap-design/dist/css/u-extend.css',
     'iuap-design/dist/css/u-extend.min.css',
+    'iuap-design/dist/css/font-awesome.css',
+    'iuap-design/dist/css/font-awesome.min.css',
     'grid/dist/css/u-grid.css',
     'grid/dist/css/u-grid.min.css',
     'tree/dist/css/u-tree.css',
@@ -58,6 +60,8 @@ var pathOfCopyJS = [
     'datetimepicker/dist/js/u-date.js',
     'datetimepicker/dist/js/u-date.min.js'
 ]
+
+var notIncludeCss = '!'+ uuiDist + '/css/font-awesome' + '*' + '.css';
 
 /**
  * 公共错误处理函数
@@ -222,28 +226,28 @@ var originGlobs = {
 
 gulp.task('originlocales', function() {
     gulp.src('./compatible/locales/en/*')
-        .pipe(gulp.dest(uuiDist + '/origin/locales/en'));
+        .pipe(gulp.dest(originDist + '/origin/locales/en'));
     gulp.src('./compatible/locales/en_US/*')
-        .pipe(gulp.dest(uuiDist + '/origin/locales/en_US'));
+        .pipe(gulp.dest(originDist + '/origin/locales/en_US'));
     gulp.src('./compatible/locales/en-US/*')
-        .pipe(gulp.dest(uuiDist + '/origin/locales/en-US'));
+        .pipe(gulp.dest(originDist + '/origin/locales/en-US'));
     gulp.src('./compatible/locales/zh/*')
-        .pipe(gulp.dest(uuiDist + '/origin/locales/zh'));
+        .pipe(gulp.dest(originDist + '/origin/locales/zh'));
     gulp.src('./compatible/locales/zh-CN/*')
-        .pipe(gulp.dest(uuiDist + '/origin/locales/zh-CN'));
+        .pipe(gulp.dest(originDist + '/origin/locales/zh-CN'));
     gulp.src('./compatible/locales/zh_CN/*')
-        .pipe(gulp.dest(uuiDist + '/origin/locales/zh_CN'));
+        .pipe(gulp.dest(originDist + '/origin/locales/zh_CN'));
 });
 
 gulp.task('originexternal', function() {
     return gulp.src('./compatible/external/*')  /*liuyk需要复制过去*/
-        .pipe(gulp.dest(uuiDist + '/origin/external'))
+        .pipe(gulp.dest(originDist + '/origin/external'))
 });
 
 
 gulp.task('originassets', ['originlocales', 'originexternal'], function(){
     return gulp.src('./compatible/assets/**')
-        .pipe(gulp.dest(uuiDist + '/origin'))
+        .pipe(gulp.dest(originDist + '/origin'))
 });
 
 ///////////////////////////////////////
@@ -252,30 +256,30 @@ gulp.task('originassets', ['originlocales', 'originexternal'], function(){
 gulp.task('originbizcorejs',function(){
     return gulp.src('./compatible/biz/biz.core.js')
             .pipe(concat('u.biz.core.js'))
-            .pipe(gulp.dest(uuiDist + '/origin/js'))
+            .pipe(gulp.dest(originDist + '/origin/js'))
             .pipe(uglify())
             .on('error', errHandle)
             .pipe(concat('u.biz.core.min.js'))
-            .pipe(gulp.dest(uuiDist + '/origin/js'));
+            .pipe(gulp.dest(originDist + '/origin/js'));
 });
 
 gulp.task('originbizjs',function(){
     return gulp.src(originGlobs.bizjs)
             .pipe(concat('u.biz.js'))
-            .pipe(gulp.dest(uuiDist + '/origin/js'))
+            .pipe(gulp.dest(originDist + '/origin/js'))
             .pipe(uglify())
             .on('error', errHandle)
             .pipe(rename('u.biz.min.js'))
-            .pipe(gulp.dest(uuiDist + '/origin/js'));
+            .pipe(gulp.dest(originDist + '/origin/js'));
 });
 
 gulp.task('originujs',function(){
     return gulp.src(originGlobs.js)
             .pipe(concat('u.js'))
-            .pipe(gulp.dest(uuiDist + '/origin/js'))
+            .pipe(gulp.dest(originDist + '/origin/js'))
             .pipe(uglify()).on('error', errHandle)
             .pipe(rename('u.min.js'))
-            .pipe(gulp.dest(uuiDist + '/origin/js'));
+            .pipe(gulp.dest(originDist + '/origin/js'));
 });
 
 gulp.task('originjs', ['originbizcorejs','originbizjs','originujs'],function() {
@@ -289,18 +293,33 @@ gulp.task('originless:ui', function() {
     return gulp.src('./compatible/less/import.less')
         .pipe(less())
         .pipe(rename('oldu.css'))
-        .pipe(gulp.dest(uuiDist + '/origin/css'));
+        .pipe(gulp.dest(originDist + '/origin/css'));
 });
 
 gulp.task('originless',['originless:ui'], function() {
-    return gulp.src([uuiDist + '/css/u.css',uuiDist + '/origin/css/oldu.css','./compatible/css/u.css',uuiDist + '/css/grid.css'])
+    return gulp.src([uuiDist + '/css/u.css',originDist + '/origin/css/oldu.css','./compatible/css/u.css',uuiDist + '/css/u-grid.css'])
             .pipe(concat('u.css'))
-            .pipe(gulp.dest(uuiDist + '/origin/css'))
+            .pipe(gulp.dest(originDist + '/origin/css'))
             .pipe(minifycss())
             .pipe(concat('u.min.css'))
-            .pipe(gulp.dest(uuiDist + '/origin/css'));
+            .pipe(gulp.dest(originDist + '/origin/css'));
 
 });
 ///////////////////////////////////////
 
-gulp.task('origin', ['originassets', 'originjs', 'originless']);
+gulp.task('origincopy', function() {
+    gulp.src(uuiDist + '/js/**')
+        .pipe(gulp.dest(originDist + '/js'));
+    gulp.src([uuiDist + '/css/**',notIncludeCss])
+        .pipe(gulp.dest(originDist + '/css'));
+    gulp.src([uuiDist + '/fonts/**'])
+        .pipe(gulp.dest(originDist + '/fonts/font-awesome/fonts'));
+    gulp.src([uuiDist] + '/css/font-awesome' + '*' + '.css')
+        .pipe(gulp.dest(originDist + '/fonts/font-awesome/css'));
+    gulp.src([uuiDist + '/images/**'])
+        .pipe(gulp.dest(originDist + '/images'));
+
+})
+
+
+gulp.task('origin', ['originassets', 'originjs', 'originless', 'origincopy']);
