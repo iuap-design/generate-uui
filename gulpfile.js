@@ -99,7 +99,11 @@ gulp.task('baseJs', function(){
 })
 
 gulp.task('js', ['baseJs'] , function(){
-    makeumd.init();
+    var jsArr = [
+        uuiDist + '/js/u.js',
+        uuiDist + '/js/u-ui.js',
+    ]
+    makeumd.init(jsArr);
 })
 
 gulp.task('gridjs', function() {

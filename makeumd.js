@@ -26,23 +26,9 @@ module.exports = {
 	uui_footer_content : '}();',
 	footer_content : '}));',
 
-	uui_files:[
-		'./dist/uui/3.0.6/js/u-ui.js'
-	],
-	all_files : [
-		'./dist/uui/3.0.6/js/u.js'
-	],
-
-	init: function() {
-		for (var i = 0; i< this.uui_files.length; i++){
-			var filePath = this.uui_files[i]
-			var data = fs.readFileSync(filePath, 'utf8');
-			data = this.uui_header_content  + data + this.uui_footer_content;
-			fs.writeFileSync(filePath, data);
-		}
-		
-		for (var i = 0; i< this.all_files.length; i++){
-			var filePath = this.all_files[i]
+	init: function(jsArr) {
+		for (var i = 0; i< jsArr.length; i++){
+			var filePath = jsArr[i]
 			var data = fs.readFileSync(filePath, 'utf8');
 			data = this.uui_header_content  + data + this.uui_footer_content;
 			fs.writeFileSync(filePath, data);
