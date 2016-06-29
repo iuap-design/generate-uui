@@ -27,10 +27,10 @@ module.exports = {
 	footer_content : '}));',
 
 	uui_files:[
-		'./dist/uui/3.0.5/js/u-ui.js'
+		'./dist/uui/3.0.6/js/u-ui.js'
 	],
 	all_files : [
-		'./dist/uui/3.0.5/js/u.js'
+		'./dist/uui/3.0.6/js/u.js'
 	],
 
 	init: function() {
