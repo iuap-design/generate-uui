@@ -38,12 +38,13 @@ var pathOfCopyCSS = [
 ]
 
 var pathGrid = [
-    'kero/dist/js/grid.kero.js',
-    'grid/dist/js/u-grid.js'
+    'grid/dist/js/u-grid.js',
+    'kero/dist/js/grid.kero.js'
 ]
 var pathTree = [
-    'kero/dist/js/tree.kero.js',
-    'tree/dist/js/u-tree.js'
+    'tree/dist/js/u-tree.js',
+    'kero/dist/js/tree.kero.js'
+    
 ]
 
 var pathUI = [
