@@ -31,10 +31,10 @@ var pathOfCopyCSS = [
     'iuap-design/dist/css/u-extend.min.css',
     'iuap-design/dist/css/font-awesome.css',
     'iuap-design/dist/css/font-awesome.min.css',
-    'grid/dist/css/u-grid.css',
-    'grid/dist/css/u-grid.min.css',
-    'tree/dist/css/u-tree.css',
-    'tree/dist/css/u-tree.min.css'
+    'grid/dist/css/grid.css',
+    'grid/dist/css/grid.min.css',
+    'tree/dist/css/tree.css',
+    'tree/dist/css/tree.min.css'
 ]
 
 var pathGrid = [
@@ -161,11 +161,6 @@ gulp.task('copyfont', function(){
         .pipe(gulp.dest(uuiDist + '/fonts/'))
 })
 
-gulp.task('copyimage', function(){
-    return gulp.src('iuap-design/dist/images/**')
-        .pipe(gulp.dest(uuiDist + '/images/'))
-})
-
 function getDistDir(moduleDir){
     var publishPkg = require('./' + moduleDir + '/package.json');
     var publishDist = 'dist/' + moduleDir + '/' + publishPkg.version;
@@ -192,7 +187,7 @@ gulp.task('shell', function() {
     });
 });
 
-gulp.task('dist', ['css', 'js', 'uiconcat', 'gridjs', 'treejs', 'copycss', 'copyjs','copyfont', 'copyimage', 'publishModules'],function(){
+gulp.task('dist', ['css', 'js', 'uiconcat', 'gridjs', 'treejs', 'copycss', 'copyjs','copyfont', 'publishModules'],function(){
     gulp.run('origin');
 })
 
@@ -231,28 +226,28 @@ var originGlobs = {
 
 gulp.task('originlocales', function() {
     gulp.src('./compatible/locales/en/*')
-        .pipe(gulp.dest(originDist + '/origin/locales/en'));
+        .pipe(gulp.dest(originDist + '/locales/en'));
     gulp.src('./compatible/locales/en_US/*')
-        .pipe(gulp.dest(originDist + '/origin/locales/en_US'));
+        .pipe(gulp.dest(originDist + '/locales/en_US'));
     gulp.src('./compatible/locales/en-US/*')
-        .pipe(gulp.dest(originDist + '/origin/locales/en-US'));
+        .pipe(gulp.dest(originDist + '/locales/en-US'));
     gulp.src('./compatible/locales/zh/*')
-        .pipe(gulp.dest(originDist + '/origin/locales/zh'));
+        .pipe(gulp.dest(originDist + '/locales/zh'));
     gulp.src('./compatible/locales/zh-CN/*')
-        .pipe(gulp.dest(originDist + '/origin/locales/zh-CN'));
+        .pipe(gulp.dest(originDist + '/locales/zh-CN'));
     gulp.src('./compatible/locales/zh_CN/*')
-        .pipe(gulp.dest(originDist + '/origin/locales/zh_CN'));
+        .pipe(gulp.dest(originDist + '/locales/zh_CN'));
 });
 
 gulp.task('originexternal', function() {
     return gulp.src('./compatible/external/*')  /*liuyk需要复制过去*/
-        .pipe(gulp.dest(originDist + '/origin/external'))
+        .pipe(gulp.dest(originDist + '/external'))
 });
 
 
 gulp.task('originassets', ['originlocales', 'originexternal'], function(){
     return gulp.src('./compatible/assets/**')
-        .pipe(gulp.dest(originDist + '/origin'))
+        .pipe(gulp.dest(originDist + ''))
 });
 
 ///////////////////////////////////////
@@ -261,30 +256,30 @@ gulp.task('originassets', ['originlocales', 'originexternal'], function(){
 gulp.task('originbizcorejs',function(){
     return gulp.src('./compatible/biz/biz.core.js')
             .pipe(concat('u.biz.core.js'))
-            .pipe(gulp.dest(originDist + '/origin/js'))
+            .pipe(gulp.dest(originDist + '/js'))
             .pipe(uglify())
             .on('error', errHandle)
             .pipe(concat('u.biz.core.min.js'))
-            .pipe(gulp.dest(originDist + '/origin/js'));
+            .pipe(gulp.dest(originDist + '/js'));
 });
 
 gulp.task('originbizjs',function(){
     return gulp.src(originGlobs.bizjs)
             .pipe(concat('u.biz.js'))
-            .pipe(gulp.dest(originDist + '/origin/js'))
+            .pipe(gulp.dest(originDist + '/js'))
             .pipe(uglify())
             .on('error', errHandle)
             .pipe(rename('u.biz.min.js'))
-            .pipe(gulp.dest(originDist + '/origin/js'));
+            .pipe(gulp.dest(originDist + '/js'));
 });
 
 gulp.task('originujs',function(){
     return gulp.src(originGlobs.js)
             .pipe(concat('u.js'))
-            .pipe(gulp.dest(originDist + '/origin/js'))
+            .pipe(gulp.dest(originDist + '/js'))
             .pipe(uglify()).on('error', errHandle)
             .pipe(rename('u.min.js'))
-            .pipe(gulp.dest(originDist + '/origin/js'));
+            .pipe(gulp.dest(originDist + '/js'));
 });
 
 gulp.task('originjs', ['originbizcorejs','originbizjs','originujs'],function() {
@@ -298,27 +293,21 @@ gulp.task('originless:ui', function() {
     return gulp.src('./compatible/less/import.less')
         .pipe(less())
         .pipe(rename('oldu.css'))
-        .pipe(gulp.dest(originDist + '/origin/css'));
+        .pipe(gulp.dest(originDist + '/css'));
 });
 
 gulp.task('originless',['originless:ui'], function() {
-    return gulp.src([uuiDist + '/css/u.css',originDist + '/origin/css/oldu.css','./compatible/css/u.css',uuiDist + '/css/u-grid.css'])
+    return gulp.src([uuiDist + '/css/u.css',originDist + '/css/oldu.css','./compatible/css/u.css',uuiDist + '/css/grid.css'])
             .pipe(concat('u.css'))
-            .pipe(gulp.dest(originDist + '/origin/css'))
+            .pipe(gulp.dest(originDist + '/css'))
             .pipe(minifycss())
             .pipe(concat('u.min.css'))
-            .pipe(gulp.dest(originDist + '/origin/css'));
+            .pipe(gulp.dest(originDist + '/css'));
 
 });
 ///////////////////////////////////////
 
 gulp.task('origincopy', function() {
-    gulp.src(uuiDist + '/js/**')
-        .pipe(gulp.dest(originDist + '/js'));
-    gulp.src([uuiDist + '/css/**',notIncludeCss])
-        .pipe(gulp.dest(originDist + '/css'));
-    gulp.src([uuiDist + '/fonts/**'])
-        .pipe(gulp.dest(originDist + '/fonts/font-awesome/fonts'));
     gulp.src([uuiDist] + '/css/font-awesome' + '*' + '.css')
         .pipe(gulp.dest(originDist + '/fonts/font-awesome/css'));
     gulp.src([uuiDist + '/images/**'])
