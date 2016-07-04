@@ -97,35 +97,45 @@ gulp.task('baseJs', function(){
         .pipe(uglify())
         .pipe(rename('u.min.js'))
         .pipe(gulp.dest(uuiDist + '/js'))
-})
+});
 
 gulp.task('js', ['baseJs'] , function(){
-    var jsArr = [
-        uuiDist + '/js/u.js',
-        uuiDist + '/js/u-ui.js',
-    ]
-    makeumd.init(jsArr);
-})
+    makeumd.init([
+        uuiDist + '/js/u.min.js',
+    ]);
+});
 
-gulp.task('gridjs', function() {
+gulp.task('gridjs-init', function() {
     return gulp.src( pathGrid )
         .pipe(concat('u-grid.js'))
         .pipe(gulp.dest( uuiDist + '/js'))
         .pipe(uglify())
         .pipe(rename('u-grid.min.js'))
         .pipe(gulp.dest(uuiDist + '/js'))
-})
+});
 
-gulp.task('treejs', function() {
+gulp.task('gridjs', ['gridjs-init'] , function(){
+    makeumd.init([
+        uuiDist + '/js/u-grid.min.js',
+    ]);
+});
+
+gulp.task('treejs-init', function() {
     return gulp.src( pathTree )
         .pipe(concat('u-tree.js'))
         .pipe(gulp.dest( uuiDist + '/js'))
         .pipe(uglify())
         .pipe(rename('u-tree.min.js'))
         .pipe(gulp.dest(uuiDist + '/js'))
-})
+});
 
-gulp.task('uiconcat', function() {
+gulp.task('treejs', ['treejs-init'] , function(){
+    makeumd.init([
+        uuiDist + '/js/u-tree.min.js',
+    ]);
+});
+
+gulp.task('uiconcat-init', function() {
     return gulp.src( pathUI)
         .pipe(concat('u-ui.js'))
         .pipe(gulp.dest( uuiDist + '/js'))
@@ -133,18 +143,29 @@ gulp.task('uiconcat', function() {
         .pipe(rename('u-ui.min.js'))
         .pipe(gulp.dest(uuiDist + '/js'))
 
-})
+});
 
+gulp.task('uiconcat', ['uiconcat-init'] , function(){
+    makeumd.init([
+        uuiDist + '/js/u-ui.min.js',
+    ]);
+});
 
-
-gulp.task('css', function(){
+gulp.task('css-init', function(){
     return gulp.src( pathOfCSS )
         .pipe(concat('u.css'))
         .pipe(gulp.dest(uuiDist + '/css'))
         .pipe(minifycss())
         .pipe(rename('u.min.css'))
         .pipe(gulp.dest(uuiDist + '/css'))
-})
+});
+
+gulp.task('css', ['css-init'] , function(){
+    makeumd.init([
+        uuiDist + '/css/u.css',
+        uuiDist + '/css/u.min.css',
+    ]);
+});
 
 gulp.task('copycss', function(){
     return gulp.src( pathOfCopyCSS )

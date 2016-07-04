@@ -1,5 +1,4 @@
 var fs = require('fs');
-var curPath = process.cwd();
 var path = require('path');
 
 module.exports = {
@@ -9,28 +8,24 @@ module.exports = {
 	 * @return {[type]} [description]
 	 */
 
-	//头部增加内容
-	uui_header_content : '+function(){\r\n',
+	init: function(filesArr) {
+		// 读取package.json，将里面内容生成头信息
+		var data = fs.readFileSync('./package.json', 'utf8');
+		var packageObj = JSON.parse( data );
 
-	all_header_content : '( function( factory ) {\r\n' +
-		'\tif ( typeof define === "function" && define.amd ) {\r\n' +
-		'\t\t// AMD. Register as an anonymous module.\r\n' +
-		'\t\tdefine(["jquery", "knockout"], factory );\r\n' +
-		'\t} else {\r\n' +
-		'\t\t// Browser globals\r\n' +
-		'\t\tfactory($, ko);\r\n' +
-		'\t}\r\n' +
-		'}( function($, ko) {\r\n',
+		var headerStr = '/** \r\n';
+			headerStr += ' * ' + packageObj.name + ' v' + packageObj.version + '\r\n';
+			headerStr += ' * ' + packageObj.description + '\r\n';
+			headerStr += ' * author : ' + packageObj.author + '\r\n';
+			headerStr += ' * homepage : ' + packageObj.homepage + '\r\n';
+			headerStr += ' * bugs : ' + packageObj.bugs.url + '\r\n';
+			headerStr += ' **/ \r\n';
 
-	//尾部增加内容	
-	uui_footer_content : '}();',
-	footer_content : '}));',
 
-	init: function(jsArr) {
-		for (var i = 0; i< jsArr.length; i++){
-			var filePath = jsArr[i]
+		for (var i = 0; i < filesArr.length; i++){
+			var filePath = filesArr[i]
 			var data = fs.readFileSync(filePath, 'utf8');
-			data = this.uui_header_content  + data + this.uui_footer_content;
+			data = headerStr  + data;
 			fs.writeFileSync(filePath, data);
 		}
 	},
