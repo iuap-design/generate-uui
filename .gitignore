@@ -20,7 +20,7 @@ dist/iuap-design
 dist/tree
 dist/grid
 dist/datetimepicker
-dist/uui
+# dist/uui
 dist/kero
 
 # Runtime data
