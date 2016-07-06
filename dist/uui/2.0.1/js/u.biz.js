@@ -12536,6 +12536,13 @@ u.StringAdapter = u.BaseAdapter.extend({
             }
         })
 
+        u.on(this.element, 'keydown',function(e){
+            var keyCode = e.keyCode;
+            if( e.keyCode == 13){// 回车
+                this.blur();
+            }
+        });
+
         u.on(this.element, 'blur',function(e){
             if(self.enable){
                 if (!self.doValidate() && self._needClean()) {
@@ -14610,6 +14617,13 @@ u.compMgr.addDataAdapter(
 	$.CheckboxComp = CheckboxComp;
 }($);
 
+/** 
+ * datatable v3.0.3
+ * 
+ * author : yonyou FED
+ * homepage : https://github.com/iuap-design/datatable#readme
+ * bugs : https://github.com/iuap-design/datatable/issues
+ **/ 
 u.GridAdapter = u.BaseAdapter.extend({
 	
 	initialize: function(options) {
@@ -14652,6 +14666,8 @@ u.GridAdapter = u.BaseAdapter.extend({
 		this.gridOptions.onValueChange = u.getFunction(viewModel,this.gridOptions.onValueChange);
 		this.gridOptions.onBeforeClickFun = u.getFunction(viewModel,this.gridOptions.onBeforeClickFun);
 		this.gridOptions.onBeforeEditFun = u.getFunction(viewModel,this.gridOptions.onBeforeEditFun);
+		this.gridOptions.onRowHover = u.getFunction(viewModel,this.gridOptions.onRowHover);
+		
 		/*
 		 * 处理column参数  item
 		 * div子项div存储column信息
@@ -14694,24 +14710,22 @@ u.GridAdapter = u.BaseAdapter.extend({
 					}
 					var comp = oThis.editComponent[column.field]
 					if (!comp){
-						obj.element.focus();
+						$(obj.element).parent().focus();
 						return
 					}
 					obj.element.innerHTML = '';
-					var $Div = $('<div class="u-grid-content-td-div" ></div>');
 					var row = oThis.getDataTableRow(obj.rowObj)
-					$(obj.element).append($Div);
-					$Div.append(oThis.editComponentDiv[column.field]);
+					$(obj.element).append(oThis.editComponentDiv[column.field]);
 					if(comp.required) {
-						$(obj.element).parent().find('.u-grid-edit-mustFlag').show()
+						$(obj.element).parent().parent().find('.u-grid-edit-mustFlag').show()
 					}
 
-					// checkbox 类型
-					if($Div.find('.checkbox').length > 0) {
-						$Div.closest('.u-grid-edit-div').css({'position': 'absolute', 'left': '83px'});
-						$Div.closest('.u-grid-edit-whole-div').find('.u-grid-edit-label').css({'margin-left': '112px', 'text-align': 'left'})
-					}
-					obj.element.focus();
+					// checkbox 类型  此段逻辑不知道是什么，暂时注释掉
+					// if($Div.find('.checkbox').length > 0) {
+					// 	$Div.closest('.u-grid-edit-div').css({'position': 'absolute', 'left': '83px'});
+					// 	$Div.closest('.u-grid-edit-whole-div').find('.u-grid-edit-label').css({'margin-left': '112px', 'text-align': 'left'})
+					// }
+					$(obj.element).parent().focus();
 					comp.modelValueChange(obj.value);
 
 
@@ -15362,7 +15376,6 @@ u.GridAdapter = u.BaseAdapter.extend({
 				options:eOptions,
 				model: viewModel
 			});
-			//$.compManager.plugs.string(compDiv.find("input")[0],eOptions,viewModel);
 
 		}else if(eType == 'integer'){
 			compDiv = $('<div><input type="text" class="u-grid-edit-item-integer"></div>');
@@ -15547,6 +15560,10 @@ u.GridAdapter = u.BaseAdapter.extend({
 				model: viewModel
 			});
 		}
+		// input输入blur时显示下一个编辑控件
+		$('input',$(compDiv)).on('blur',function(e){
+			oThis.grid.nextEditShow();
+		});
 		if (comp && comp.dataAdapter){
 			comp = comp.dataAdapter;
 		}
