@@ -213,7 +213,6 @@ gulp.task('shell', function() {
 
 gulp.task('dist', ['css', 'js', 'uiconcat', 'gridjs', 'treejs', 'copycss', 'copyjs','copyfont'],function(){
     gulp.run('origin');
-    gulp.run('down');
 })
 
 
