@@ -4,7 +4,9 @@
   "description": "合并构建UUI",
   "main": "gulpfile.js",
   "scripts": {
-    "build": "gulp dist"
+    "build": "gulp dist",
+    "down": "gulp down",
+    "version": "npm run build && npm run down"
   },
   "repository": {
     "type": "git",
