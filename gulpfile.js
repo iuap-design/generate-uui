@@ -5,8 +5,11 @@ var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
 var minifycss = require('gulp-minify-css');
 var exec = require('child_process').exec;
+var zip = require('gulp-zip');
+var flatmap = require('gulp-flatmap');
+var del = require('del');
 var uuiPkg = require('./package.json');
-var originVersion = '2.0.1'
+var originVersion = '2.0.1';
 
 var makeumd = require('./makeumd.js');
 
@@ -210,6 +213,7 @@ gulp.task('shell', function() {
 
 gulp.task('dist', ['css', 'js', 'uiconcat', 'gridjs', 'treejs', 'copycss', 'copyjs','copyfont'],function(){
     gulp.run('origin');
+    gulp.run('down');
 })
 
 
@@ -336,5 +340,26 @@ gulp.task('origincopy', function() {
 
 })
 
-
 gulp.task('origin', ['originassets', 'originjs', 'originless', 'origincopy']);
+
+/**
+ * 下载新版体验
+ * @return {[type]}   [description]
+ */
+gulp.task('newpack', function() {
+    return gulp.src([uuiDist + '/**/*', 'dist/download/temp/*.*'])
+        .pipe(gulp.dest('dist/download/' + 'iuap-design-' + uuiPkg.version))
+        .pipe(zip('iuap-design-' + uuiPkg.version + '.zip'))
+        .pipe(gulp.dest('dist/download'));
+});
+
+gulp.task('down', ['newpack'], function() {
+    del('dist/download/' + 'iuap-design-' + uuiPkg.version);
+});
+
+
+
+
+
+
+
