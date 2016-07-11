@@ -16,7 +16,7 @@ var makeumd = require('./makeumd.js');
 var uuiDist = 'dist/uui/' + uuiPkg.version;
 var originDist = 'dist/uui/' + originVersion;
 
-var distModules = ['iuap-design', '', 'datetimepicker', 'grid', 'tree']
+var distModules = ['neoui', '', 'datetimepicker', 'grid', 'tree']
 
 var pathOfJS = [
     'neoui/dist/js/u-ui.js',
