@@ -24,6 +24,7 @@ dist/datetimepicker
 dist/neoui
 dist/uui
 dist/kero
+dist/download/*.zip
 
 # Runtime data
 pids
