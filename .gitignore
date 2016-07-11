@@ -22,9 +22,9 @@ dist/tree
 dist/grid
 dist/datetimepicker
 dist/neoui
-# dist/uui
+dist/uui
 dist/kero
-# dist/download/*.zip
+dist/download/*.zip
 
 # Runtime data
 pids
