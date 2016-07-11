@@ -6,7 +6,7 @@
   "scripts": {
     "build": "gulp dist",
     "down": "gulp down",
-    "version": "npm run build && npm run down"
+    "release": "npm run build && npm run down"
   },
   "repository": {
     "type": "git",
