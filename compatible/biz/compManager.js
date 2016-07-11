@@ -7,7 +7,7 @@
                     adapter: plug,
                     name: name
                 });
-        },
+        }
     };
 
 }($);
@@ -33,4 +33,4 @@ u.compMgr.createDataAdapter = function (options) {
     comp.type = type;
     comp.id = id;
     return comp;
-}
+};

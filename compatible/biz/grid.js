@@ -1080,7 +1080,7 @@ u.GridAdapter = u.BaseAdapter.extend({
  			comp:this,
  			Msg:wholeMsg
  		}
-	},
+	}
 });
 
 	//if ($.compManager)

@@ -13812,7 +13812,7 @@ u.compMgr.addDataAdapter(
                     adapter: plug,
                     name: name
                 });
-        },
+        }
     };
 
 }($);
@@ -13838,7 +13838,7 @@ u.compMgr.createDataAdapter = function (options) {
     comp.type = type;
     comp.id = id;
     return comp;
-}
+};
 // 兼容旧版本，jquery必须存在
 $.DataTable = u.DataTable;
 
