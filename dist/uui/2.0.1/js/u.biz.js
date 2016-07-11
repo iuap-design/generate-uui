@@ -5535,9 +5535,6 @@ u.extend(u, {
 			return element.classList.toggle(value);
 		}
 	},
-	index: function(selector, childEle) {
-		return Array.prototype.slice.call(document.querySelectorAll(selector), 0).indexOf(childEle);
-	},
 	closest: function(element, selector) {
 		var tmp = element;
 		while(tmp != null &&!u.hasClass(tmp, selector) && tmp != document.body ) {
@@ -10841,16 +10838,6 @@ DataTable.fn.getCurrentRow = function () {
         return this.getRow(index)
 }
 
-DataTable.fn.getCurrentIndex = function () {
-    if (this.focusIndex() != -1)
-        return this.focusIndex()
-    var index = this.getSelectedIndex()
-    if (index == -1)
-        return -1
-    else
-        return index
-}
-
 
 DataTable.fn.updateCurrIndex = function () {
     var currentIndex = this.focusIndex() != -1 ? this.focusIndex() : this.getSelectedIndex();
@@ -12095,7 +12082,6 @@ u.ValidateMixin = {
     init: function(){
         this.placement = this.getOption('placement');
         this.tipId = this.getOption('tipId');
-		this.tipAliveTime = this.getOption('tipAliveTime');
         this.errorMsg = this.getOption('errorMsg');
         this.nullMsg = this.getOption('nullMsg');
         this.regExp = this.getOption('regExp');
@@ -12112,7 +12098,6 @@ u.ValidateMixin = {
                 validType: this.validType,
                 placement: this.placement,
                 tipId: this.tipId,
-				tipAliveTime: this.tipAliveTime,
                 successId:this.successId,
                 notipFlag:this.notipFlag,
                 hasSuccess:this.hasSuccess,
@@ -13270,8 +13255,7 @@ u.PaginationAdapter = u.BaseAdapter.extend({
             this.options.pageSize = this.dataModel.pageSize() || this.options.pageSize;
             //this.$element.pagination(options);
             //this.comp = this.$element.data('u.pagination');
-            var options = u.extend({},{el:this.element,jumppage:true},this.options);
-            this.comp = new u.pagination(options);
+            this.comp = new u.pagination({el:this.element,jumppage:true});
 			this.element['u.pagination'] = this.comp;
             this.comp.dataModel = this.dataModel;
             this.pageChange = u.getFunction(this.viewModel, this.options['pageChange']);
