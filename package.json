@@ -5,8 +5,7 @@
   "main": "gulpfile.js",
   "scripts": {
     "build": "gulp dist",
-    "down": "gulp down",
-    "release": "npm run build && npm run down"
+    "down": "gulp down"
   },
   "repository": {
     "type": "git",
