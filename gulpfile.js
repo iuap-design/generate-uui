@@ -19,21 +19,21 @@ var originDist = 'dist/uui/' + originVersion;
 var distModules = ['iuap-design', '', 'datetimepicker', 'grid', 'tree']
 
 var pathOfJS = [
-    'iuap-design/dist/js/u-ui.js',
+    'neoui/dist/js/u-ui.js',
     'datetimepicker/dist/js/u-date.js',
     'kero/dist/js/model.js'
 ]
 
 var pathOfCSS = [
-    'iuap-design/dist/css/u.css',
+    'neoui/dist/css/u.css',
     'datetimepicker/dist/css/u-date.css'
 ]
 
 var pathOfCopyCSS = [
-    'iuap-design/dist/css/u-extend.css',
-    'iuap-design/dist/css/u-extend.min.css',
-    'iuap-design/dist/css/font-awesome.css',
-    'iuap-design/dist/css/font-awesome.min.css',
+    'neoui/dist/css/u-extend.css',
+    'neoui/dist/css/u-extend.min.css',
+    'neoui/dist/fonts/font-awesome/css/font-awesome.css',
+    'neoui/dist/fonts/font-awesome/css/font-awesome.min.css',
     'grid/dist/css/grid.css',
     'grid/dist/css/grid.min.css',
     'tree/dist/css/tree.css',
@@ -51,14 +51,14 @@ var pathTree = [
 ]
 
 var pathUI = [
-    'iuap-design/dist/js/u-ui.js',
+    'neoui/dist/js/u-ui.js',
     'datetimepicker/dist/js/u-date.js'
 ]
 
 
 var pathOfCopyJS = [
-    'iuap-design/dist/js/u-polyfill.js',
-    'iuap-design/dist/js/u-polyfill.min.js',
+    'neoui/dist/js/u-polyfill.js',
+    'neoui/dist/js/u-polyfill.min.js',
     'kero/dist/js/u-model.js',
     'kero/dist/js/u-model.min.js',
     'datetimepicker/dist/js/u-date.js',
@@ -181,8 +181,8 @@ gulp.task('copyjs', function(){
 })
 
 gulp.task('copyfont', function(){
-    return gulp.src('iuap-design/dist/fonts/**')
-        .pipe(gulp.dest(uuiDist + '/fonts/'))
+    gulp.src(['neoui/dist/fonts/*.*','neoui/dist/fonts/font-awesome/fonts/**'])
+        .pipe(gulp.dest(uuiDist + '/fonts/'));
 })
 
 function getDistDir(moduleDir){
