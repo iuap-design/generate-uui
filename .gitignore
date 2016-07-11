@@ -22,7 +22,7 @@ dist/tree
 dist/grid
 dist/datetimepicker
 dist/neoui
-# dist/uui
+dist/uui
 dist/kero
 
 # Runtime data
