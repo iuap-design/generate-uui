@@ -214,6 +214,7 @@ gulp.task('shell', function() {
 gulp.task('dist', ['css', 'js', 'uiconcat', 'gridjs', 'treejs', 'copycss', 'copyjs','copyfont'],function(){
     gulp.run('origin');
     gulp.run('down');
+    gulp.run('new');
 });
 
 
@@ -356,6 +357,16 @@ gulp.task('newpack', function() {
 gulp.task('down', ['newpack'], function() {
     del('dist/download/' + 'iuap-design-' + uuiPkg.version);
 });
+
+/**
+ * 最新版本存放路径
+ * @param  {[type]} ) {}          [description]
+ * @return {[type]}   [description]
+ */
+gulp.task('new', function() {
+    return gulp.src(uuiDist + '/**')
+        .pipe(gulp.dest('dist/uui/latest'));
+})
 
 
 
