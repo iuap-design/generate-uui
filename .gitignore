@@ -12,18 +12,21 @@ iuap-design
 neoui-tree
 neoui-grid
 neoui-datetimepicker
+
+tree
+grid
+datetimepicker
+
 kero
 neoui
 
 dist/kero
-dist/datatable
 dist/iuap-design
 dist/tree
 dist/grid
 dist/datetimepicker
 dist/neoui
 dist/uui
-dist/kero
 dist/download/*.zip
 
 # Runtime data
