@@ -9,9 +9,9 @@ dist/.DS_Store
 # ignore project
 datatable
 iuap-design
-tree
-grid
-datetimepicker
+neoui-tree
+neoui-grid
+neoui-datetimepicker
 kero
 neoui
 

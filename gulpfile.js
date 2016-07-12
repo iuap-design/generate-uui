@@ -16,17 +16,17 @@ var makeumd = require('./makeumd.js');
 var uuiDist = 'dist/uui/' + uuiPkg.version;
 var originDist = 'dist/uui/' + originVersion;
 
-var distModules = ['neoui', '', 'datetimepicker', 'grid', 'tree']
+var distModules = ['neoui', '', 'neoui-datetimepicker', 'neoui-grid', 'tree']
 
 var pathOfJS = [
     'neoui/dist/js/u-ui.js',
-    'datetimepicker/dist/js/u-date.js',
+    'neoui-datetimepicker/dist/js/u-date.js',
     'kero/dist/js/model.js'
 ]
 
 var pathOfCSS = [
     'neoui/dist/css/u.css',
-    'datetimepicker/dist/css/u-date.css'
+    'neoui-datetimepicker/dist/css/u-date.css'
 ]
 
 var pathOfCopyCSS = [
@@ -34,25 +34,25 @@ var pathOfCopyCSS = [
     'neoui/dist/css/u-extend.min.css',
     'neoui/dist/fonts/font-awesome/css/font-awesome.css',
     'neoui/dist/fonts/font-awesome/css/font-awesome.min.css',
-    'grid/dist/css/grid.css',
-    'grid/dist/css/grid.min.css',
-    'tree/dist/css/tree.css',
-    'tree/dist/css/tree.min.css'
+    'neoui-grid/dist/css/grid.css',
+    'neoui-grid/dist/css/grid.min.css',
+    'neoui-tree/dist/css/tree.css',
+    'neoui-tree/dist/css/tree.min.css'
 ]
 
 var pathGrid = [
-    'grid/dist/js/u-grid.js',
+    'neoui-grid/dist/js/u-grid.js',
     'kero/dist/js/grid.kero.js'
 ]
 var pathTree = [
-    'tree/dist/js/u-tree.js',
+    'neoui-tree/dist/js/u-tree.js',
     'kero/dist/js/tree.kero.js'
     
 ]
 
 var pathUI = [
     'neoui/dist/js/u-ui.js',
-    'datetimepicker/dist/js/u-date.js'
+    'neoui-datetimepicker/dist/js/u-date.js'
 ]
 
 
@@ -61,8 +61,8 @@ var pathOfCopyJS = [
     'neoui/dist/js/u-polyfill.min.js',
     'kero/dist/js/u-model.js',
     'kero/dist/js/u-model.min.js',
-    'datetimepicker/dist/js/u-date.js',
-    'datetimepicker/dist/js/u-date.min.js'
+    'neoui-datetimepicker/dist/js/u-date.js',
+    'neoui-datetimepicker/dist/js/u-date.min.js'
 ]
 
 var notIncludeCss = '!'+ uuiDist + '/css/font-awesome' + '*' + '.css';
@@ -234,14 +234,14 @@ var originGlobs = {
         uuiDist + '/js/u-polyfill.js',
         uuiDist + '/js/u-ui.js',
         './compatible/src/dialog_.js',
-        './grid/dist/js/u-grid.js',
+        './neoui-grid/dist/js/u-grid.js',
         './compatible/u/validate.js',
         './compatible/u/autocomplete.js',
         './compatible/u/backtop.js',
         './compatible/u/combobox.js',
         './compatible/u/dialog.js',
         './compatible/u/moment.js',
-        './compatible/u/datetimepicker.js',
+        './compatible/u/neoui-datetimepicker.js',
         './compatible/u/formater.js',
         './compatible/u/JsExtensions.js',
         './compatible/u/loading.js',
