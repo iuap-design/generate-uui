@@ -12,11 +12,12 @@ prodName=(
 
 
 
-# 分支切换到 release
+# 执行gulp
 for name in ${prodName[@]}
 do
   cd ${name}
-  echo "--- ${name}进行分支切换和代码更新 ---"
+  echo "--- ${name}执行gulp ---"
   gulp dist
-  echo "--- 分支切换和代码更新完成 ---"
+  cd ..
+  echo "--- 执行gulp完成 ---"
 done

@@ -11,13 +11,12 @@ prodName=(
 )
 
 
-# 分支切换到 release
+# 拉取代码 release
 for name in ${prodName[@]}
 do
   cd ${name}
-  echo "--- ${name}进行分支切换和代码更新 ---"
-  git checkout release
+  echo "--- ${name}进行代码更新 ---"
   git pull origin release
   cd ..
-  echo "--- 分支切换和代码更新完成 ---"
+  echo "--- 代码更新完成 ---"
 done
