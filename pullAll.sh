@@ -20,3 +20,5 @@ do
   cd ..
   echo "--- 代码更新完成 ---"
 done
+
+git pull origin master
