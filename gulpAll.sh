@@ -21,3 +21,5 @@ do
   cd ..
   echo "--- 执行gulp完成 ---"
 done
+
+gulp dist
