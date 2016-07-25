@@ -185,6 +185,11 @@ gulp.task('copyfont', function(){
         .pipe(gulp.dest(uuiDist + '/fonts/'));
 })
 
+gulp.task('copyimg', function(){
+    gulp.src(['neoui/dist/images/**'])
+        .pipe(gulp.dest(uuiDist + '/images/'));
+})
+
 function getDistDir(moduleDir){
     var publishPkg = require('./' + moduleDir + '/package.json');
     var publishDist = 'dist/' + moduleDir + '/' + publishPkg.version;
@@ -211,7 +216,7 @@ gulp.task('shell', function() {
     });
 });
 
-gulp.task('dist', ['css', 'js', 'uiconcat', 'gridjs', 'treejs', 'copycss', 'copyjs','copyfont'],function(){
+gulp.task('dist', ['css', 'js', 'uiconcat', 'gridjs', 'treejs', 'copycss', 'copyjs','copyfont','copyimg'],function(){
     gulp.run('origin');
     gulp.run('down');
     gulp.run('new');
