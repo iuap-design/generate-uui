@@ -1,6 +1,6 @@
 {
   "name": "generate-uui",
-  "version": "3.0.6",
+  "version": "3.0.0-RELEASE",
   "description": "合并构建UUI",
   "main": "gulpfile.js",
   "scripts": {
