@@ -11,7 +11,7 @@ var del = require('del');
 var uuiPkg = require('./package.json');
 var originVersion = '2.0.1';
 
-var makeumd = require('./makeumd.js');
+var version = require('./version.js');
 
 var uuiDist = 'dist/uui/' + uuiPkg.version;
 var originDist = 'dist/uui/' + originVersion;
@@ -103,7 +103,7 @@ gulp.task('baseJs', function(){
 });
 
 gulp.task('js', ['baseJs'] , function(){
-    makeumd.init([
+    version.init([
         uuiDist + '/js/u.min.js',
     ]);
 });
@@ -118,7 +118,7 @@ gulp.task('gridjs-init', function() {
 });
 
 gulp.task('gridjs', ['gridjs-init'] , function(){
-    makeumd.init([
+    version.init([
         uuiDist + '/js/u-grid.min.js',
     ]);
 });
@@ -133,7 +133,7 @@ gulp.task('treejs-init', function() {
 });
 
 gulp.task('treejs', ['treejs-init'] , function(){
-    makeumd.init([
+    version.init([
         uuiDist + '/js/u-tree.min.js',
     ]);
 });
@@ -149,7 +149,7 @@ gulp.task('uiconcat-init', function() {
 });
 
 gulp.task('uiconcat', ['uiconcat-init'] , function(){
-    makeumd.init([
+    version.init([
         uuiDist + '/js/u-ui.min.js',
     ]);
 });
@@ -164,7 +164,7 @@ gulp.task('css-init', function(){
 });
 
 gulp.task('css', ['css-init'] , function(){
-    makeumd.init([
+    version.init([
         uuiDist + '/css/u.css',
         uuiDist + '/css/u.min.css',
     ]);
