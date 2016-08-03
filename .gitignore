@@ -2,6 +2,7 @@
 logs
 *.log
 npm-debug.log*
+*.war
 
 .DS_Store
 dist/.DS_Store
