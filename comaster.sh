@@ -17,9 +17,9 @@ for name in ${prodName[@]}
 do
   cd ${name}
   echo "--- ${name}执行gulp ---"
-  git co master
+  git checkout master
   cd ..
   echo "--- 执行gulp完成 ---"
 done
 
-git co master
+git checkout master
