@@ -8,7 +8,9 @@ var exec = require('child_process').exec;
 var zip = require('gulp-zip');
 var flatmap = require('gulp-flatmap');
 var del = require('del');
+var fs = require('fs');
 var uuiPkg = require('./package.json');
+var process = require('child_process');
 var originVersion = '2.0.1';
 
 var version = require('./version.js');
