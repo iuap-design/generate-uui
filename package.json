@@ -1,12 +1,13 @@
 {
   "name": "generate-uui",
-  "version": "3.0.6",
+  "version": "3.0.0",
   "description": "合并构建UUI",
   "main": "gulpfile.js",
   "scripts": {
     "build": "gulp dist",
     "down": "gulp down",
-    "deploy": "sh fetch.sh && npm run build"
+    "maven": "gulp maven",
+    "deploy": "sh fetch.sh && npm run build && npm run maven"
   },
   "repository": {
     "type": "git",

@@ -8,10 +8,12 @@ var exec = require('child_process').exec;
 var zip = require('gulp-zip');
 var flatmap = require('gulp-flatmap');
 var del = require('del');
+var fs = require('fs');
 var uuiPkg = require('./package.json');
+var process = require('child_process');
 var originVersion = '2.0.1';
 
-var makeumd = require('./makeumd.js');
+var version = require('./version.js');
 
 var uuiDist = 'dist/uui/' + uuiPkg.version;
 var originDist = 'dist/uui/' + originVersion;
@@ -103,7 +105,7 @@ gulp.task('baseJs', function(){
 });
 
 gulp.task('js', ['baseJs'] , function(){
-    makeumd.init([
+    version.init([
         uuiDist + '/js/u.min.js',
     ]);
 });
@@ -118,7 +120,7 @@ gulp.task('gridjs-init', function() {
 });
 
 gulp.task('gridjs', ['gridjs-init'] , function(){
-    makeumd.init([
+    version.init([
         uuiDist + '/js/u-grid.min.js',
     ]);
 });
@@ -133,7 +135,7 @@ gulp.task('treejs-init', function() {
 });
 
 gulp.task('treejs', ['treejs-init'] , function(){
-    makeumd.init([
+    version.init([
         uuiDist + '/js/u-tree.min.js',
     ]);
 });
@@ -149,7 +151,7 @@ gulp.task('uiconcat-init', function() {
 });
 
 gulp.task('uiconcat', ['uiconcat-init'] , function(){
-    makeumd.init([
+    version.init([
         uuiDist + '/js/u-ui.min.js',
     ]);
 });
@@ -164,7 +166,7 @@ gulp.task('css-init', function(){
 });
 
 gulp.task('css', ['css-init'] , function(){
-    makeumd.init([
+    version.init([
         uuiDist + '/css/u.css',
         uuiDist + '/css/u.min.css',
     ]);
@@ -183,6 +185,11 @@ gulp.task('copyjs', function(){
 gulp.task('copyfont', function(){
     gulp.src(['neoui/dist/fonts/*.*','neoui/dist/fonts/font-awesome/fonts/**'])
         .pipe(gulp.dest(uuiDist + '/fonts/'));
+})
+
+gulp.task('copyimg', function(){
+    gulp.src(['neoui/dist/images/**'])
+        .pipe(gulp.dest(uuiDist + '/images/'));
 })
 
 function getDistDir(moduleDir){
@@ -211,7 +218,7 @@ gulp.task('shell', function() {
     });
 });
 
-gulp.task('dist', ['css', 'js', 'uiconcat', 'gridjs', 'treejs', 'copycss', 'copyjs','copyfont'],function(){
+gulp.task('dist', ['css', 'js', 'uiconcat', 'gridjs', 'treejs', 'copycss', 'copyjs','copyfont','copyimg'],function(){
     gulp.run('origin');
     gulp.run('down');
     gulp.run('new');
@@ -372,5 +379,96 @@ gulp.task('new', function() {
 
 
 
+
+
+
+
+// maven 配置信息
+
+var publishConfig = {
+    command: "mvn",
+    repositoryId: "iUAP-Stagings",
+    repositoryURL: "http://172.16.51.12:8081/nexus/content/repositories/iUAP-Stagings",
+    artifactId: "iuap-design",
+    groupId: "com.yonyou.iuap",
+    version: "3.0.6"
+};
+
+
+
+/**
+ * 打包为war
+ * @param  {[type]} "package" [description]
+ * @param  {[type]} function( [description]
+ * @return {[type]}           [description]
+ */
+gulp.task("package", function(){
+  gulp.src('./dist/uui/latest/**')
+      .pipe(zip('iuap-design.war'))
+      .pipe(gulp.dest('./'));
+
+  console.info('package ok!');
+});
+
+/**
+ * install 到本地
+ * @param  {[type]} "install" [description]
+ * @param  {[type]} function( [description]
+ * @return {[type]}           [description]
+ */
+gulp.task("install", ["package"], function(){
+
+  var targetPath = fs.realpathSync('.');
+
+  // 安装命令
+  var installCommandStr = publishConfig.command +
+      " install:install-file -Dfile=" + targetPath +
+      "/iuap-design.war   -DgroupId="+ publishConfig.groupId +
+      " -DartifactId=" + publishConfig.artifactId +
+      "  -Dversion="+ publishConfig.version +" -Dpackaging=war";
+
+    var installWarProcess = process.exec(installCommandStr, function(err,stdout,stderr){
+        if(err) {
+            console.log('install war error:'+stderr);
+        }
+    });
+
+    installWarProcess.stdout.on('data',function(data){
+        console.info(data);
+    });
+    installWarProcess.on('exit',function(data){
+    console.info('install war success');
+  })
+
+});
+
+/**
+ * 发布到maven仓库中
+ * @param  {[type]} "deploy"    [description]
+ * @param  {[type]} ["package"] [description]
+ * @param  {[type]} function(   [description]
+ * @return {[type]}             [description]
+ */
+gulp.task("maven", ["install"], function(){
+  var targetPath = fs.realpathSync('.');
+
+  var publishCommandStr =  publishConfig.command + " deploy:deploy-file  -Dfile="+ targetPath+"/iuap-design.war   -DgroupId="+ publishConfig.groupId +" -DartifactId="+ publishConfig.artifactId +"  -Dversion="+ publishConfig.version +" -Dpackaging=war  -DrepositoryId="+ publishConfig.repositoryId +" -Durl=" +publishConfig.repositoryURL;
+
+  console.info(publishCommandStr);
+
+  var publishWarProcess =   process.exec(publishCommandStr, function(err,stdout,stderr){
+    if(err) {
+      console.log('publish war error:'+stderr);
+    }
+  });
+
+  publishWarProcess.stdout.on('data',function(data){
+    console.info(data);
+  });
+  publishWarProcess.on('exit',function(data){
+    console.info('publish  war success');
+  });
+
+})
 
 
