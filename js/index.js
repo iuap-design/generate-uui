@@ -1,7 +1,7 @@
-import * as u from 'neoui-sparrow';
-import * as neoui from 'neoui';
-import {DataTable, u as kero} from 'kero';
-import * as adapter from 'kero-adapter';
+import * as u from 'neoui-sparrow/js/index';
+import * as neoui from 'neoui/js/index';
+import {DataTable, u as kero} from 'kero/js/index';
+import * as adapter from 'kero-adapter/js/index';
 
 u.extend(u, neoui);
 u.extend(u, kero);

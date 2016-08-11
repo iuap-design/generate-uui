@@ -43,6 +43,10 @@ var config = {
 		loaders: [{
 			test: /(\.jsx|\.js)$/,
 			loader: 'babel',
+			// include: [
+			// 	__dirname + '/js',
+			// 	__dirname + '/node_modules/neoui-sparrow/js'
+			// ]
 			exclude: /(bower_components)/
 		}, {
 			test: /(\.jsx|\.js)$/,
