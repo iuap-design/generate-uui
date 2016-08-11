@@ -15607,6 +15607,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.u = undefined;
+
+	var _extend = __webpack_require__(2);
+
 	var _baseAdapter = __webpack_require__(112);
 
 	var _checkbox = __webpack_require__(113);
@@ -15615,41 +15622,45 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _combobox = __webpack_require__(116);
 
-	var _float = __webpack_require__(117);
+	var _currency = __webpack_require__(117);
 
-	var _integer = __webpack_require__(118);
+	var _float = __webpack_require__(118);
 
-	var _nativeCheckbox = __webpack_require__(119);
+	var _integer = __webpack_require__(119);
 
-	var _nativeRadio = __webpack_require__(120);
+	var _nativeCheckbox = __webpack_require__(120);
 
-	var _pagination = __webpack_require__(121);
+	var _nativeRadio = __webpack_require__(121);
 
-	var _password = __webpack_require__(122);
+	var _pagination = __webpack_require__(122);
 
-	var _percent = __webpack_require__(124);
+	var _password = __webpack_require__(123);
 
-	var _string = __webpack_require__(123);
+	var _percent = __webpack_require__(125);
 
-	var _progress = __webpack_require__(125);
+	var _string = __webpack_require__(124);
 
-	var _radio = __webpack_require__(126);
+	var _progress = __webpack_require__(126);
 
-	var _switch = __webpack_require__(127);
+	var _radio = __webpack_require__(127);
 
-	var _textarea = __webpack_require__(128);
+	var _switch = __webpack_require__(128);
 
-	var _textfield = __webpack_require__(129);
+	var _textarea = __webpack_require__(129);
 
-	var _url = __webpack_require__(130);
+	var _textfield = __webpack_require__(130);
 
-	var _enableMixin = __webpack_require__(131);
+	var _url = __webpack_require__(131);
 
-	var _requiredMixin = __webpack_require__(132);
+	var _enableMixin = __webpack_require__(132);
 
-	var _validateMixin = __webpack_require__(133);
+	var _requiredMixin = __webpack_require__(133);
+
+	var _validateMixin = __webpack_require__(134);
 
 	var _valueMixin = __webpack_require__(114);
+
+	// console.log(TextAreaAdapter);
 
 	//import {YearAdapter} from './year';
 	//import {YearMonthAdapter} from './yearmonth';
@@ -15657,18 +15668,45 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	//import {MonthAdapter} from './month';
 
-	//import {CurrencyAdapter} from './currency';
 	//import {DateTimeAdapter} from './datetime';
 	/**
 	 * Module : Kero webpack entry index
 	 * Author : Kvkens(yueming@yonyou.com)
 	 * Date	  : 2016-08-10 14:51:05
 	 */
-
-	console.log(_textarea.TextAreaAdapter);
+	var ex = {
+		BaseAdapter: _baseAdapter.BaseAdapter,
+		CheckboxAdapter: _checkbox.CheckboxAdapter,
+		CkEditorAdapter: _ckeditor.CkEditorAdapter,
+		ComboboxAdapter: _combobox.ComboboxAdapter,
+		CurrencyAdapter: _currency.CurrencyAdapter,
+		FloatAdapter: _float.FloatAdapter,
+		IntegerAdapter: _integer.IntegerAdapter,
+		NativeCheckAdapter: _nativeCheckbox.NativeCheckAdapter,
+		NativeRadioAdapter: _nativeRadio.NativeRadioAdapter,
+		PaginationAdapter: _pagination.PaginationAdapter,
+		PassWordAdapter: _password.PassWordAdapter,
+		PercentAdapter: _percent.PercentAdapter,
+		StringAdapter: _string.StringAdapter,
+		ProgressAdapter: _progress.ProgressAdapter,
+		RadioAdapter: _radio.RadioAdapter,
+		SwitchAdapter: _switch.SwitchAdapter,
+		TextAreaAdapter: _textarea.TextAreaAdapter,
+		TextFieldAdapter: _textfield.TextFieldAdapter,
+		UrlAdapter: _url.UrlAdapter,
+		EnableMixin: _enableMixin.EnableMixin,
+		RequiredMixin: _requiredMixin.RequiredMixin,
+		ValidateMixin: _validateMixin.ValidateMixin,
+		ValueMixin: _valueMixin.ValueMixin
+	};
 	//import {TimeAdapter} from './time';
 
-	//import {GridAdapter} from './grid';
+	// import {GridAdapter} from './grid';
+
+
+	(0, _extend.extend)(ex, window.u || {});
+
+	exports.u = ex;
 
 /***/ },
 /* 112 */
@@ -16328,6 +16366,112 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.CurrencyAdapter = undefined;
+
+	var _baseAdapter = __webpack_require__(112);
+
+	var _valueMixin = __webpack_require__(114);
+
+	var _util = __webpack_require__(5);
+
+	var _neouiCheckbox = __webpack_require__(27);
+
+	var _indexDataTable = __webpack_require__(68);
+
+	var _formater = __webpack_require__(15);
+
+	var _float = __webpack_require__(118);
+
+	var _compMgr = __webpack_require__(11);
+
+	/**
+	 * 货币控件
+	 */
+	/**
+	 * Module : Kero currency
+	 * Author : Kvkens(yueming@yonyou.com)
+	 * Date	  : 2016-08-09 13:42:14
+	 */
+
+	var CurrencyAdapter = _float.FloatAdapter.extend({
+	    init: function init() {
+	        var self = this;
+	        CurrencyAdapter.superclass.init.apply(this);
+
+	        this.maskerMeta = iweb.Core.getMaskerMeta('currency') || {};
+	        this.maskerMeta.precision = this.getOption('precision') || this.maskerMeta.precision;
+	        this.maskerMeta.curSymbol = this.getOption('curSymbol') || this.maskerMeta.curSymbol;
+	        this.validType = 'float';
+	        this.dataModel.on(this.field + '.curSymbol.' + _indexDataTable.DataTable.ON_CURRENT_META_CHANGE, function (event) {
+	            self.setCurSymbol(event.newValue);
+	        });
+	        this.formater = new _formater.NumberFormater(this.maskerMeta.precision);
+	        this.masker = new CurrencyMasker(this.maskerMeta);
+	    },
+	    /**
+	     * 修改精度
+	     * @param {Integer} precision
+	     */
+	    setPrecision: function setPrecision(precision) {
+	        if (this.maskerMeta.precision == precision) return;
+	        this.maskerMeta.precision = precision;
+	        this.formater = new _formater.NumberFormater(this.maskerMeta.precision);
+	        this.masker = new CurrencyMasker(this.maskerMeta);
+	        var currentRow = this.dataModel.getCurrentRow();
+	        if (currentRow) {
+	            var v = this.dataModel.getCurrentRow().getValue(this.field);
+	            this.showValue = this.masker.format(this.formater.format(v)).value;
+	        } else {
+	            this.showValue = this.masker.format(this.formater.format(this.trueValue)).value;
+	        }
+	        this.setShowValue(this.showValue);
+	    },
+	    /**
+	     * 修改币符
+	     * @param {String} curSymbol
+	     */
+	    setCurSymbol: function setCurSymbol(curSymbol) {
+	        if (this.maskerMeta.curSymbol == curSymbol) return;
+	        this.maskerMeta.curSymbol = curSymbol;
+	        this.masker.formatMeta.curSymbol = this.maskerMeta.curSymbol;
+	        this.element.trueValue = this.trueValue;
+	        this.showValue = this.masker.format(this.trueValue).value;
+	        this.setShowValue(this.showValue);
+	    },
+	    onFocusin: function onFocusin(e) {
+	        var v = this.getValue(),
+	            vstr = v + '',
+	            focusValue = v;
+	        if ((0, _util.isNumber)(v) && (0, _util.isNumber)(this.maskerMeta.precision)) {
+	            if (vstr.indexOf('.') >= 0) {
+	                var sub = vstr.substr(vstr.indexOf('.') + 1);
+	                if (sub.length < this.maskerMeta.precision || parseInt(sub.substr(this.maskerMeta.precision)) == 0) {
+	                    focusValue = this.formater.format(v);
+	                }
+	            } else if (this.maskerMeta.precision > 0) {
+	                focusValue = this.formater.format(v);
+	            }
+	        }
+	        this.setShowValue(focusValue);
+	    }
+	});
+
+	_compMgr.compMgr.addDataAdapter({
+	    adapter: CurrencyAdapter,
+	    name: 'currency'
+	});
+
+	exports.CurrencyAdapter = CurrencyAdapter;
+
+/***/ },
+/* 118 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	exports.FloatAdapter = undefined;
 
 	var _baseAdapter = __webpack_require__(112);
@@ -16464,7 +16608,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.FloatAdapter = FloatAdapter;
 
 /***/ },
-/* 118 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16549,7 +16693,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.IntegerAdapter = IntegerAdapter;
 
 /***/ },
-/* 119 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16683,7 +16827,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.NativeCheckAdapter = NativeCheckAdapter;
 
 /***/ },
-/* 120 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16786,7 +16930,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.NativeRadioAdapter = NativeRadioAdapter;
 
 /***/ },
-/* 121 */
+/* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16902,7 +17046,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.PaginationAdapter = PaginationAdapter;
 
 /***/ },
-/* 122 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16912,7 +17056,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.PassWordAdapter = undefined;
 
-	var _string = __webpack_require__(123);
+	var _string = __webpack_require__(124);
 
 	var _util = __webpack_require__(5);
 
@@ -16976,7 +17120,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.PassWordAdapter = PassWordAdapter;
 
 /***/ },
-/* 123 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17048,7 +17192,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.StringAdapter = StringAdapter;
 
 /***/ },
-/* 124 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17058,7 +17202,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.PercentAdapter = undefined;
 
-	var _float = __webpack_require__(117);
+	var _float = __webpack_require__(118);
 
 	var _formater = __webpack_require__(15);
 
@@ -17096,7 +17240,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.PercentAdapter = PercentAdapter;
 
 /***/ },
-/* 125 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17142,7 +17286,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.ProgressAdapter = ProgressAdapter;
 
 /***/ },
-/* 126 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17335,7 +17479,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.RadioAdapter = RadioAdapter;
 
 /***/ },
-/* 127 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17403,7 +17547,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.SwitchAdapter = SwitchAdapter;
 
 /***/ },
-/* 128 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17451,7 +17595,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.TextAreaAdapter = TextAreaAdapter;
 
 /***/ },
-/* 129 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17467,11 +17611,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _neouiTextfield = __webpack_require__(29);
 
-	var _float = __webpack_require__(117);
+	var _float = __webpack_require__(118);
 
-	var _string = __webpack_require__(123);
+	var _string = __webpack_require__(124);
 
-	var _integer = __webpack_require__(118);
+	var _integer = __webpack_require__(119);
 
 	var _compMgr = __webpack_require__(11);
 
@@ -17531,7 +17675,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.TextFieldAdapter = TextFieldAdapter;
 
 /***/ },
-/* 130 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17541,7 +17685,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.UrlAdapter = undefined;
 
-	var _string = __webpack_require__(123);
+	var _string = __webpack_require__(124);
 
 	var _dom = __webpack_require__(8);
 
@@ -17598,7 +17742,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.UrlAdapter = UrlAdapter;
 
 /***/ },
-/* 131 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17644,7 +17788,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.EnableMixin = EnableMixin;
 
 /***/ },
-/* 132 */
+/* 133 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -17681,7 +17825,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.RequiredMixin = RequiredMixin;
 
 /***/ },
-/* 133 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
