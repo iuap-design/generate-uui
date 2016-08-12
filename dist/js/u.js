@@ -63,8 +63,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _index = __webpack_require__(1);
 
-	var u = _interopRequireWildcard(_index);
-
 	var _index2 = __webpack_require__(22);
 
 	var neoui = _interopRequireWildcard(_index2);
@@ -77,11 +75,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
-	u.extend(u, neoui);
-	u.extend(u, _index3.u);
-	u.extend(u, adapter);
+	// import * as u from 'neoui-sparrow/js/index';
+	// import * as neoui from 'neoui/js/index';
+	// import {DataTable, u as kero} from 'kero/js/index';
+	// import * as adapter from 'kero-adapter/js/index';
 
-	exports.u = u;
+	_index.u.extend(_index.u, neoui.u);
+	_index.u.extend(_index.u, _index3.u.u);
+	_index.u.extend(_index.u, adapter.u);
+
+	exports.u = _index.u;
 	exports.DataTable = _index3.DataTable;
 
 /***/ },
@@ -12940,11 +12943,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _extend = __webpack_require__(2);
 
-	/**
-	 * Module : neoui-month
-	 * Author : liuyk(liuyk@yonyou.com)
-	 * Date	  : 2016-08-11 15:17:07
-	 */
+	var _compMgr = __webpack_require__(11);
+
 	var Month = _BaseComponent.BaseComponent.extend({
 		DEFAULTS: {},
 		init: function init() {
@@ -13132,19 +13132,24 @@ return /******/ (function(modules) { // webpackBootstrap
 			(0, _dom.removeClass)(this.panelDiv, 'is-visible');
 			this.panelDiv.style.zIndex = -1;
 		}
-	});
+	}); /**
+	     * Module : neoui-month
+	     * Author : liuyk(liuyk@yonyou.com)
+	     * Date	  : 2016-08-11 15:17:07
+	     */
 
-	compMgr.regComp({
+
+	_compMgr.compMgr.regComp({
 		comp: Month,
 		compAsString: 'u.Month',
 		css: 'u-month'
 	});
 	if (document.readyState && document.readyState === 'complete') {
-		compMgr.updateComp();
+		_compMgr.compMgr.updateComp();
 	} else {
 		(0, _event.on)(window, 'load', function () {
 			//扫描并生成控件
-			compMgr.updateComp();
+			_compMgr.compMgr.updateComp();
 		});
 	}
 	exports.Month = Month;
@@ -13168,11 +13173,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _extend = __webpack_require__(2);
 
-	/**
-	 * Module : neoui-year
-	 * Author : liuyk(liuyk@yonyou.com)
-	 * Date	  : 2016-08-11 15:17:07
-	 */
+	var _compMgr = __webpack_require__(11);
 
 	var Year = _BaseComponent.BaseComponent.extend({
 		DEFAULTS: {},
@@ -13361,19 +13362,23 @@ return /******/ (function(modules) { // webpackBootstrap
 			(0, _dom.removeClass)(this.panelDiv, 'is-visible');
 			this.panelDiv.style.zIndex = -1;
 		}
-	});
+	}); /**
+	     * Module : neoui-year
+	     * Author : liuyk(liuyk@yonyou.com)
+	     * Date	  : 2016-08-11 15:17:07
+	     */
 
-	compMgr.regComp({
+	_compMgr.compMgr.regComp({
 		comp: Year,
 		compAsString: 'u.Year',
 		css: 'u-year'
 	});
 	if (document.readyState && document.readyState === 'complete') {
-		compMgr.updateComp();
+		_compMgr.compMgr.updateComp();
 	} else {
 		(0, _event.on)(window, 'load', function () {
 			//扫描并生成控件
-			compMgr.updateComp();
+			_compMgr.compMgr.updateComp();
 		});
 	}
 	exports.Year = Year;
@@ -13398,6 +13403,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _extend = __webpack_require__(2);
 
 	var _env = __webpack_require__(6);
+
+	var _compMgr = __webpack_require__(11);
+
+	/**
+	 * Module : neoui-year
+	 * Author : liuyk(liuyk@yonyou.com)
+	 * Date   : 2016-08-11 15:17:07
+	 */
 
 	var YearMonth = _BaseComponent.BaseComponent.extend({
 	    DEFAULTS: {},
@@ -13677,23 +13690,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        (0, _dom.removeClass)(this.panelDiv, 'is-visible');
 	        this.panelDiv.style.zIndex = -1;
 	    }
-	}); /**
-	     * Module : neoui-year
-	     * Author : liuyk(liuyk@yonyou.com)
-	     * Date   : 2016-08-11 15:17:07
-	     */
+	});
 
-	compMgr.regComp({
+	_compMgr.compMgr.regComp({
 	    comp: YearMonth,
 	    compAsString: 'u.YearMonth',
 	    css: 'u-yearmonth'
 	});
 	if (document.readyState && document.readyState === 'complete') {
-	    compMgr.updateComp();
+	    _compMgr.compMgr.updateComp();
 	} else {
 	    (0, _event.on)(window, 'load', function () {
 	        //扫描并生成控件
-	        compMgr.updateComp();
+	        _compMgr.compMgr.updateComp();
 	    });
 	}
 	exports.YearMonth = YearMonth;
@@ -14310,32 +14319,36 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 66 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.processXHRError = undefined;
-
-	var _neouiMessage = __webpack_require__(38);
+	/**
+	 * Module : kero app processXHRError
+	 * Author : liuyk(liuyk@yonyou.com)
+	 * Date   : 2016-07-29 09:34:01
+	 */
 
 	var processXHRError = function processXHRError(rsl, state, xhr) {
 	    if (typeof rsl === 'string') rsl = JSON.parse(rsl);
 	    if (xhr.getResponseHeader && xhr.getResponseHeader("X-Error")) {
-	        (0, _neouiMessage.showMessageDialog)({ type: "info", title: "提示", msg: rsl["message"], backdrop: true });
+	        if (u.showMessageDialog) {
+	            u.showMessageDialog({ type: "info", title: "提示", msg: rsl["message"], backdrop: true });
+	        } else {
+	            alert(rsl["message"]);
+	        }
+
 	        if (rsl["operate"]) {
 	            eval(rsl["operate"]);
 	        }
 	        return false;
 	    }
 	    return true;
-	}; /**
-	    * Module : kero app processXHRError
-	    * Author : liuyk(liuyk@yonyou.com)
-	    * Date   : 2016-07-29 09:34:01
-	    */
+	};
+
 	exports.processXHRError = processXHRError;
 
 /***/ },
@@ -14625,22 +14638,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 72 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.processXHRError = undefined;
-
-	var _neouiMessage = __webpack_require__(38);
+	/**
+	 * Module : kero app serverEvent processXHRError
+	 * Author : liuyk(liuyk@yonyou.com)
+	 * Date   : 2016-07-29 09:34:01
+	 */
 
 	var processXHRError = function processXHRError(self, rsl, state, xhr) {
 	    if (typeof rsl === 'string') rsl = JSON.parse(rsl);
 	    if (xhr.getResponseHeader && xhr.getResponseHeader("X-Error")) {
 	        if (self.orignError) self.orignError.call(self, rsl, state, xhr);else {
-	            if (_neouiMessage.showMessageDialog) (0, _neouiMessage.showMessageDialog)({ type: "info", title: "提示", msg: rsl["message"], backdrop: true });else alert(rsl["message"]);
+	            if (u.showMessageDialog) u.showMessageDialog({ type: "info", title: "提示", msg: rsl["message"], backdrop: true });else alert(rsl["message"]);
 	            if (rsl["operate"]) {
 	                eval(rsl["operate"]);
 	            }
@@ -14648,11 +14663,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return false;
 	    }
 	    return true;
-	}; /**
-	    * Module : kero app serverEvent processXHRError
-	    * Author : liuyk(liuyk@yonyou.com)
-	    * Date   : 2016-07-29 09:34:01
-	    */
+	};
 
 	exports.processXHRError = processXHRError;
 
@@ -17109,16 +17120,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 101 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.updateRow = exports.setRowValue = undefined;
-
-	var _neouiMessage = __webpack_require__(38);
+	/**
+	 * Module : kero dataTable page data
+	 * Author : liuyk(liuyk@yonyou.com)
+	 * Date   : 2016-08-08 09:59:01
+	 */
 
 	var setRowValue = function setRowValue(rowIndex, fieldName, value) {
 	    var row = this.rows[rowIndex];
@@ -17126,11 +17139,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        row.data[fieldName]['value'] = value;
 	        if (row.status != Row.STATUS.NEW) row.status = Row.STATUS.UPDATE;
 	    }
-	}; /**
-	    * Module : kero dataTable page data
-	    * Author : liuyk(liuyk@yonyou.com)
-	    * Date   : 2016-08-08 09:59:01
-	    */
+	};
 
 	var updateRow = function updateRow(originRow, newRow) {
 	    originRow.status = originRow.status;
@@ -17145,7 +17154,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    //					this.setValue(key, valueObj.value)
 
 	                    if (valueObj.error) {
-	                        (0, _neouiMessage.showMessageDialog)({ title: "警告", msg: valueObj.error, backdrop: true });
+	                        if (u.showMessageDialog) u.showMessageDialog({ title: "警告", msg: valueObj.error, backdrop: true });else alert(valueObj.error);
 	                    } else {
 	                        //this.setValue(key, this.formatValue(key, valueObj.value), null)
 	                        originRow.data[key]['value'] = valueObj.value;
@@ -17476,8 +17485,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _util = __webpack_require__(93);
 
-	var _neouiMessage = __webpack_require__(38);
-
 	var _util2 = __webpack_require__(5);
 
 	/**
@@ -17562,7 +17569,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        } else {
 	            if (valueObj.error) {
-	                (0, _neouiMessage.showMessageDialog)({ title: "警告", msg: valueObj.error, backdrop: true });
+	                if (u.showMessageDialog) u.showMessageDialog({ title: "警告", msg: valueObj.error, backdrop: true });else alert(valueObj.error);
 	            } else if (valueObj.value || valueObj.value === null || valueObj.meta || valueObj.value === '' || valueObj.value === '0' || valueObj.value === 0) {
 	                var oldValue = targetData[key]['value'];
 	                targetData[key]['value'] = this.formatValue(key, valueObj.value);
@@ -17639,7 +17646,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                } else {
 	                    var valueObj = sourceData[key];
 	                    if (valueObj.error) {
-	                        (0, _neouiMessage.showMessageDialog)({ title: "警告", msg: valueObj.error, backdrop: true });
+	                        if (u.showMessageDialog) u.showMessageDialog({ title: "警告", msg: valueObj.error, backdrop: true });else alert(valueObj.error);
 	                    } else if (valueObj.value || valueObj.value === null || valueObj.meta) {
 	                        oldValue = targetData[key]['value'];
 	                        targetData[key]['value'] = this.formatValue(key, valueObj.value);
@@ -20800,11 +20807,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _dom = __webpack_require__(8);
 
-	/**
-	 * Module : Kero url adapter
-	 * Author : Kvkens(yueming@yonyou.com)
-	 * Date	  : 2016-08-10 13:51:26
-	 */
+	var _compMgr = __webpack_require__(11);
+
 	var UrlAdapter = _string.StringAdapter.extend({
 	    init: function init() {
 	        UrlAdapter.superclass.init.apply(this);
@@ -20845,8 +20849,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.aDom.style.display = 'block';
 	        }
 	    }
-	});
-	compMgr.addDataAdapter({
+	}); /**
+	     * Module : Kero url adapter
+	     * Author : Kvkens(yueming@yonyou.com)
+	     * Date	  : 2016-08-10 13:51:26
+	     */
+
+	_compMgr.compMgr.addDataAdapter({
 	    adapter: UrlAdapter,
 	    name: 'url'
 	});
