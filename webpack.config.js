@@ -23,7 +23,8 @@ if (env === 'dev'){
 		minimize: true
 	}));
 	outputFile = 'u.min.js';
-	devToolSelect = 'source-map';
+	// devToolSelect = 'source-map';
+	devToolSelect = '';
 
 }
 

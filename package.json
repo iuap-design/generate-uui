@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "webpack --colors --progress --display-modules --mode=dev",
     "prod": "webpack --colors --progress --display-modules --mode=prod",
-    "dist": "npm run dev && npm run prod"
+    "product": "npm run dev && npm run prod"
   },
   "repository": {
     "type": "git",
