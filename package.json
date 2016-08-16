@@ -1,6 +1,6 @@
 {
   "name": "generate-uui",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "## 使用说明",
   "main": "gulpfile.js",
   "scripts": {
@@ -32,9 +32,9 @@
     "yargs": "^4.8.1"
   },
   "devDependencies": {
-    "kero": "^3.1.2",
-    "kero-adapter": "*",
-    "neoui": "*",
-    "neoui-sparrow": "^1.2.2"
+    "kero": "^3.4.0",
+    "kero-adapter": "^1.4.0",
+    "neoui": "^3.4.0",
+    "neoui-sparrow": "^1.4.0"
   }
 }
