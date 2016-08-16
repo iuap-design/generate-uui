@@ -3,9 +3,6 @@
 cdir=`pwd`
 
 prodName=(
-  "neoui"
-  "kero"
-  "neoui-datetimepicker"
   "neoui-tree"
   "neoui-grid"
 )
