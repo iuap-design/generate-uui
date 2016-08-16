@@ -16407,7 +16407,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	var removeRows = function removeRows(indices) {
-	    indices = (0, _util._formatToIndicesArray)(indices);
+	    indices = (0, _util._formatToIndicesArray)(this, indices);
 	    indices = indices.sort();
 	    var rowIds = [],
 	        rows = this.rows(),
@@ -16478,14 +16478,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    */
 
 
-	var _formatToIndicesArray = function _formatToIndicesArray(indices) {
+	var _formatToIndicesArray = function _formatToIndicesArray(dataTableObj, indices) {
 	    if (typeof indices == 'string' || typeof indices == 'number') {
 	        indices = [indices];
 	    } else if (indices instanceof Row) {
-	        indices = this.getIndexByRowId(indices.rowId);
+	        indices = dataTableObj.getIndexByRowId(indices.rowId);
 	    } else if ((0, _util.isArray)(indices) && indices.length > 0 && indices[0] instanceof Row) {
 	        for (var i = 0; i < indices.length; i++) {
-	            indices[i] = this.getIndexByRowId(indices[i].rowId);
+	            indices[i] = dataTableObj.getIndexByRowId(indices[i].rowId);
 	        }
 	    }
 	    return indices;
@@ -16687,7 +16687,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {Array} indices
 	 */
 	var setRowsDelete = function setRowsDelete(indices) {
-	    indices = (0, _util._formatToIndicesArray)(indices);
+	    indices = (0, _util._formatToIndicesArray)(this, indices);
 	    for (var i = 0; i < indices.length; i++) {
 	        var row = this.getRow(indices[i]);
 	        if (row.status == Row.STATUS.NEW) {
@@ -16757,7 +16757,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.setAllRowsUnSelect({ quiet: true });
 	        return;
 	    }
-	    indices = (0, _util2._formatToIndicesArray)(indices);
+	    indices = (0, _util2._formatToIndicesArray)(this, indices);
 	    var sIns = this.selectedIndices();
 	    if ((0, _util.isArray)(indices) && (0, _util.isArray)(sIns) && indices.join() == sIns.join()) {
 	        // 避免与控件循环触发
@@ -16791,7 +16791,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * 添加选中行，不会清空之前已选中的行
 	 */
 	var addRowsSelect = function addRowsSelect(indices) {
-	    indices = (0, _util2._formatToIndicesArray)(indices);
+	    indices = (0, _util2._formatToIndicesArray)(this, indices);
 	    var selectedIndices = this.selectedIndices().slice();
 	    for (var i = 0; i < indices.length; i++) {
 	        var ind = indices[i],
@@ -16837,7 +16837,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 
 	var setRowsUnSelect = function setRowsUnSelect(indices) {
-	    indices = (0, _util2._formatToIndicesArray)(indices);
+	    indices = (0, _util2._formatToIndicesArray)(this, indices);
 	    var selectedIndices = this.selectedIndices().slice();
 
 	    // 避免与控件循环触发
@@ -17332,7 +17332,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _rowData = __webpack_require__(107);
 
-	var _rowGetData = __webpack_require__(108);
+	var _rowGetData = __webpack_require__(109);
 
 	var _rowGetMeta = __webpack_require__(110);
 
@@ -17348,7 +17348,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _rowSimpleData = __webpack_require__(116);
 
-	var _rowUtil = __webpack_require__(109);
+	var _rowUtil = __webpack_require__(108);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -17438,8 +17438,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        //util
 	        _this.formatValue = _rowUtil.formatValue;
-	        _this._findField = _rowUtil._findField;
-	        _this._getField = _rowUtil._getField;
 
 	        _this.init();
 	        return _this;
@@ -17485,9 +17483,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                                                                                                                                                                                                                                   */
 
 
-	var _util = __webpack_require__(93);
+	var _rowUtil = __webpack_require__(108);
 
-	var _util2 = __webpack_require__(5);
+	var _util = __webpack_require__(5);
 
 	/**
 	*设置row中某一列的值
@@ -17499,9 +17497,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	    var oldValue = this.getValue(fieldName);
 	    if (typeof oldValue == 'undefined' || oldValue === null) oldValue = '';
-	    if ((0, _util.eq)(oldValue, value)) return;
-	    (0, _util._getField)(fieldName)['value'] = value;
-	    (0, _util._triggerChange)(fieldName, oldValue, ctx);
+	    if ((0, _rowUtil.eq)(oldValue, value)) return;
+	    (0, _rowUtil._getField)(this, fieldName)['value'] = value;
+	    (0, _rowUtil._triggerChange)(this, fieldName, oldValue, ctx);
 	};
 
 	var setChildValue = function setChildValue(fieldName, value) {
@@ -17556,44 +17554,44 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @param {[type]} subscribe  
 	 * @param {[type]} parentKey  [父项key，数据项为数组时获取meta值用]
 	 */
-	var _setData = function _setData(sourceData, targetData, subscribe, parentKey) {
+	var _setData = function _setData(rowObj, sourceData, targetData, subscribe, parentKey) {
 	    for (var key in sourceData) {
 	        var _parentKey = parentKey || null;
 	        //if (targetData[key]) {
 	        targetData[key] = targetData[key] || {};
 	        var valueObj = sourceData[key];
-	        if ((typeof valueObj === 'undefined' ? 'undefined' : _typeof(valueObj)) != 'object') this.parent.createField(key);
+	        if ((typeof valueObj === 'undefined' ? 'undefined' : _typeof(valueObj)) != 'object') rowObj.parent.createField(key);
 	        //if (typeof this.parent.meta[key] === 'undefined') continue;
 	        if (valueObj == null || (typeof valueObj === 'undefined' ? 'undefined' : _typeof(valueObj)) != 'object') {
-	            targetData[key]['value'] = this.formatValue(key, valueObj);
+	            targetData[key]['value'] = rowObj.formatValue(key, valueObj);
 	            if (subscribe === true && oldValue !== targetData[key]['value']) {
-	                (0, _util._triggerChange)(key, oldValue);
+	                (0, _rowUtil._triggerChange)(rowObj, key, oldValue);
 	            }
 	        } else {
 	            if (valueObj.error) {
 	                if (u.showMessageDialog) u.showMessageDialog({ title: "警告", msg: valueObj.error, backdrop: true });else alert(valueObj.error);
 	            } else if (valueObj.value || valueObj.value === null || valueObj.meta || valueObj.value === '' || valueObj.value === '0' || valueObj.value === 0) {
 	                var oldValue = targetData[key]['value'];
-	                targetData[key]['value'] = this.formatValue(key, valueObj.value);
+	                targetData[key]['value'] = rowObj.formatValue(key, valueObj.value);
 	                if (subscribe === true && oldValue !== targetData[key]['value']) {
-	                    (0, _util._triggerChange)(key, oldValue);
+	                    (0, _rowUtil._triggerChange)(rowObj, key, oldValue);
 	                }
 	                for (var k in valueObj.meta) {
-	                    this.setMeta(key, k, valueObj.meta[k]);
+	                    rowObj.setMeta(key, k, valueObj.meta[k]);
 	                }
-	            } else if ((0, _util2.isArray)(valueObj)) {
+	            } else if ((0, _util.isArray)(valueObj)) {
 	                targetData[key].isChild = true;
 	                //ns 是多级数据时的空间名： 最顶层的dataTable没有ns。  f1.f2.f3
 	                var _key = _parentKey == null ? key : _parentKey + '.' + key;
-	                var ns = this.parent.ns === '' ? key : this.parent.ns + '.' + _key;
-	                if (this.parent.meta[_key]) {
-	                    var meta = this.parent.meta[_key]['meta'];
-	                    targetData[key].value = new u.DataTable({ root: this.parent.root, ns: ns, meta: meta });
+	                var ns = rowObj.parent.ns === '' ? key : rowObj.parent.ns + '.' + _key;
+	                if (rowObj.parent.meta[_key]) {
+	                    var meta = rowObj.parent.meta[_key]['meta'];
+	                    targetData[key].value = new u.DataTable({ root: rowObj.parent.root, ns: ns, meta: meta });
 	                    targetData[key].value.setSimpleData(valueObj);
 	                }
 	            } else {
 	                _parentKey = _parentKey == null ? key : _parentKey + '.' + key;
-	                this._setData(valueObj, targetData[key], null, _parentKey);
+	                _setData(rowObj, valueObj, targetData[key], null, _parentKey);
 	            }
 	        }
 	        //}
@@ -17609,7 +17607,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var sourceData = data.data,
 	        targetData = this.data;
 	    if (this.parent.root.strict != true) {
-	        this._setData(sourceData, targetData, subscribe);
+	        _setData(this, sourceData, targetData, subscribe);
 	        return;
 	    }
 
@@ -17659,7 +17657,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    }
 	                }
 	        if (subscribe === true && oldValue !== newValue) {
-	            (0, _util._triggerChange)(key, oldValue);
+	            (0, _rowUtil._triggerChange)(this, key, oldValue);
 	        }
 	    }
 	};
@@ -17683,15 +17681,149 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports._findField = exports._getField = exports.formatValue = exports._triggerChange = exports._dateToUTCString = exports.eq = undefined;
+
+	var _util = __webpack_require__(5);
+
+	var eq = function eq(a, b) {
+	    if ((a === null || a === undefined || a === '') && (b === null || b === undefined || b === '')) return true;
+	    if ((0, _util.isNumber)(a) && (0, _util.isNumber)(b) && parseFloat(a) == parseFloat(b)) return true;
+	    if (a + '' == b + '') return true;
+	    return false;
+	}; /**
+	    * Module : kero dataTable row util
+	    * Author : liuyk(liuyk@yonyou.com)
+	    * Date   : 2016-08-08 13:54:01
+	    */
+
+
+	var _formatDate = function _formatDate(value) {
+	    if (!value) return value;
+	    var date = new Date();
+	    date.setTime(value);
+	    //如果不能转为Date 直接返回原值
+	    if (isNaN(date)) {
+	        return value;
+	    }
+	    var year = date.getFullYear();
+	    var month = date.getMonth() + 1;
+	    if (parseInt(month) < 10) month = "0" + month;
+	    var day = date.getDate();
+	    if (parseInt(day) < 10) day = "0" + day;
+	    var hours = date.getHours();
+	    if (parseInt(hours) < 10) hours = "0" + hours;
+	    var minutes = date.getMinutes();
+	    if (parseInt(minutes) < 10) minutes = "0" + minutes;
+	    var seconds = date.getSeconds();
+	    if (parseInt(seconds) < 10) seconds = "0" + seconds;
+	    var mill = date.getMilliseconds();
+	    var formatString = year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds; //+ "." + mill;
+	    return formatString;
+	};
+
+	var _dateToUTCString = function _dateToUTCString(date) {
+	    if (!date) return '';
+	    if (typeof date === 'number') return date;
+	    if (date.indexOf("-") > -1) date = date.replace(/\-/g, "/");
+	    var utcString = Date.parse(date);
+	    if (isNaN(utcString)) return "";
+	    return utcString;
+	};
+
+	var _triggerChange = function _triggerChange(rowObj, fieldName, oldValue, ctx) {
+	    _getField(rowObj, fieldName).changed = true;
+	    if (rowObj.status != Row.STATUS.NEW) rowObj.status = Row.STATUS.UPDATE;
+	    if (rowObj.valueChange[fieldName]) rowObj.valueChange[fieldName](-rowObj.valueChange[fieldName]());
+	    if (rowObj.parent.getCurrentRow() == rowObj && rowObj.parent.valueChange[fieldName]) {
+	        rowObj.parent.valueChange[fieldName](-rowObj.parent.valueChange[fieldName]());
+	    }
+	    if (rowObj.parent.ns) {
+	        var fName = rowObj.parent.ns + '.' + fieldName;
+	        if (rowObj.parent.root.valueChange[fName]) rowObj.parent.root.valueChange[fName](-rowObj.parent.root.valueChange[fName]());
+	    }
+
+	    var event = {
+	        eventType: 'dataTableEvent',
+	        dataTable: rowObj.parent.id,
+	        rowId: rowObj.rowId,
+	        field: fieldName,
+	        oldValue: oldValue,
+	        newValue: rowObj.getValue(fieldName),
+	        ctx: ctx || ""
+	    };
+	    rowObj.parent.trigger(DataTable.ON_VALUE_CHANGE, event);
+	    rowObj.parent.trigger(fieldName + "." + DataTable.ON_VALUE_CHANGE, event);
+	    if (rowObj == rowObj.parent.getCurrentRow()) rowObj.parent.trigger(fieldName + "." + DataTable.ON_CURRENT_VALUE_CHANGE, event);
+	};
+
+	/**
+	 * 格式化数据值
+	 * @private
+	 * @param {Object} field
+	 * @param {Object} value
+	 */
+	var formatValue = function formatValue(field, value) {
+	    var type = this.parent.getMeta(field, 'type');
+	    if (!type) return value;
+	    if (type == 'date' || type == 'datetime') {
+	        return _formatDate(value);
+	    }
+	    return value;
+	};
+
+	var _findField = function _findField(rowObj, fieldName) {
+	    var rat = rowObj.data[fieldName];
+	    if (!rat) {
+	        var fnames = fieldName.split('.'); //多级field
+	        if (fnames.length > 1) {
+	            var tempField = rowObj.data;
+	            for (var i = 0; i < fnames.length; i++) {
+	                tempField = tempField[fnames[i]];
+	                if (!tempField) {
+	                    break;
+	                }
+	            }
+	            rat = tempField;
+	        }
+	    }
+	    return rat || null;
+	};
+
+	var _getField = function _getField(rowObj, fieldName) {
+	    var rat = _findField(rowObj, fieldName);
+	    if (!rat) {
+	        var msg = 'field:' + fieldName + ' not exist in dataTable:' + rowObj.parent.root.id + '!';
+	        console.error(msg);
+	        throw new Error(msg);
+	    }
+	    return rat;
+	};
+
+	exports.eq = eq;
+	exports._dateToUTCString = _dateToUTCString;
+	exports._triggerChange = _triggerChange;
+	exports.formatValue = formatValue;
+	exports._getField = _getField;
+	exports._findField = _findField;
+
+/***/ },
+/* 109 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
 	exports.getEmptyData = exports.getData = exports.getChildValue = exports.getValue = undefined;
 
-	var _rowUtil = __webpack_require__(109);
+	var _rowUtil = __webpack_require__(108);
 
 	/**
 	 *获取row中某一列的值
 	 */
 	var getValue = function getValue(fieldName) {
-	    return (0, _rowUtil._getField)(fieldName)['value'];
+	    return (0, _rowUtil._getField)(this, fieldName)['value'];
 	};
 
 	/**
@@ -17772,140 +17904,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.getEmptyData = getEmptyData;
 
 /***/ },
-/* 109 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports._findField = exports._getField = exports.formatValue = exports._triggerChange = exports._dateToUTCString = exports.eq = undefined;
-
-	var _util = __webpack_require__(5);
-
-	var eq = function eq(a, b) {
-	    if ((a === null || a === undefined || a === '') && (b === null || b === undefined || b === '')) return true;
-	    if ((0, _util.isNumber)(a) && (0, _util.isNumber)(b) && parseFloat(a) == parseFloat(b)) return true;
-	    if (a + '' == b + '') return true;
-	    return false;
-	}; /**
-	    * Module : kero dataTable row util
-	    * Author : liuyk(liuyk@yonyou.com)
-	    * Date   : 2016-08-08 13:54:01
-	    */
-
-
-	var _formatDate = function _formatDate(value) {
-	    if (!value) return value;
-	    var date = new Date();
-	    date.setTime(value);
-	    //如果不能转为Date 直接返回原值
-	    if (isNaN(date)) {
-	        return value;
-	    }
-	    var year = date.getFullYear();
-	    var month = date.getMonth() + 1;
-	    if (parseInt(month) < 10) month = "0" + month;
-	    var day = date.getDate();
-	    if (parseInt(day) < 10) day = "0" + day;
-	    var hours = date.getHours();
-	    if (parseInt(hours) < 10) hours = "0" + hours;
-	    var minutes = date.getMinutes();
-	    if (parseInt(minutes) < 10) minutes = "0" + minutes;
-	    var seconds = date.getSeconds();
-	    if (parseInt(seconds) < 10) seconds = "0" + seconds;
-	    var mill = date.getMilliseconds();
-	    var formatString = year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds; //+ "." + mill;
-	    return formatString;
-	};
-
-	var _dateToUTCString = function _dateToUTCString(date) {
-	    if (!date) return '';
-	    if (typeof date === 'number') return date;
-	    if (date.indexOf("-") > -1) date = date.replace(/\-/g, "/");
-	    var utcString = Date.parse(date);
-	    if (isNaN(utcString)) return "";
-	    return utcString;
-	};
-
-	var _triggerChange = function _triggerChange(fieldName, oldValue, ctx) {
-	    this._getField(fieldName).changed = true;
-	    if (this.status != Row.STATUS.NEW) this.status = Row.STATUS.UPDATE;
-	    if (this.valueChange[fieldName]) this.valueChange[fieldName](-this.valueChange[fieldName]());
-	    if (this.parent.getCurrentRow() == this && this.parent.valueChange[fieldName]) {
-	        this.parent.valueChange[fieldName](-this.parent.valueChange[fieldName]());
-	    }
-	    if (this.parent.ns) {
-	        var fName = this.parent.ns + '.' + fieldName;
-	        if (this.parent.root.valueChange[fName]) this.parent.root.valueChange[fName](-this.parent.root.valueChange[fName]());
-	    }
-
-	    var event = {
-	        eventType: 'dataTableEvent',
-	        dataTable: this.parent.id,
-	        rowId: this.rowId,
-	        field: fieldName,
-	        oldValue: oldValue,
-	        newValue: this.getValue(fieldName),
-	        ctx: ctx || ""
-	    };
-	    this.parent.trigger(DataTable.ON_VALUE_CHANGE, event);
-	    this.parent.trigger(fieldName + "." + DataTable.ON_VALUE_CHANGE, event);
-	    if (this == this.parent.getCurrentRow()) this.parent.trigger(fieldName + "." + DataTable.ON_CURRENT_VALUE_CHANGE, event);
-	};
-
-	/**
-	 * 格式化数据值
-	 * @private
-	 * @param {Object} field
-	 * @param {Object} value
-	 */
-	var formatValue = function formatValue(field, value) {
-	    var type = this.parent.getMeta(field, 'type');
-	    if (!type) return value;
-	    if (type == 'date' || type == 'datetime') {
-	        return _formatDate(value);
-	    }
-	    return value;
-	};
-
-	var _findField = function _findField(fieldName) {
-	    var rat = this.data[fieldName];
-	    if (!rat) {
-	        var fnames = fieldName.split('.'); //多级field
-	        if (fnames.length > 1) {
-	            var tempField = this.data;
-	            for (var i = 0; i < fnames.length; i++) {
-	                tempField = tempField[fnames[i]];
-	                if (!tempField) {
-	                    break;
-	                }
-	            }
-	            rat = tempField;
-	        }
-	    }
-	    return rat || null;
-	};
-
-	var _getField = function _getField(fieldName) {
-	    var rat = this._findField(fieldName);
-	    if (!rat) {
-	        var msg = 'field:' + fieldName + ' not exist in dataTable:' + this.parent.root.id + '!';
-	        console.error(msg);
-	        throw new Error(msg);
-	    }
-	    return rat;
-	};
-
-	exports.eq = eq;
-	exports._dateToUTCString = _dateToUTCString;
-	exports._triggerChange = _triggerChange;
-	exports.formatValue = formatValue;
-	exports._getField = _getField;
-	exports._findField = _findField;
-
-/***/ },
 /* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -17916,7 +17914,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.getMeta = undefined;
 
-	var _util = __webpack_require__(93);
+	var _rowUtil = __webpack_require__(108);
 
 	/**
 	 *获取row中某一列的属性
@@ -17929,7 +17927,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return mt;
 	    }
-	    var meta = (0, _util._getField)(fieldName).meta;
+	    var meta = (0, _rowUtil._getField)(this, fieldName).meta;
 	    if (meta && meta[key] !== undefined && meta[key] !== null && meta[key] !== '') return meta[key];else if (typeof fetchParent == 'undefined' || fetchParent != false) return this.parent.getMeta(fieldName, key);
 	    return undefined;
 	}; /**
@@ -17951,20 +17949,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.getSimpleData = undefined;
 
-	var _util = __webpack_require__(93);
+	var _rowUtil = __webpack_require__(108);
 
-	var _util2 = __webpack_require__(5);
+	var _util = __webpack_require__(5);
 
 	/**
 	 * Module : kero dataTable row getSimpleData
 	 * Author : liuyk(liuyk@yonyou.com)
 	 * Date   : 2016-08-08 13:54:01
 	 */
-	var _getSimpleData = function _getSimpleData(data) {
+	var _getSimpleData = function _getSimpleData(rowObj, data) {
 	    var _data = {};
-	    var meta = this.parent.getMeta() || {};
+	    var meta = rowObj.parent.getMeta() || {};
 	    for (var key in data) {
-	        if (key === 'meta' || (0, _util2.isEmptyObject)(data[key])) {
+	        if (key === 'meta' || (0, _util.isEmptyObject)(data[key])) {
 	            continue;
 	        } else if (data[key].isChild) {
 	            _data[key] = data[key].value ? data[key].value.getSimpleData() : {};
@@ -17981,11 +17979,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (meta[key] && meta[key].type) {
 	                if (meta[key].type == 'date' || meta[key].type == 'datetime') {
 
-	                    _data[key] = (0, _util._dateToUTCString)(data[key].value);
+	                    _data[key] = (0, _rowUtil._dateToUTCString)(data[key].value);
 	                }
 	            }
 	        } else {
-	            _data[key] = this._getSimpleData(data[key]);
+	            _data[key] = _getSimpleData(rowObj, data[key]);
 	        }
 	    }
 	    return _data;
@@ -17996,7 +17994,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var fields = options['fields'] || null;
 	    var meta = this.parent.getMeta();
 	    var data = this.data;
-	    var _data = this._getSimpleData(data); //{};
+	    var _data = _getSimpleData(this, data); //{};
 	    var _fieldsData = {};
 	    if (fields) {
 	        for (var key in _data) {
@@ -18090,16 +18088,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 	exports.setMeta = undefined;
 
-	var _util = __webpack_require__(93);
+	var _rowUtil = __webpack_require__(108);
 
 	/**
 	 *设置row中某一列的属性
 	 */
 	var setMeta = function setMeta(fieldName, key, value) {
-	    var meta = (0, _util._getField)(fieldName).meta;
-	    if (!meta) meta = (0, _util._getField)(fieldName).meta = {};
+	    var meta = (0, _rowUtil._getField)(this, fieldName).meta;
+	    if (!meta) meta = (0, _rowUtil._getField)(this, fieldName).meta = {};
 	    var oldValue = meta[key];
-	    if ((0, _util.eq)(oldValue, value)) return;
+	    if ((0, _rowUtil.eq)(oldValue, value)) return;
 	    meta[key] = value;
 	    //this.metaChange(- this.metaChange())
 	    if (this.metaChange[fieldName + '.' + key]) {
@@ -18158,7 +18156,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _dateUtils = __webpack_require__(17);
 
-	var _util2 = __webpack_require__(93);
+	var _rowUtil = __webpack_require__(108);
 
 	var ref = function ref(fieldName) {
 	    this.parent.createField(fieldName);
@@ -18204,8 +18202,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.valueChange[fieldName]();
 	            this.currentRowChange();
 	            var ds = (0, _util.getJSObject)(this.parent.parent, datasource);
-	            if ((0, _util2._getField)(fieldName)['value'] === undefined || (0, _util2._getField)(fieldName)['value'] === "") return "";
-	            var v = (0, _util2._getField)(fieldName)['value'];
+	            if ((0, _rowUtil._getField)(this, fieldName)['value'] === undefined || (0, _rowUtil._getField)(this, fieldName)['value'] === "") return "";
+	            var v = (0, _rowUtil._getField)(this, fieldName)['value'];
 	            var valArr = typeof v === 'string' ? v.split(',') : [v];
 
 	            var nameArr = [];
@@ -18234,8 +18232,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        read: function read() {
 	            this.valueChange[fieldName]();
 	            this.currentRowChange();
-	            if (!(0, _util2._getField)(fieldName)['value']) return "";
-	            var valArr = (0, _util2._getField)(fieldName)['value'];
+	            if (!(0, _rowUtil._getField)(this, fieldName)['value']) return "";
+	            var valArr = (0, _rowUtil._getField)(this, fieldName)['value'];
 	            if (!valArr) return "";
 	            valArr = _dateUtils.date.format(valArr, format); //moment(valArr).format(format)
 	            return valArr;
@@ -18256,8 +18254,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        read: function read() {
 	            this.valueChange[fieldName]();
 	            this.currentRowChange();
-	            if (!(0, _util2._getField)(fieldName)['value']) return "";
-	            var valArr = (0, _util2._getField)(fieldName)['value'];
+	            if (!(0, _rowUtil._getField)(this, fieldName)['value']) return "";
+	            var valArr = (0, _rowUtil._getField)(this, fieldName)['value'];
 	            if (!valArr) return "";
 	            if (valArr == "N") valArr = "否";else if (valArr == "Y") valArr = "是";
 	            return valArr;
@@ -18368,39 +18366,43 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _float = __webpack_require__(127);
 
-	var _integer = __webpack_require__(129);
+	var _grid = __webpack_require__(129);
 
-	var _month = __webpack_require__(130);
+	var _integer = __webpack_require__(131);
 
-	var _nativeCheckbox = __webpack_require__(131);
+	var _month = __webpack_require__(136);
 
-	var _nativeRadio = __webpack_require__(132);
+	var _nativeCheckbox = __webpack_require__(137);
 
-	var _pagination = __webpack_require__(133);
+	var _nativeRadio = __webpack_require__(138);
+
+	var _pagination = __webpack_require__(139);
 
 	var _password = __webpack_require__(134);
 
-	var _percent = __webpack_require__(136);
+	var _percent = __webpack_require__(135);
 
-	var _string = __webpack_require__(135);
+	var _string = __webpack_require__(130);
 
-	var _progress = __webpack_require__(137);
+	var _progress = __webpack_require__(140);
 
-	var _radio = __webpack_require__(138);
+	var _radio = __webpack_require__(132);
 
-	var _switch = __webpack_require__(139);
+	var _switch = __webpack_require__(141);
 
-	var _textarea = __webpack_require__(140);
+	var _textarea = __webpack_require__(142);
 
-	var _textfield = __webpack_require__(141);
+	var _textfield = __webpack_require__(143);
 
-	var _time = __webpack_require__(142);
+	var _time = __webpack_require__(144);
 
-	var _url = __webpack_require__(143);
+	var _url = __webpack_require__(133);
 
-	var _year = __webpack_require__(144);
+	var _year = __webpack_require__(145);
 
-	var _yearmonth = __webpack_require__(145);
+	var _yearmonth = __webpack_require__(146);
+
+	var _tree = __webpack_require__(147);
 
 	var _enableMixin = __webpack_require__(121);
 
@@ -18412,7 +18414,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	// console.log(TextAreaAdapter);
 
-	//import {TreeAdapter} from './tree';
 	var ex = {
 		BaseAdapter: _baseAdapter.BaseAdapter,
 		CheckboxAdapter: _checkbox.CheckboxAdapter,
@@ -18442,13 +18443,11 @@ return /******/ (function(modules) { // webpackBootstrap
 		RequiredMixin: _requiredMixin.RequiredMixin,
 		ValidateMixin: _validateMixin.ValidateMixin,
 		ValueMixin: _valueMixin.ValueMixin
-	};
-	// import {GridAdapter} from './grid';
-	/**
-	 * Module : Kero webpack entry index
-	 * Author : Kvkens(yueming@yonyou.com)
-	 * Date	  : 2016-08-10 14:51:05
-	 */
+	}; /**
+	    * Module : Kero webpack entry index
+	    * Author : Kvkens(yueming@yonyou.com)
+	    * Date	  : 2016-08-10 14:51:05
+	    */
 
 
 	(0, _extend.extend)(ex, window.u || {});
@@ -19428,13 +19427,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _formater = __webpack_require__(15);
 
-	var _env = __webpack_require__(6);
-
 	var _dateUtils = __webpack_require__(17);
 
 	var _compMgr = __webpack_require__(11);
 
 	var _masker = __webpack_require__(16);
+
+	var _util = __webpack_require__(5);
 
 	var FloatAdapter = _baseAdapter.BaseAdapter.extend({
 	    mixins: [_valueMixin.ValueMixin, _enableMixin.EnableMixin, _requiredMixin.RequiredMixin, _validateMixin.ValidateMixin],
@@ -19518,7 +19517,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var v = this.dataModel.getCurrentRow().getValue(this.field),
 	            vstr = v + '',
 	            focusValue = v;
-	        if (_env.env.isNumber(v) && _env.env.isNumber(this.maskerMeta.precision)) {
+	        if ((0, _util.isNumber)(v) && (0, _util.isNumber)(this.maskerMeta.precision)) {
 	            if (vstr.indexOf('.') >= 0) {
 	                var sub = vstr.substr(vstr.indexOf('.') + 1);
 	                if (sub.length < this.maskerMeta.precision || parseInt(sub.substr(this.maskerMeta.precision)) == 0) {
@@ -19534,15 +19533,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _needClean: function _needClean() {
 	        return true;
 	    }
-	});
-	//miss DateTimePicker
-
-	//miss DataTable;
-	/**
-	 * Module : Kero float adapter
-	 * Author : Kvkens(yueming@yonyou.com)
-	 * Date	  : 2016-08-09 15:16:08
-	 */
+	}); /**
+	     * Module : Kero float adapter
+	     * Author : Kvkens(yueming@yonyou.com)
+	     * Date	  : 2016-08-09 15:16:08
+	     */
 
 
 	_compMgr.compMgr.addDataAdapter({
@@ -19781,6 +19776,1257 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.GridAdapter = undefined;
+
+	var _baseAdapter = __webpack_require__(118);
+
+	var _valueMixin = __webpack_require__(120);
+
+	var _enableMixin = __webpack_require__(121);
+
+	var _requiredMixin = __webpack_require__(122);
+
+	var _validateMixin = __webpack_require__(123);
+
+	var _util = __webpack_require__(5);
+
+	var _formater = __webpack_require__(15);
+
+	var _masker = __webpack_require__(16);
+
+	var _dataRender = __webpack_require__(14);
+
+	var _indexDataTable = __webpack_require__(74);
+
+	var _event = __webpack_require__(7);
+
+	var _string = __webpack_require__(130);
+
+	var _integer = __webpack_require__(131);
+
+	var _checkbox = __webpack_require__(119);
+
+	var _combobox = __webpack_require__(125);
+
+	var _radio = __webpack_require__(132);
+
+	var _float = __webpack_require__(127);
+
+	var _currency = __webpack_require__(126);
+
+	var _datetime = __webpack_require__(128);
+
+	var _url = __webpack_require__(133);
+
+	var _password = __webpack_require__(134);
+
+	var _percent = __webpack_require__(135);
+
+	var _neouiValidate = __webpack_require__(49);
+
+	var _neouiMessage = __webpack_require__(38);
+
+	var _compMgr = __webpack_require__(11);
+
+	var _i18n = __webpack_require__(21);
+
+	/**
+	 * Module : Kero Grid Adapter
+	 * Author : Kvkens(yueming@yonyou.com)
+	 * Date	  : 2016-08-09 16:17:17
+	 */
+
+	var GridAdapter = _baseAdapter.BaseAdapter.extend({
+		initialize: function initialize(options) {
+			// 初始options中包含grid的属性设置，还需要增加dataSource、columns、transMap以及事件处理
+			var opt = options['options'] || {},
+			    viewModel = options['model'];
+			var element = typeof options['el'] === 'string' ? document.querySelector(options['el']) : options['el'];
+			var app = options['app'];
+			this.id = opt['id'];
+			options = opt;
+
+			var oThis = this;
+			var compDiv = null;
+			var comp = null;
+			this.dataTable = (0, _util.getJSObject)(viewModel, options["data"]);
+			this.element = element;
+			this.$element = $(element);
+			this.editComponentDiv = {};
+			this.editComponent = {};
+			this.id = options['id'];
+			this.gridOptions = options;
+
+			// 在html中将函数类参数进行处理
+			this.gridOptions.onBeforeRowSelected = (0, _util.getFunction)(viewModel, this.gridOptions.onBeforeRowSelected);
+			this.gridOptions.onRowSelected = (0, _util.getFunction)(viewModel, this.gridOptions.onRowSelected);
+			this.gridOptions.onBeforeRowUnSelected = (0, _util.getFunction)(viewModel, this.gridOptions.onBeforeRowUnSelected);
+			this.gridOptions.onRowUnSelected = (0, _util.getFunction)(viewModel, this.gridOptions.onRowUnSelected);
+			this.gridOptions.onBeforeAllRowSelected = (0, _util.getFunction)(viewModel, this.gridOptions.onBeforeAllRowSelected);
+			this.gridOptions.onAllRowSelected = (0, _util.getFunction)(viewModel, this.gridOptions.onAllRowSelected);
+			this.gridOptions.onBeforeAllRowUnSelected = (0, _util.getFunction)(viewModel, this.gridOptions.onBeforeAllRowUnSelected);
+			this.gridOptions.onAllRowUnSelected = (0, _util.getFunction)(viewModel, this.gridOptions.onAllRowUnSelected);
+			this.gridOptions.onBeforeRowFocus = (0, _util.getFunction)(viewModel, this.gridOptions.onBeforeRowFocus);
+			this.gridOptions.onRowFocus = (0, _util.getFunction)(viewModel, this.gridOptions.onRowFocus);
+			this.gridOptions.onBeforeRowUnFocus = (0, _util.getFunction)(viewModel, this.gridOptions.onBeforeRowUnFocus);
+			this.gridOptions.onRowUnFocus = (0, _util.getFunction)(viewModel, this.gridOptions.onRowUnFocus);
+			this.gridOptions.onDblClickFun = (0, _util.getFunction)(viewModel, this.gridOptions.onDblClickFun);
+			this.gridOptions.onValueChange = (0, _util.getFunction)(viewModel, this.gridOptions.onValueChange);
+			this.gridOptions.onBeforeClickFun = (0, _util.getFunction)(viewModel, this.gridOptions.onBeforeClickFun);
+			this.gridOptions.onBeforeEditFun = (0, _util.getFunction)(viewModel, this.gridOptions.onBeforeEditFun);
+			this.gridOptions.onRowHover = (0, _util.getFunction)(viewModel, this.gridOptions.onRowHover);
+			this.gridOptions.afterCreate = (0, _util.getFunction)(viewModel, this.gridOptions.afterCreate);
+
+			/*扩展onBeforeEditFun，如果点击的是单选或者复选的话则不执行原有的编辑处理，直接通过此js进行处理*/
+			var customOnBeforeEditFun = this.gridOptions.onBeforeEditFun;
+			var newOnBeforeEditFun = function newOnBeforeEditFun(obj) {
+				var colIndex = obj.colIndex;
+				var $tr = obj.$tr;
+
+				if ($($tr.find('td')[colIndex]).find('[type=radio]').length > 0 || $($tr.find('td')[colIndex]).find('[type=checkbox]').length > 0) {
+					return false;
+				} else {
+					if (typeof customOnBeforeEditFun == 'function') {
+						return customOnBeforeEditFun(obj);
+					} else {
+						return true;
+					}
+				}
+			};
+			this.gridOptions.onBeforeEditFun = newOnBeforeEditFun;
+			/*
+	   * 处理column参数  item
+	   * div子项div存储column信息
+	   */
+			var columns = [];
+			$("div", this.$element).each(function () {
+				var ops = $(this).attr('options');
+				if (typeof ops == "undefined") var column = eval("(" + ops + ")");else var column = JSON.parse(ops);
+				// 处理精度，以dataTable的精度为准
+
+				/*处理editType*/
+				var eType = (0, _util.getFunction)(viewModel, column.editType);
+				var rType = (0, _util.getFunction)(viewModel, column.renderType);
+				var afterEType = (0, _util.getFunction)(viewModel, column.afterEType);
+				var afterRType = (0, _util.getFunction)(viewModel, column.afterRType);
+				var sumRenderType = (0, _util.getFunction)(viewModel, column.sumRenderType);
+				column.sumRenderType = sumRenderType;
+				var eOptions = {};
+				if (column.editOptions) {
+					if (typeof column.editOptions == "undefined") var eOptions = eval("(" + column.editOptions + ")");else var eOptions = column.editOptions;
+				}
+				eOptions.data = options['data'];
+				eOptions.field = column['field'];
+				// 默认按照string处理
+				if (eType == '') eType = 'string';
+				if (eType == 'string' || eType == 'integer' || eType == 'checkbox' || eType == 'combo' || eType == 'radio' || eType == 'float' || eType == 'currency' || eType == 'datetime' || eType == 'date' || eType == 'time' || eType == 'url' || eType == 'password' || eType == 'percent') {
+					oThis.createDefaultEdit(eType, eOptions, options, viewModel, column);
+					column.editType = function (obj) {
+						if (oThis.editComponentDiv[column.field] && oThis.editComponentDiv[column.field][0].childNodes.length > 0) {} else {
+							//IE8有问题，所以需要重新创建div,将上面的代码直接拷贝
+							oThis.createDefaultEdit(eType, eOptions, options, viewModel, column);
+						}
+						var comp = oThis.editComponent[column.field];
+						if (!comp) {
+							$(obj.element).parent().focus();
+							return;
+						}
+						obj.element.innerHTML = '';
+						var row = oThis.getDataTableRow(obj.rowObj);
+						$(obj.element).append(oThis.editComponentDiv[column.field]);
+						if (comp.required) {
+							$(obj.element).parent().parent().find('.u-grid-edit-mustFlag').show();
+						}
+
+						// checkbox 类型  此段逻辑不知道是什么，暂时注释掉
+						// if($Div.find('.checkbox').length > 0) {
+						// 	$Div.closest('.u-grid-edit-div').css({'position': 'absolute', 'left': '83px'});
+						// 	$Div.closest('.u-grid-edit-whole-div').find('.u-grid-edit-label').css({'margin-left': '112px', 'text-align': 'left'})
+						// }
+						$(obj.element).parent().focus();
+						comp.modelValueChange(obj.value);
+
+						// 根据惊道需求增加editype之后的处理,此处只针对grid.js中的默认eType进行处理，非默认通过eType进行处理
+						if (typeof afterEType == 'function') {
+							afterEType.call(this, obj);
+						}
+					};
+				} else if (typeof eType == 'function') {
+					column.editType = eType;
+				}
+
+				if (rType == 'booleanRender') {
+					column.renderType = function (obj) {
+						var checkStr = '';
+						if (obj.value == 'Y') {
+							checkStr = 'checked';
+						}
+						var htmlStr = '<input type="checkbox"   style="cursor:default;" ' + checkStr + '>';
+						obj.element.innerHTML = htmlStr;
+
+						var grid = obj.gridObj;
+						var datatable = grid.dataTable;
+						var rowId = obj.row.value['$_#_@_id'];
+
+						var row = datatable.getRowByRowId(rowId);
+						$(obj.element).find('input').on('click', function () {
+							var value = this.checked ? "Y" : "N";
+							var column = obj.gridCompColumn;
+							var field = column.options.field;
+							row.setValue(field, value);
+						});
+
+						// 根据惊道需求增加renderType之后的处理,此处只针对grid.js中的默认render进行处理，非默认通过renderType进行处理
+						if (typeof afterRType == 'function') {
+							afterRType.call(this, obj);
+						}
+					};
+				} else if (rType == 'integerRender') {
+					column.renderType = function (obj) {
+						var grid = obj.gridObj;
+						var column = obj.gridCompColumn;
+						var field = column.options.field;
+						obj.element.innerHTML = obj.value;
+						/*设置header为right*/
+						$('#' + grid.options.id + '_header_table').find('th[field="' + field + '"]').css('text-align', 'right');
+						$(obj.element).css('text-align', 'right');
+						$(obj.element).css('color', '#e33c37');
+						$(obj.element).find('.u-grid-header-link').css('padding-right', '3em');
+						// 根据惊道需求增加renderType之后的处理,此处只针对grid.js中的默认render进行处理，非默认通过renderType进行处理
+						if (typeof afterRType == 'function') {
+							afterRType.call(this, obj);
+						}
+					};
+				} else if (rType == 'currencyRender') {
+					column.renderType = function (obj) {
+						//需要处理精度
+
+						var grid = obj.gridObj;
+						var column = obj.gridCompColumn;
+						var field = column.options.field;
+						var rowIndex = obj.rowIndex;
+						var datatable = grid.dataTable;
+						var rowId = $(grid.dataSourceObj.rows[rowIndex].value).attr("$_#_@_id");
+						var row = datatable.getRowByRowId(rowId);
+						if (!row) return;
+						var rprec = row.getMeta(field, 'precision');
+						var maskerMeta = iweb.Core.getMaskerMeta('float') || {};
+						var precision = typeof parseFloat(rprec) == 'number' ? rprec : maskerMeta.precision;
+						maskerMeta.precision = precision;
+
+						maskerMeta.precision = precision || maskerMeta.precision;
+						var formater = new _formater.NumberFormater(maskerMeta.precision);
+						var masker = new _masker.NumberMasker(maskerMeta);
+						var svalue = masker.format(formater.format(obj.value)).value;
+						obj.element.innerHTML = svalue;
+						/*设置header为right*/
+						$('#' + grid.options.id + '_header_table').find('th[field="' + field + '"]').css('text-align', 'right');
+						$(obj.element).css('text-align', 'right');
+						$(obj.element).css('color', '#e33c37');
+						$(obj.element).find('.u-grid-header-link').css('padding-right', '3em');
+						$(obj.element).attr('title', svalue);
+
+						// 根据惊道需求增加renderType之后的处理,此处只针对grid.js中的默认render进行处理，非默认通过renderType进行处理
+						if (typeof afterRType == 'function') {
+							afterRType.call(this, obj);
+						}
+					};
+				} else if (rType == 'floatRender') {
+					column.renderType = function (obj) {
+						//需要处理精度
+
+						var grid = obj.gridObj;
+						var column = obj.gridCompColumn;
+						var field = column.options.field;
+						var rowIndex = obj.rowIndex;
+						var datatable = grid.dataTable;
+						var rowId = $(grid.dataSourceObj.rows[rowIndex].value).attr("$_#_@_id");
+						var row = datatable.getRowByRowId(rowId);
+						if (!row) return;
+						var rprec = row.getMeta(field, 'precision') || column.options.precision;
+						var maskerMeta = iweb.Core.getMaskerMeta('float') || {};
+						var precision = typeof parseFloat(rprec) == 'number' ? rprec : maskerMeta.precision;
+						maskerMeta.precision = precision;
+
+						var formater = new _formater.NumberFormater(maskerMeta.precision);
+						var masker = new _masker.NumberMasker(maskerMeta);
+						var svalue = masker.format(formater.format(obj.value)).value;
+						obj.element.innerHTML = svalue;
+						/*设置header为right*/
+						$('#' + grid.options.id + '_header_table').find('th[field="' + field + '"]').css('text-align', 'right');
+						$(obj.element).css('text-align', 'right');
+						$(obj.element).css('color', '#e33c37');
+						$(obj.element).find('.u-grid-header-link').css('padding-right', '3em');
+						$(obj.element).attr('title', svalue);
+
+						// 根据惊道需求增加renderType之后的处理,此处只针对grid.js中的默认render进行处理，非默认通过renderType进行处理
+						if (typeof afterRType == 'function') {
+							afterRType.call(this, obj);
+						}
+					};
+				} else if (rType == 'comboRender') {
+					column.renderType = function (obj) {
+
+						//需要将key转化为name
+						var ds = (0, _util.getJSObject)(viewModel, eOptions['datasource']);
+
+						obj.element.innerHTML = '';
+						if (nameArr) {
+							nameArr.length = 0;
+						}
+
+						var valArr = obj.value.split(',');
+						var nameArr = [];
+						for (var i = 0, length = ds.length; i < length; i++) {
+							for (var j = 0; j < valArr.length; j++) {
+								if (ds[i].value == valArr[j]) {
+									nameArr.push(ds[i].name);
+								}
+							}
+						}
+						var svalue = nameArr.toString();
+						if (!svalue) svalue = obj.value;
+						obj.element.innerHTML = svalue;
+						$(obj.element).attr('title', svalue);
+
+						// 根据惊道需求增加renderType之后的处理,此处只针对grid.js中的默认render进行处理，非默认通过renderType进行处理
+						if (typeof afterRType == 'function') {
+							afterRType.call(this, obj);
+						}
+					};
+				} else if (rType == 'dateRender') {
+					//通过grid的dataType为Date format处理
+					column.renderType = function (obj) {
+						var svalue = (0, _dataRender.dateRender)(obj.value, obj.gridCompColumn.options['format']);
+						obj.element.innerHTML = svalue;
+						$(obj.element).attr('title', svalue);
+						// 根据惊道需求增加renderType之后的处理,此处只针对grid.js中的默认render进行处理，非默认通过renderType进行处理
+						if (typeof afterRType == 'function') {
+							afterRType.call(this, obj);
+						}
+					};
+				} else if (rType == 'dateTimeRender') {
+					//通过grid的dataType为DateTime format处理
+					column.renderType = function (obj) {
+						var svalue = (0, _dataRender.dateTimeRender)(obj.value);
+						obj.element.innerHTML = svalue;
+						$(obj.element).attr('title', svalue);
+
+						// 根据惊道需求增加renderType之后的处理,此处只针对grid.js中的默认render进行处理，非默认通过renderType进行处理
+						if (typeof afterRType == 'function') {
+							afterRType.call(this, obj);
+						}
+					};
+				} else if (typeof rType == 'function') {
+					column.renderType = rType;
+				} else if (rType == 'radioRender') {
+					column.renderType = function (params) {
+						//debugger
+						var ds = (0, _util.getJSObject)(viewModel, eOptions['datasource']);
+						var value = params.value;
+						var compDiv = $('<div class="u-grid-edit-item-radio"></div>');
+
+						params.element.innerHTML = "";
+						$(params.element).append(compDiv);
+
+						for (var i = 0; i < ds.length; i++) {
+							if (ds[i].value == value) compDiv.append('<input name="' + column.field + params.row.value['$_#_@_id'] + '" type="radio" value="' + ds[i].value + '" checked="true" /><i data-role="name">' + ds[i].name + '</i>');else compDiv.append('<input name="' + column.field + params.row.value['$_#_@_id'] + '" type="radio" value="' + ds[i].value + '"/><i data-role="name">' + ds[i].name + '</i>');
+						}
+						compDiv.find(":radio").each(function () {
+
+							$(this).on('click', function () {
+
+								var val = this.value;
+								compDiv.find(":radio").each(function () {
+									if (this.value == val) {
+										this.checked = true;
+									} else {
+										this.checked = false;
+									}
+								});
+								var grid = params.gridObj;
+								var column = params.gridCompColumn;
+								var field = column.options.field;
+								var datatable = grid.dataTable;
+								//var rowIndex = params.rowIndex
+								//var tmprowId =  $(grid.dataSourceObj.rows[rowIndex].value).attr("$_#_@_id");
+								var rowId = params.row.value['$_#_@_id'];
+
+								var row = datatable.getRowByRowId(rowId);
+
+								row.setValue(field, val);
+							});
+						});
+						//					var comp = new $.compManager.plugs.radio(compDiv[0],eOptions,viewModel);					
+						//					for( var i=0,length=rdo.length; i<length; i++){
+						//					   if(rdo[i].pk==value){
+						//					   	 obj.element.innerHTML = '<input type="radio" checked><i data-role="name">'+rdo[i].name+'</i>';
+						//					   	 break;
+						//					   }
+						//					}				
+						// 根据惊道需求增加renderType之后的处理,此处只针对grid.js中的默认render进行处理，非默认通过renderType进行处理
+						if (typeof afterRType == 'function') {
+							afterRType.call(this, obj);
+						}
+					};
+				} else if (rType == 'urlRender') {
+					//通过grid的dataType为DateTime format处理
+					column.renderType = function (obj) {
+						obj.element.innerHTML = '<a href="' + obj.value + '" target="_blank">' + obj.value + '</a>';
+
+						// 根据惊道需求增加renderType之后的处理,此处只针对grid.js中的默认render进行处理，非默认通过renderType进行处理
+						if (typeof afterRType == 'function') {
+							afterRType.call(this, obj);
+						}
+					};
+				} else if (rType == 'passwordRender') {
+					//通过grid的dataType为DateTime format处理
+					column.renderType = function (obj) {
+						obj.element.innerHTML = '<input type="password" disable="true" role="grid-for-edit" readonly="readonly" style="border:0px;background:none;padding:0px;" value="' + obj.value + '" title=""><span class="uf uf-eyeopen right-span" role="grid-for-edit"></span>';
+						var span = obj.element.querySelector('span');
+						var input = obj.element.querySelector('input');
+						input.value = obj.value;
+						$(span).on('click', function () {
+							if (input.type == 'password') {
+								input.type = 'text';
+							} else {
+								input.type = 'password';
+							}
+						});
+						// 根据惊道需求增加renderType之后的处理,此处只针对grid.js中的默认render进行处理，非默认通过renderType进行处理
+						if (typeof afterRType == 'function') {
+							afterRType.call(this, obj);
+						}
+					};
+				} else if (rType == 'percentRender') {
+					column.renderType = function (obj) {
+						//需要处理精度
+
+						var grid = obj.gridObj;
+						var column = obj.gridCompColumn;
+						var field = column.options.field;
+						var rowIndex = obj.rowIndex;
+						var datatable = grid.dataTable;
+						var rowId = $(grid.dataSourceObj.rows[rowIndex].value).attr("$_#_@_id");
+						var row = datatable.getRowByRowId(rowId);
+						if (!row) return;
+						var rprec = row.getMeta(field, 'precision') || column.options.precision;
+						var maskerMeta = iweb.Core.getMaskerMeta('percent') || {};
+						var precision = typeof parseFloat(rprec) == 'number' ? rprec : maskerMeta.precision;
+						maskerMeta.precision = precision;
+						if (maskerMeta.precision) {
+							maskerMeta.precision = parseInt(maskerMeta.precision) + 2;
+						}
+
+						var formater = new _formater.NumberFormater(maskerMeta.precision);
+						var masker = new _masker.PercentMasker(maskerMeta);
+						var svalue = masker.format(formater.format(obj.value)).value;
+						obj.element.innerHTML = svalue;
+						$(obj.element).css('text-align', 'right');
+						$(obj.element).attr('title', svalue);
+
+						// 根据惊道需求增加renderType之后的处理,此处只针对grid.js中的默认render进行处理，非默认通过renderType进行处理
+						if (typeof afterRType == 'function') {
+							afterRType.call(this, obj);
+						}
+					};
+				}
+
+				var defineSumRenderType = column.sumRenderType;
+				column.sumRenderType = function (obj) {
+					obj.value = parseFloat(obj.value);
+					var grid = obj.gridObj;
+					var column = obj.gridCompColumn;
+					var rprec = column.options.precision;
+					var maskerMeta = iweb.Core.getMaskerMeta('float') || {};
+					var precision = rprec == 0 || rprec && typeof parseFloat(rprec) == 'number' ? rprec : maskerMeta.precision;
+					maskerMeta.precision = precision;
+
+					var formater = new _formater.NumberFormater(maskerMeta.precision);
+					var masker = new _masker.NumberMasker(maskerMeta);
+					var svalue = masker.format(formater.format(obj.value)).value;
+					obj.element.innerHTML = svalue;
+					$(obj.element).parent().css('text-align', 'right');
+					$(obj.element).css('text-align', 'right');
+					$(obj.element).attr('title', svalue);
+					if (typeof defineSumRenderType == 'function') defineSumRenderType.call(grid, obj);
+				};
+
+				columns.push(column);
+			});
+
+			if (app && app.adjustFunc) app.adjustFunc.call(app, { id: this.id, type: 'gridColumn', columns: columns });
+
+			this.gridOptions.columns = columns;
+
+			/*
+	   * 处理viewModel与grid之间的绑定
+	   * 
+	   */
+			var onRowSelectedFun = this.gridOptions.onRowSelected;
+			// 选中
+			this.gridOptions.onRowSelected = function (obj) {
+				var rowId = oThis.grid.dataSourceObj.rows[obj.rowIndex].value['$_#_@_id'];
+				var index = oThis.dataTable.getIndexByRowId(rowId);
+				if (oThis.grid.options.multiSelect) {
+					oThis.dataTable.addRowsSelect([index]);
+				} else {
+					oThis.dataTable.setRowSelect(index);
+				}
+
+				if (onRowSelectedFun) {
+					onRowSelectedFun.call(oThis, obj);
+				}
+			};
+			this.dataTable.on(_indexDataTable.DataTable.ON_ROW_SELECT, function (event) {
+				/*index转化为grid的index*/
+				$.each(event.rowIds, function () {
+					var index = oThis.grid.getRowIndexByValue('$_#_@_id', this);
+					var selectFlag = true;
+					if (index > -1) {
+						selectFlag = oThis.grid.setRowSelect(parseInt(index));
+						if (!selectFlag) {
+							oThis.dataTable.setRowUnSelect(oThis.dataTable.getIndexByRowId(this));
+						}
+					}
+				});
+			});
+
+			//全选
+			this.dataTable.on(_indexDataTable.DataTable.ON_ROW_ALLSELECT, function (event) {
+				oThis.grid.setAllRowSelect();
+			});
+
+			//全返选
+			this.dataTable.on(_indexDataTable.DataTable.ON_ROW_ALLUNSELECT, function (event) {
+				oThis.grid.setAllRowUnSelect();
+			});
+
+			// 反选
+			var onRowUnSelectedFun = this.gridOptions.onRowUnSelected;
+			this.gridOptions.onRowUnSelected = function (obj) {
+				var rowId = oThis.grid.dataSourceObj.rows[obj.rowIndex].value['$_#_@_id'];
+				var index = oThis.dataTable.getIndexByRowId(rowId);
+				oThis.dataTable.setRowUnSelect(index);
+				if (onRowUnSelectedFun) {
+					onRowUnSelectedFun.call(oThis, obj);
+				}
+			};
+			this.dataTable.on(_indexDataTable.DataTable.ON_ROW_UNSELECT, function (event) {
+				$.each(event.rowIds, function () {
+					var index = oThis.grid.getRowIndexByValue('$_#_@_id', this);
+					var unSelectFlag = true;
+					if (index > -1) {
+						unSelectFlag = oThis.grid.setRowUnselect(parseInt(index));
+						if (!unSelectFlag) {
+							if (oThis.grid.options.multiSelect) {
+								oThis.dataTable.addRowsSelect([oThis.dataTable.getIndexByRowId(this)]);
+							} else {
+								oThis.dataTable.setRowSelect(oThis.dataTable.getIndexByRowId(this));
+							}
+						}
+					}
+				});
+			});
+
+			var onRowFocusFun = this.gridOptions.onRowFocus;
+			// focus
+			this.gridOptions.onRowFocus = function (obj) {
+				var rowId = oThis.grid.dataSourceObj.rows[obj.rowIndex].value['$_#_@_id'];
+				var index = oThis.dataTable.getIndexByRowId(rowId);
+
+				if (oThis.grid.options.rowClickBan) {
+					oThis.dataTable.setRowFocus(index, true);
+				} else {
+					oThis.dataTable.setRowFocus(index);
+				}
+
+				if (onRowFocusFun) {
+					onRowFocusFun.call(oThis, obj);
+				}
+			};
+			this.dataTable.on(_indexDataTable.DataTable.ON_ROW_FOCUS, function (event) {
+				/*index转化为grid的index*/
+				var index = oThis.grid.getRowIndexByValue('$_#_@_id', event.rowId);
+
+				var focusFlag = true;
+				if (index > -1) {
+					focusFlag = oThis.grid.setRowFocus(parseInt(index));
+
+					if (!focusFlag) {
+						oThis.dataTable.setRowUnFocus(oThis.dataTable.getIndexByRowId(event.rowId));
+					}
+				}
+			});
+
+			// 反focus
+			var onRowUnFocusFun = this.gridOptions.onRowUnFocus;
+			this.gridOptions.onRowUnFocus = function (obj) {
+				var rowId = oThis.grid.dataSourceObj.rows[obj.rowIndex].value['$_#_@_id'];
+				var index = oThis.dataTable.getIndexByRowId(rowId);
+				oThis.dataTable.setRowUnFocus(index);
+				if (onRowUnFocusFun) {
+					onRowUnFocusFun.call(oThis, obj);
+				}
+			};
+			this.dataTable.on(_indexDataTable.DataTable.ON_ROW_UNFOCUS, function (event) {
+				var index = oThis.grid.getRowIndexByValue('$_#_@_id', event.rowId);
+				var unFocusFlag = true;
+				if (index > -1) {
+					unFocusFlag = oThis.grid.setRowUnFocus(parseInt(index));
+					if (!unFocusFlag) {
+						oThis.dataTable.setRowFocus(oThis.dataTable.getIndexByRowId(event.rowId));
+					}
+				}
+			});
+
+			// 增行,只考虑viewModel传入grid
+			//		var onRowInsertFun = this.gridOptions.onRowInsert; 
+			//		this.gridOptions.onRowInsert = function(obj){
+			//			dataTable.insertRow(obj.index,obj.row);
+			//			if(onRowSelectedFun){
+			//				viewModel[onRowUnSelectedFun].call(grid,grid, row, rowindex);
+			//			}
+			//		};
+			this.dataTable.on(_indexDataTable.DataTable.ON_INSERT, function (event) {
+				var gridRows = new Array();
+				$.each(event.rows, function () {
+					var row = this.data;
+					var id = this.rowId;
+					var gridRow = {};
+					for (var filed in row) {
+						gridRow[filed] = row[filed].value;
+					}
+					gridRow['$_#_@_id'] = id;
+					gridRows.push(gridRow);
+				});
+				oThis.grid.addRows(gridRows, event.index);
+			});
+
+			this.dataTable.on(_indexDataTable.DataTable.ON_UPDATE, function (event) {
+				$.each(event.rows, function () {
+					var row = this.data;
+					var id = this.rowId;
+					var gridRow = {};
+					for (var filed in row) {
+						gridRow[filed] = row[filed].value;
+					}
+					gridRow['$_#_@_id'] = id;
+					var index = oThis.grid.getRowIndexByValue('$_#_@_id', id);
+					oThis.grid.updateRow(index, gridRow);
+				});
+			});
+
+			this.dataTable.on(_indexDataTable.DataTable.ON_VALUE_CHANGE, function (obj) {
+
+				var id = obj.rowId;
+				var index = oThis.grid.getRowIndexByValue('$_#_@_id', id);
+				if (index == -1) {
+					return;
+				}
+				var field = obj.field;
+				var value = obj.newValue;
+				oThis.grid.updateValueAt(index, field, value);
+				//oThis.grid.editClose();
+			});
+
+			// 删除行,只考虑viewModel传入grid
+			//		this.gridOptions.onRowDelete = function(obj){
+			//			dataTable.removeRow(obj.index);
+			//		};
+			this.dataTable.on(_indexDataTable.DataTable.ON_DELETE, function (event) {
+				/*index转化为grid的index*/
+				var gridIndexs = new Array();
+				$.each(event.rowIds, function () {
+					var index = oThis.grid.getRowIndexByValue('$_#_@_id', this);
+					gridIndexs.push(index);
+				});
+				oThis.grid.deleteRows(gridIndexs);
+			});
+
+			this.dataTable.on(_indexDataTable.DataTable.ON_DELETE_ALL, function (event) {
+				oThis.grid.setDataSource({});
+			});
+
+			// 数据改变
+			var onValueChangeFun = this.gridOptions.onValueChange;
+			this.gridOptions.onValueChange = function (obj) {
+				var row = oThis.getDataTableRow(oThis.grid.dataSourceObj.rows[obj.rowIndex].value);
+				if (row) {
+					if ($.type(obj.newValue) == 'object') {
+						row.setValue(obj.field, obj.newValue.trueValue);
+						row.setMeta(obj.field, 'display', obj.newValue.showValue);
+					} else {
+						row.setValue(obj.field, obj.newValue);
+					}
+				}
+				if (onValueChangeFun) {
+					onValueChangeFun.call(oThis, obj);
+				}
+			};
+			this.dataTable.on('valueChange', function (event) {
+				var field = event.field,
+				    rowId = event.rowId,
+				    oldValue = event.oldValue,
+				    newValue = event.newValue;
+				var rowIndex = oThis.grid.getRowIndexByValue('$_#_@_id', rowId);
+				if (rowIndex > -1) {
+					oThis.grid.updateValueAt(rowIndex, field, newValue);
+				}
+			});
+			// 加载数据,只考虑viewModel传入grid
+			this.dataTable.on(_indexDataTable.DataTable.ON_LOAD, function (data) {
+				if (data.length > 0) {
+					var values = new Array();
+
+					$.each(data, function () {
+						var value = {};
+						var dataObj = this.data;
+						var id = this.rowId;
+						for (var p in dataObj) {
+							var v = dataObj[p].value;
+							value[p] = v;
+						}
+						value['$_#_@_id'] = id;
+						values.push(value);
+					});
+					var dataSource = {};
+					dataSource['values'] = values;
+					oThis.grid.setDataSource(dataSource);
+				}
+			});
+			this.dataTable.on(_indexDataTable.DataTable.ON_ENABLE_CHANGE, function (enable) {
+				oThis.grid.setEditable(enable.enable);
+			});
+
+			this.dataTable.on(_indexDataTable.DataTable.ON_ROW_META_CHANGE, function (event) {
+				var field = event.field,
+				    meta = event.meta,
+				    row = event.row,
+				    newValue = event.newValue;
+				if (meta == 'required') {
+					oThis.grid.setRequired(field, newValue);
+				}
+				if (meta == 'precision') {
+					var comp = oThis.editComponent[field];
+					if (comp) {
+						comp.setPrecision(newValue);
+					}
+
+					var index = oThis.grid.getRowIndexByValue('$_#_@_id', row.rowId);
+					if (index == -1) {
+						return;
+					}
+					var value = row.getValue(field);
+
+					oThis.grid.updateValueAt(index, field, value, true);
+				}
+			});
+
+			this.dataTable.on(_indexDataTable.DataTable.ON_META_CHANGE, function (event) {
+				var field = event.field;
+				var meta = event.meta;
+				if (meta == 'precision') {
+					oThis.grid.renderTypeFun({ field: field });
+				}
+			});
+
+			this.gridOptions.transMap = {
+				ml_show_column: (0, _i18n.trans)('gridComp.show_column', '显示/隐藏列'),
+				ml_clear_set: (0, _i18n.trans)('gridComp.clear_set', '清除设置'),
+				ml_no_rows: (0, _i18n.trans)('gridComp.no_rows', '无数据'),
+				ml_sum: (0, _i18n.trans)('gridComp.sum', '合计:'),
+				ml_close: (0, _i18n.trans)('gridComp.close', '关闭')
+			};
+			// 创建grid
+			this.grid = $(element).grid(this.gridOptions);
+			this.grid.dataTable = this.dataTable;
+			this.grid.viewModel = viewModel;
+			this.grid.gridModel = this;
+
+			//如果先插入数据再创建grid需要处理 load
+			var data = this.dataTable.rows();
+			if (data.length > 0) {
+				var values = new Array();
+
+				$.each(data, function () {
+					var value = {};
+					var dataObj = this.data;
+					var id = this.rowId;
+					for (var p in dataObj) {
+						var v = dataObj[p].value;
+						value[p] = v;
+					}
+					value['$_#_@_id'] = id;
+					values.push(value);
+				});
+				var dataSource = {};
+				dataSource['values'] = values;
+				oThis.grid.setDataSource(dataSource);
+			}
+			// 选中行
+			var selectIndexs = this.dataTable.getSelectedIndexs();
+			if (selectIndexs.length > 0) {
+				$.each(selectIndexs, function () {
+					oThis.grid.setRowSelect(this);
+				});
+			}
+
+			return this;
+		},
+
+		getName: function getName() {
+			return 'grid';
+		},
+		createDefaultEdit: function createDefaultEdit(eType, eOptions, options, viewModel, column) {
+			var oThis = this;
+			var compDiv, comp;
+			if (eType == 'string') {
+				compDiv = $('<div><input type="text" class="u-grid-edit-item-string"></div>');
+				if (!options.editType || options.editType == "default") {
+					compDiv.addClass("eType-input");
+				}
+				eOptions.dataType = 'string';
+				comp = new _string.StringAdapter({
+					el: compDiv[0],
+					options: eOptions,
+					model: viewModel
+				});
+			} else if (eType == 'integer') {
+				compDiv = $('<div><input type="text" class="u-grid-edit-item-integer"></div>');
+				if (!options.editType || options.editType == "default") {
+					compDiv.addClass("eType-input");
+				}
+				eOptions.dataType = 'integer';
+				comp = new _integer.IntegerAdapter({
+					el: compDiv[0],
+					options: eOptions,
+					model: viewModel
+				});
+
+				//comp = new $.compManager.plugs.integer(compDiv.find("input")[0],eOptions,viewModel);
+			} else if (eType == 'checkbox') {
+				compDiv = $('<div><input id="' + oThis.id + "_edit_field_" + column['field'] + '" type="checkbox" class="u-grid-edit-item-checkbox"></div>');
+				//eOptions.dataType = 'integer';
+
+				if ($.CheckboxComp) {
+					comp = new $.CheckboxComp(compDiv.find("input")[0], eOptions, viewModel);
+				} else {
+					comp = new _checkbox.CheckboxAdapter({
+						el: compDiv[0],
+						options: eOptions,
+						model: viewModel
+					});
+				}
+
+				//comp = new $.compManager.plugs.check(compDiv.find("input")[0],eOptions,viewModel);
+			} else if (eType == 'combo') {
+				// compDiv = $('<div class="input-group  form_date u-grid-edit-item-comb"><div  type="text" class="form-control grid-combox"></div><i class="input-group-addon" ><i class="uf uf-anglearrowdown"></i></i></div>');
+				compDiv = $('<div class="eType-input"><input type="text" class="u-grid-edit-item-float"></div>');
+				//comp = new $.compManager.plugs.combo(compDiv[0],eOptions,viewModel);
+				//comp = new Combobox({
+				//	el:compDiv[0],
+				//	options:eOptions,
+				//	model: viewModel
+				//});
+				eOptions.showFix = true;
+				if ($.Combobox) {
+					//兼容旧版本
+					compDiv = $('<div class="input-group  form_date u-grid-edit-item-comb"><div  type="text" class="form-control grid-combox"></div><i class="input-group-addon" ><i class="uf uf-anglearrowdown"></i></i></div>');
+					comp = new $.Combobox(compDiv[0], eOptions, viewModel);
+				} else {
+					comp = new _combobox.ComboboxAdapter({
+						el: compDiv[0],
+						options: eOptions,
+						model: viewModel
+					});
+					if (oThis.gridOptions.customEditPanelClass) {
+						if (oThis.gridOptions.customEditPanelClass.indexOf('u-combo-ul') < 0) {
+							oThis.gridOptions.customEditPanelClass += ',u-combo-ul';
+						}
+					} else {
+						oThis.gridOptions.customEditPanelClass = 'u-combo-ul';
+					}
+				}
+			} else if (eType == 'radio') {
+				if (!options.editType || options.editType == "default") {
+					compDiv = null;
+					comp = null;
+				} else {
+					compDiv = $('<div class="u-grid-edit-item-radio"><input type="radio" name="identity" /><i data-role="name"></i></div>');
+					//comp = new $.compManager.plugs.radio(compDiv[0],eOptions,viewModel);
+					comp = new _radio.RadioAdapter({
+						el: compDiv[0],
+						options: eOptions,
+						model: viewModel
+					});
+				}
+			} else if (eType == 'float') {
+				compDiv = $('<div><input type="text" class="u-grid-edit-item-float"></div>');
+				if (!options.editType || options.editType == "default") {
+					compDiv.addClass("eType-input");
+				}
+				//comp = new $.compManager.plugs.float(compDiv.find("input")[0],eOptions,viewModel);
+				eOptions.dataType = 'float';
+				comp = new _float.FloatAdapter({
+					el: compDiv[0],
+					options: eOptions,
+					model: viewModel
+				});
+			} else if (eType == 'currency') {
+				compDiv = $('<div><input type="text" class="u-grid-edit-item-currency"></div>');
+				if (!options.editType || options.editType == "default") {
+					compDiv.addClass("eType-input");
+				}
+				//comp = new $.compManager.plugs.currency(compDiv.find("input")[0],eOptions,viewModel);
+				eOptions.dataType = 'currency';
+				comp = new _currency.CurrencyAdapter({
+					el: compDiv[0],
+					options: eOptions,
+					model: viewModel
+				});
+			} else if (eType == 'datetime') {
+				compDiv = $('<div class="input-group u-grid-edit-item-datetime" ><input class="form-control" /><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span></div>');
+				eOptions.showFix = true;
+				//comp = new $.compManager.plugs.datetime(compDiv[0],eOptions,viewModel);
+				if ($.DateTime) {
+					comp = new $.DateTime(compDiv[0], eOptions, viewModel);
+				} else {
+					comp = new _datetime.DateTimeAdapter({
+						el: compDiv[0],
+						options: eOptions,
+						model: viewModel
+					});
+					if (oThis.gridOptions.customEditPanelClass) {
+						if (oThis.gridOptions.customEditPanelClass.indexOf('u-date-panel') < 0) {
+							oThis.gridOptions.customEditPanelClass += ',u-date-panel';
+						}
+					} else {
+						oThis.gridOptions.customEditPanelClass = 'u-date-panel';
+					}
+				}
+			} else if (eType == 'date') {
+				compDiv = $('<div class="input-group u-grid-edit-item-date" ><input class="form-control" /><span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span></div>');
+				eOptions.showFix = true;
+				//comp = new $.compManager.plugs.date(compDiv[0],eOptions,viewModel);
+				if ($.DateComp) {
+					comp = new $.DateComp(compDiv[0], eOptions, viewModel);
+				} else {
+					eOptions.type = 'u-date';
+					comp = new _datetime.DateTimeAdapter({
+						el: compDiv[0],
+						options: eOptions,
+						model: viewModel
+					});
+					if (oThis.gridOptions.customEditPanelClass) {
+						if (oThis.gridOptions.customEditPanelClass.indexOf('u-date-panel') < 0) {
+							oThis.gridOptions.customEditPanelClass += ',u-date-panel';
+						}
+					} else {
+						oThis.gridOptions.customEditPanelClass = 'u-date-panel';
+					}
+				}
+			} else if (eType == 'url') {
+				compDiv = $('<div><input type="text" class="u-grid-edit-item-string"></div>');
+				if (!options.editType || options.editType == "default") {
+					compDiv.addClass("eType-input");
+				}
+				eOptions.dataType = 'url';
+				comp = new _url.UrlAdapter({
+					el: compDiv[0],
+					options: eOptions,
+					model: viewModel
+				});
+				//$.compManager.plugs.string(compDiv.find("input")[0],eOptions,viewModel);
+			} else if (eType == 'password') {
+				compDiv = $('<div><input type="text" class="u-grid-edit-item-string"><span class="uf uf-eyeopen right-span"></span></div>');
+				if (!options.editType || options.editType == "default") {
+					compDiv.addClass("eType-input");
+				}
+				eOptions.dataType = 'password';
+				comp = new _password.PassWordAdapter({
+					el: compDiv[0],
+					options: eOptions,
+					model: viewModel
+				});
+				//$.compManager.plugs.string(compDiv.find("input")[0],eOptions,viewModel);
+			} else if (eType == 'percent') {
+
+				compDiv = $('<div><input type="text" class="u-grid-edit-item-float"></div>');
+				if (!options.editType || options.editType == "default") {
+					compDiv.addClass("eType-input");
+				}
+				//comp = new $.compManager.plugs.float(compDiv.find("input")[0],eOptions,viewModel);
+				eOptions.dataType = 'precent';
+				comp = new _percent.PercentAdapter({
+					el: compDiv[0],
+					options: eOptions,
+					model: viewModel
+				});
+			}
+			// input输入blur时显示下一个编辑控件
+			$('input', $(compDiv)).on('keydown', function (e) {
+				var keyCode = e.keyCode;
+				if (e.keyCode == 13 || e.keyCode == 9) {
+					// 回车
+					this.blur(); //首先触发blur来将修改值反应到datatable中
+					oThis.grid.nextEditShow();
+					(0, _event.stopEvent)(e);
+				}
+			});
+			if (comp && comp.dataAdapter) {
+				comp = comp.dataAdapter;
+			}
+
+			oThis.editComponentDiv[column.field] = compDiv;
+			oThis.editComponent[column.field] = comp;
+		},
+
+		/**
+	  * 获取grid行对应的数据模型行对象
+	  * @param {Object} gridRow
+	  */
+		getDataTableRow: function getDataTableRow(gridRow) {
+			var rowId = gridRow['$_#_@_id'];
+			var row = null;
+			var rowIndex = this.dataTable.getIndexByRowId(rowId);
+			if (rowIndex > -1) row = this.dataTable.getRow(rowIndex);
+			return row;
+		},
+
+		setEnable: function setEnable(enable) {
+			this.grid.setEditable(enable);
+		},
+
+		setShowHeader: function setShowHeader(showHeader) {
+			this.grid.setShowHeader(showHeader);
+		},
+
+		// 传入要编辑的tr对应的jquery对象
+		editRowFun: function editRowFun(index) {
+			this.dataTable.setRowSelect(index);
+			this.grid.editRowIndexFun(index);
+		},
+		/*
+	 grid校验之后不显示提示信息，只返回提示信息，由调用者主动处理
+	 传入参数：	trueValue 不处理
+	 			showMsg 不处理
+	 返回：	passed 是否通过
+	 		MsgObj 包含id以及提示信息，后续可扩展
+	 		Msg 提示信息
+	 */
+		doValidate: function doValidate(options) {
+			var rows = this.grid.dataSourceObj.rows,
+			    gridColumnArr = this.grid.gridCompColumnArr,
+			    passed = true,
+			    MsgArr = new Array(),
+			    evalStr = '',
+			    rowMsg = '',
+			    wholeMsg = '',
+			    columnShowMsg = '';
+
+			// 遍历所有列
+			for (var j = 0; j < gridColumnArr.length; j++) {
+				// 遍历所有行
+				var column = gridColumnArr[j],
+				    columnOptions = gridColumnArr[j].options,
+				    field = columnOptions.field,
+				    title = columnOptions.title,
+				    required = columnOptions.required,
+				    validType,
+				    placement,
+				    tipId,
+				    errorMsg,
+				    nullMsg,
+				    maxLength,
+				    minLength,
+				    max,
+				    min,
+				    maxNotEq,
+				    minNotEq,
+				    reg;
+				if (columnOptions.editOptions) {
+					validType = columnOptions.editOptions.validType || '';
+					placement = columnOptions.editOptions.placement || '';
+					tipId = columnOptions.editOptions.tipId || '';
+					errorMsg = columnOptions.editOptions.errorMsg || '';
+					nullMsg = columnOptions.editOptions.nullMsg || '';
+					maxLength = columnOptions.editOptions.maxLength || '';
+					minLength = columnOptions.editOptions.minLength || '';
+					max = columnOptions.editOptions.max || '';
+					min = columnOptions.editOptions.min || '';
+					maxNotEq = columnOptions.editOptions.maxNotEq || '';
+					minNotEq = columnOptions.editOptions.minNotEq || '';
+					reg = columnOptions.editOptions.regExp || '';
+				}
+
+				var columnPassedFlag = true,
+				    columnMsg = '';
+				var validate = new _neouiValidate.Validate({
+					el: this.element,
+					single: true,
+					required: required,
+					validType: validType,
+					placement: placement,
+					tipId: tipId,
+					errorMsg: errorMsg,
+					nullMsg: nullMsg,
+					maxLength: maxLength,
+					minLength: minLength,
+					max: max,
+					min: min,
+					maxNotEq: maxNotEq,
+					minNotEq: minNotEq,
+					reg: reg
+				});
+				for (var i = 0; i < rows.length; i++) {
+					var value = rows[i].value[field];
+					var result = validate.check({ pValue: value, showMsg: false });
+					passed = result.passed && passed;
+					if (!result.passed) {
+						columnPassedFlag = false;
+						if (options.showMsg && columnMsg.indexOf(result.Msg) < 0) {
+							columnMsg += result.Msg + ' ';
+						}
+						// 设置背景色
+						var index = this.grid.getIndexOfColumn(column);
+						var contentDiv = document.getElementById(this.grid.options.id + '_content_tbody');
+						var row = contentDiv.querySelectorAll('tr')[i];
+						var td = row.querySelectorAll('td')[index];
+						var div = td.querySelector('div');
+						addClass(td, 'u-grid-err-td');
+						addClass(div, 'u-grid-err-td');
+						evalStr = 'if(typeof obj' + i + ' == \'undefined\'){var obj' + i + '= {}; MsgArr.push(obj' + i + ');obj' + i + '.rowNum = ' + i + '; obj' + i + '.arr = new Array();}';
+						eval(evalStr);
+						var msg = '(' + title + ')' + result.Msg + ';';
+						evalStr = 'obj' + i + '.arr.push(msg)';
+						eval(evalStr);
+					}
+				}
+				// 如果存在错误信息并且提示信息
+				if (!columnPassedFlag && options.showMsg) {
+					columnShowMsg += title + ':' + columnMsg + '<br>';
+				}
+			}
+			if (columnShowMsg) (0, _neouiMessage.showMessage)({ msg: columnShowMsg, showSeconds: 3 });
+			if (MsgArr.length > 0) {
+				MsgArr.sort(function (a1, a2) {
+					if (a1.rowNum > a2.rowNum) return 1;else return -1;
+				});
+			}
+
+			for (var k = 0; k < MsgArr.length; k++) {
+				var rowNum = MsgArr[k].rowNum;
+				rowMsg = MsgArr[k].arr.join('');
+				wholeMsg += '第' + (rowNum + 1) + '行:' + rowMsg;
+			}
+
+			return {
+				passed: passed,
+				comp: this,
+				Msg: wholeMsg
+			};
+		}
+	});
+
+	//if ($.compManager)
+	//	$.compManager.addPlug(Grid)
+
+	_compMgr.compMgr.addDataAdapter({
+		adapter: GridAdapter,
+		name: 'grid'
+		//dataType: 'float'
+	});
+
+	exports.GridAdapter = GridAdapter;
+
+/***/ },
+/* 130 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.StringAdapter = undefined;
+
+	var _baseAdapter = __webpack_require__(118);
+
+	var _extend = __webpack_require__(2);
+
+	var _valueMixin = __webpack_require__(120);
+
+	var _enableMixin = __webpack_require__(121);
+
+	var _requiredMixin = __webpack_require__(122);
+
+	var _validateMixin = __webpack_require__(123);
+
+	var _event = __webpack_require__(7);
+
+	var _compMgr = __webpack_require__(11);
+
+	/**
+	 * Module : Kero string adapter
+	 * Author : Kvkens(yueming@yonyou.com)
+	 * Date	  : 2016-08-09 20:12:42
+	 */
+	var StringAdapter = _baseAdapter.BaseAdapter.extend({
+	    mixins: [_valueMixin.ValueMixin, _enableMixin.EnableMixin, _requiredMixin.RequiredMixin, _validateMixin.ValidateMixin],
+	    init: function init() {
+	        var self = this;
+	        this.element = this.element.nodeName === 'INPUT' ? this.element : this.element.querySelector('input');
+	        if (!this.element) {
+	            throw new Error('not found INPUT element, u-meta:' + JSON.stringify(this.options));
+	        };
+	        this.validType = this.options['validType'] || 'string';
+	        this.minLength = this.getOption('minLength');
+	        this.maxLength = this.getOption('maxLength');
+
+	        (0, _event.on)(this.element, 'focus', function () {
+	            if (self.enable) {
+	                self.setShowValue(self.getValue());
+	                try {
+	                    var e = event.srcElement;
+	                    var r = e.createTextRange();
+	                    r.moveStart('character', e.value.length);
+	                    r.collapse(true);
+	                    r.select();
+	                } catch (e) {}
+	            }
+	        });
+
+	        (0, _event.on)(this.element, 'blur', function (e) {
+	            if (self.enable) {
+	                if (!self.doValidate() && self._needClean()) {
+	                    if (self.required && (self.element.value === null || self.element.value === undefined || self.element.value === '')) {
+	                        // 因必输项清空导致检验没通过的情况
+	                        self.setValue('');
+	                    } else {
+	                        self.element.value = self.getShowValue();
+	                    }
+	                } else self.setValue(self.element.value);
+	            }
+	        });
+	    }
+	});
+	_compMgr.compMgr.addDataAdapter({
+	    adapter: StringAdapter,
+	    name: 'string'
+	});
+
+	exports.StringAdapter = StringAdapter;
+
+/***/ },
+/* 131 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 	exports.IntegerAdapter = undefined;
@@ -19866,663 +21112,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.IntegerAdapter = IntegerAdapter;
 
 /***/ },
-/* 130 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.MonthAdapter = undefined;
-
-	var _baseAdapter = __webpack_require__(118);
-
-	var _neouiMonth = __webpack_require__(53);
-
-	var _compMgr = __webpack_require__(11);
-
-	var MonthAdapter = _baseAdapter.BaseAdapter.extend({
-	    initialize: function initialize(comp, options) {
-	        var self = this;
-	        MonthAdapter.superclass.initialize.apply(this, arguments);
-	        this.validType = 'month';
-
-	        this.comp = new _neouiMonth.Month(this.element);
-
-	        this.comp.on('valueChange', function (event) {
-	            self.slice = true;
-	            self.dataModel.setValue(self.field, event.value);
-	            self.slice = false;
-	            //self.setValue(event.value);
-	        });
-	        this.dataModel.ref(this.field).subscribe(function (value) {
-	            self.modelValueChange(value);
-	        });
-	    },
-	    modelValueChange: function modelValueChange(value) {
-	        if (this.slice) return;
-	        this.comp.setValue(value);
-	    },
-	    setEnable: function setEnable(enable) {}
-	}); /**
-	     * Module : Kero month
-	     * Author : Kvkens(yueming@yonyou.com)
-	     * Date	  : 2016-08-09 18:46:30
-	     */
-
-	_compMgr.compMgr.addDataAdapter({
-	    adapter: MonthAdapter,
-	    name: 'u-month'
-	});
-
-	exports.MonthAdapter = MonthAdapter;
-
-/***/ },
-/* 131 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.NativeCheckAdapter = undefined;
-
-	var _baseAdapter = __webpack_require__(118);
-
-	var _valueMixin = __webpack_require__(120);
-
-	var _enableMixin = __webpack_require__(121);
-
-	var _util = __webpack_require__(5);
-
-	var _event = __webpack_require__(7);
-
-	var _compMgr = __webpack_require__(11);
-
-	/**
-	 * Module : Kero native-checkbox
-	 * Author : Kvkens(yueming@yonyou.com)
-	 * Date	  : 2016-08-09 18:55:51
-	 */
-
-	var NativeCheckAdapter = _baseAdapter.BaseAdapter.extend({
-	    mixins: [_valueMixin.ValueMixin, _enableMixin.EnableMixin],
-	    init: function init() {
-	        var self = this;
-	        this.isGroup = false;
-	        //如果存在datasource，动态创建checkbox
-	        if (this.options['datasource']) {
-	            this.isGroup = true;
-	            var datasource = (0, _util.getJSObject)(this.viewModel, this.options['datasource']);
-
-	            this.checkboxTemplateArray = [];
-	            for (var i = 0, count = this.element.childNodes.length; i < count; i++) {
-	                this.checkboxTemplateArray.push(this.element.childNodes[i]);
-	            }
-	            this.setComboData(datasource);
-	        } else {
-	            this.checkedValue = this.options['checkedValue'] || 'Y';
-	            this.unCheckedValue = this.options["unCheckedValue"] || 'N';
-	            (0, _event.on)(this.element, 'click', function () {
-	                if (this.checked) {
-	                    self.dataModel.setValue(self.field, self.checkedValue);
-	                } else {
-	                    self.dataModel.setValue(self.field, self.unCheckedValue);
-	                }
-	            });
-	        }
-	    },
-	    setComboData: function setComboData(comboData) {
-	        var self = this;
-	        this.element.innerHTML = '';
-	        for (var i = 0, len = comboData.length; i < len; i++) {
-	            for (var j = 0; j < this.checkboxTemplateArray.length; j++) {
-	                try {
-	                    this.element.appendChild(this.checkboxTemplateArray[j].cloneNode());
-	                } catch (e) {}
-	            }
-	            //this.radioTemplate.clone().appendTo(this.element)
-	        }
-
-	        var allCheck = this.element.querySelectorAll('[type=checkbox]');
-	        var allName = this.element.querySelectorAll('[data-role=name]');
-	        for (var k = 0; k < allCheck.length; k++) {
-	            allCheck[k].value = comboData[k].pk || comboData[k].value;
-	            allName[k].innerHTML = comboData[k].name;
-	        }
-
-	        this.element.querySelectorAll('[type=checkbox]').forEach(function (ele) {
-	            (0, _event.on)(ele, 'click', function () {
-	                var modelValue = self.dataModel.getValue(self.field);
-
-	                var valueArr = modelValue == '' ? [] : modelValue.split(',');
-
-	                if (this.checked) {
-	                    valueArr.push(this.value);
-	                } else {
-	                    var index = valueArr.indexOf(this.value);
-	                    valueArr.splice(index, 1);
-	                }
-	                self.slice = true;
-	                self.dataModel.setValue(self.field, valueArr.join(','));
-	                self.slice = false;
-	            });
-	        });
-	    },
-	    modelValueChange: function modelValueChange(val) {
-	        if (this.slice) return;
-	        if (this.isGroup) {
-	            this.element.querySelectorAll('[type=checkbox]').forEach(function (ele) {
-	                if (ele.checked != (val + ',').indexOf(ele.value) > -1) {
-	                    this.slice = true;
-	                    ele.checked = !ele.checked;
-	                    this.slice = false;
-	                }
-	            });
-	        } else {
-	            if (this.element.checked != (val === this.checkedValue)) {
-	                this.slice = true;
-	                this.element.checked = !this.element.checked;
-	                this.slice = false;
-	            }
-	        }
-	    },
-	    setValue: function setValue(value) {
-	        this.trueValue = value;
-	        this.element.querySelectorAll('[type=checkbox]').forEach(function (ele) {
-	            if (ele.value == value) {
-	                ele.checked = true;
-	            } else {
-	                ele.checked = false;
-	            }
-	        });
-	        this.slice = true;
-	        this.dataModel.setValue(this.field, this.trueValue);
-	        this.slice = false;
-	    },
-	    getValue: function getValue() {
-	        return this.trueValue;
-	    }
-
-	});
-
-	_compMgr.compMgr.addDataAdapter({
-	    adapter: NativeCheckAdapter,
-	    name: 'checkbox'
-	});
-	exports.NativeCheckAdapter = NativeCheckAdapter;
-
-/***/ },
 /* 132 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.NativeRadioAdapter = undefined;
-
-	var _baseAdapter = __webpack_require__(118);
-
-	var _valueMixin = __webpack_require__(120);
-
-	var _enableMixin = __webpack_require__(121);
-
-	var _util = __webpack_require__(5);
-
-	var _event = __webpack_require__(7);
-
-	var _compMgr = __webpack_require__(11);
-
-	/**
-	 * Module : Kero native-radio
-	 * Author : Kvkens(yueming@yonyou.com)
-	 * Date	  : 2016-08-09 19:03:30
-	 */
-
-	var NativeRadioAdapter = _baseAdapter.BaseAdapter.extend({
-	    mixins: [_valueMixin.ValueMixin, _enableMixin.EnableMixin],
-	    init: function init() {
-	        this.isDynamic = false;
-	        //如果存在datasource，动态创建radio
-	        if (this.options['datasource']) {
-	            this.isDynamic = true;
-	            var datasource = (0, _util.getJSObject)(this.viewModel, this.options['datasource']);
-	            //if(!u.isArray(datasource)) return;
-
-	            this.radioTemplateArray = [];
-	            for (var i = 0, count = this.element.childNodes.length; i < count; i++) {
-	                this.radioTemplateArray.push(this.element.childNodes[i]);
-	            }
-	            this.setComboData(datasource);
-	        } else {}
-	    },
-	    setComboData: function setComboData(comboData) {
-	        var self = this;
-	        //if(!this.radioTemplate.is(":radio")) return;
-	        this.element.innerHTML = '';
-	        for (var i = 0, len = comboData.length; i < len; i++) {
-	            for (var j = 0; j < this.radioTemplateArray.length; j++) {
-	                try {
-	                    this.element.appendChild(this.radioTemplateArray[j].cloneNode(true));
-	                } catch (e) {}
-	            }
-	            //this.radioTemplate.clone().appendTo(this.element)
-	        }
-
-	        var allRadio = this.element.querySelectorAll('[type=radio]');
-	        var allName = this.element.querySelectorAll('[data-role=name]');
-	        for (var k = 0; k < allRadio.length; k++) {
-	            allRadio[k].value = comboData[k].pk || comboData[k].value;
-	            allName[k].innerHTML = comboData[k].name;
-	        }
-
-	        this.radioInputName = allRadio[0].name;
-
-	        this.element.querySelectorAll('[type=radio][name="' + this.radioInputName + '"]').forEach(function (ele) {
-	            (0, _event.on)(ele, 'click', function () {
-	                if (this.checked) {
-	                    self.setValue(this.value);
-	                }
-	            });
-	        });
-	    },
-	    modelValueChange: function modelValueChange(value) {
-	        if (this.slice) return;
-	        this.setValue(value);
-	    },
-	    setValue: function setValue(value) {
-	        this.trueValue = value;
-	        this.element.querySelectorAll('[type=radio][name="' + this.radioInputName + '"]').forEach(function (ele) {
-	            if (ele.value == value) {
-	                ele.checked = true;
-	            } else {
-	                ele.checked = false;
-	            }
-	        });
-	        this.slice = true;
-	        this.dataModel.setValue(this.field, this.trueValue);
-	        this.slice = false;
-	    },
-	    getValue: function getValue() {
-	        return this.trueValue;
-	    }
-
-	});
-
-	_compMgr.compMgr.addDataAdapter({
-	    adapter: NativeRadioAdapter,
-	    name: 'radio'
-	});
-	exports.NativeRadioAdapter = NativeRadioAdapter;
-
-/***/ },
-/* 133 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.PaginationAdapter = undefined;
-
-	var _baseAdapter = __webpack_require__(118);
-
-	var _extend = __webpack_require__(2);
-
-	var _neouiPagination = __webpack_require__(41);
-
-	var _util = __webpack_require__(5);
-
-	var _compMgr = __webpack_require__(11);
-
-	var PaginationAdapter = _baseAdapter.BaseAdapter.extend({
-	    initialize: function initialize(comp, options) {
-	        var self = this;
-	        PaginationAdapter.superclass.initialize.apply(this, arguments);
-
-	        //var Pagination = function(element, options, viewModel) {
-
-	        if (!this.dataModel.pageSize() && this.options.pageSize) this.dataModel.pageSize(this.options.pageSize);
-	        this.options.pageSize = this.dataModel.pageSize() || this.options.pageSize;
-	        //this.$element.pagination(options);
-	        //this.comp = this.$element.data('u.pagination');
-	        var options = (0, _extend.extend)({}, { el: this.element, jumppage: true }, this.options);
-	        this.comp = new _neouiPagination.pagination(options);
-	        this.element['u.pagination'] = this.comp;
-	        this.comp.dataModel = this.dataModel;
-	        this.pageChange = (0, _util.getFunction)(this.viewModel, this.options['pageChange']);
-	        this.sizeChange = (0, _util.getFunction)(this.viewModel, this.options['sizeChange']);
-
-	        this.comp.on('pageChange', function (pageIndex) {
-	            if (typeof self.pageChange == 'function') {
-	                self.pageChange(pageIndex);
-	            } else {
-	                self.defaultPageChange(pageIndex);
-	            }
-	        });
-	        this.comp.on('sizeChange', function (size, pageIndex) {
-	            if (typeof self.sizeChange == 'function') {
-	                self.sizeChange(size, pageIndex);
-	            } else {
-	                self.defaultSizeChange(size, pageIndex);
-	                // showMessage({msg:"没有注册sizeChange事件"});
-	            }
-	        });
-
-	        this.dataModel.totalPages.subscribe(function (value) {
-	            self.comp.update({ totalPages: value });
-	        });
-
-	        this.dataModel.pageSize.subscribe(function (value) {
-	            self.comp.update({ pageSize: value });
-	        });
-
-	        this.dataModel.pageIndex.subscribe(function (value) {
-	            self.comp.update({ currentPage: value + 1 });
-	        });
-
-	        this.dataModel.totalRow.subscribe(function (value) {
-	            self.comp.update({ totalCount: value });
-	        });
-
-	        if (this.comp.options.pageList.length > 0) {
-	            this.comp.options.pageSize = this.comp.options.pageList[0];
-	            ///this.comp.trigger('sizeChange', options.pageList[0])
-	            this.dataModel.pageSize(this.comp.options.pageList[0]);
-	        }
-
-	        // 如果datatable已经创建则根据datatable设置分页组件
-	        // self.comp.update({totalPages: this.dataModel.totalPages()})
-	        // self.comp.update({pageSize: this.dataModel.pageSize()})
-	        // self.comp.update({currentPage: this.dataModel.pageIndex() + 1})
-	        // self.comp.update({totalCount: this.dataModel.totalRow()})
-	        self.comp.update({ totalPages: this.dataModel.totalPages(), pageSize: this.dataModel.pageSize(), currentPage: this.dataModel.pageIndex() + 1, totalCount: this.dataModel.totalRow() });
-	    },
-
-	    defaultPageChange: function defaultPageChange(pageIndex) {
-	        if (this.dataModel.hasPage(pageIndex)) {
-	            this.dataModel.setCurrentPage(pageIndex);
-	        } else {}
-	    },
-
-	    defaultSizeChange: function defaultSizeChange(size, pageIndex) {
-	        this.dataModel.pageSize(size);
-	    },
-
-	    disableChangeSize: function disableChangeSize() {
-	        this.comp.disableChangeSize();
-	    },
-
-	    enableChangeSize: function enableChangeSize() {
-	        this.comp.enableChangeSize();
-	    }
-	}); /**
-	     * Module : Kero pagination
-	     * Author : Kvkens(yueming@yonyou.com)
-	     * Date	  : 2016-08-09 19:09:39
-	     */
-
-
-	_compMgr.compMgr.addDataAdapter({
-	    adapter: PaginationAdapter,
-	    name: 'pagination'
-	});
-
-	exports.PaginationAdapter = PaginationAdapter;
-
-/***/ },
-/* 134 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.PassWordAdapter = undefined;
-
-	var _string = __webpack_require__(135);
-
-	var _util = __webpack_require__(5);
-
-	var _env = __webpack_require__(6);
-
-	var _event = __webpack_require__(7);
-
-	var _compMgr = __webpack_require__(11);
-
-	/**
-	 * 密码控件
-	 */
-	var PassWordAdapter = _string.StringAdapter.extend({
-	    init: function init() {
-	        PassWordAdapter.superclass.init.apply(this);
-	        var oThis = this;
-	        if (_env.env.isIE8) {
-	            var outStr = this.element.outerHTML;
-	            var l = outStr.length;
-	            outStr = outStr.substring(0, l - 1) + ' type="password"' + outStr.substring(l - 1);
-	            var newEle = document.createElement(outStr);
-	            var parent = this.element.parentNode;
-	            parent.insertBefore(newEle, this.element.nextSibling);
-	            parent.removeChild(this.element);
-	            this.element = newEle;
-	        } else {
-	            this.element.type = "password";
-	        }
-	        oThis.element.title = '';
-	        this._element = this.element.parentNode;
-	        this.span = this._element.querySelector("span");
-	        if (_env.env.isIE8) {
-	            this.span.style.display = 'none';
-	        }
-	        if (this.span) {
-	            (0, _event.on)(this.span, 'click', function () {
-	                if (oThis.element.type == 'password') {
-	                    oThis.element.type = 'text';
-	                } else {
-	                    oThis.element.type = 'password';
-	                }
-	            });
-	        }
-	    },
-	    setShowValue: function setShowValue(showValue) {
-	        this.showValue = showValue;
-	        this.element.value = showValue;
-	        this.element.title = '';
-	    }
-	}); /**
-	     * Module : Kero password
-	     * Author : Kvkens(yueming@yonyou.com)
-	     * Date	  : 2016-08-09 19:19:33
-	     */
-
-	_compMgr.compMgr.addDataAdapter({
-	    adapter: PassWordAdapter,
-	    name: 'password'
-	});
-
-	exports.PassWordAdapter = PassWordAdapter;
-
-/***/ },
-/* 135 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.StringAdapter = undefined;
-
-	var _baseAdapter = __webpack_require__(118);
-
-	var _extend = __webpack_require__(2);
-
-	var _valueMixin = __webpack_require__(120);
-
-	var _enableMixin = __webpack_require__(121);
-
-	var _requiredMixin = __webpack_require__(122);
-
-	var _validateMixin = __webpack_require__(123);
-
-	var _event = __webpack_require__(7);
-
-	var _compMgr = __webpack_require__(11);
-
-	/**
-	 * Module : Kero string adapter
-	 * Author : Kvkens(yueming@yonyou.com)
-	 * Date	  : 2016-08-09 20:12:42
-	 */
-	var StringAdapter = _baseAdapter.BaseAdapter.extend({
-	    mixins: [_valueMixin.ValueMixin, _enableMixin.EnableMixin, _requiredMixin.RequiredMixin, _validateMixin.ValidateMixin],
-	    init: function init() {
-	        var self = this;
-	        this.element = this.element.nodeName === 'INPUT' ? this.element : this.element.querySelector('input');
-	        if (!this.element) {
-	            throw new Error('not found INPUT element, u-meta:' + JSON.stringify(this.options));
-	        };
-	        this.validType = this.options['validType'] || 'string';
-	        this.minLength = this.getOption('minLength');
-	        this.maxLength = this.getOption('maxLength');
-
-	        (0, _event.on)(this.element, 'focus', function () {
-	            if (self.enable) {
-	                self.setShowValue(self.getValue());
-	                try {
-	                    var e = event.srcElement;
-	                    var r = e.createTextRange();
-	                    r.moveStart('character', e.value.length);
-	                    r.collapse(true);
-	                    r.select();
-	                } catch (e) {}
-	            }
-	        });
-
-	        (0, _event.on)(this.element, 'blur', function (e) {
-	            if (self.enable) {
-	                if (!self.doValidate() && self._needClean()) {
-	                    if (self.required && (self.element.value === null || self.element.value === undefined || self.element.value === '')) {
-	                        // 因必输项清空导致检验没通过的情况
-	                        self.setValue('');
-	                    } else {
-	                        self.element.value = self.getShowValue();
-	                    }
-	                } else self.setValue(self.element.value);
-	            }
-	        });
-	    }
-	});
-	_compMgr.compMgr.addDataAdapter({
-	    adapter: StringAdapter,
-	    name: 'string'
-	});
-
-	exports.StringAdapter = StringAdapter;
-
-/***/ },
-/* 136 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.PercentAdapter = undefined;
-
-	var _float = __webpack_require__(127);
-
-	var _formater = __webpack_require__(15);
-
-	var _masker = __webpack_require__(16);
-
-	var _core = __webpack_require__(10);
-
-	var _compMgr = __webpack_require__(11);
-
-	/**
-	 * 百分比控件
-	 */
-	var PercentAdapter = _float.FloatAdapter.extend({
-	  init: function init() {
-	    PercentAdapter.superclass.init.apply(this);
-	    this.validType = 'float';
-	    this.maskerMeta = _core.core.getMaskerMeta('percent') || {};
-	    this.maskerMeta.precision = this.getOption('precision') || this.maskerMeta.precision;
-	    if (this.maskerMeta.precision) {
-	      this.maskerMeta.precision = parseInt(this.maskerMeta.precision) + 2;
-	    }
-	    this.formater = new _formater.NumberFormater(this.maskerMeta.precision);
-	    this.masker = new _masker.PercentMasker(this.maskerMeta);
-	  }
-	}); /**
-	     * Module : Kero percent
-	     * Author : Kvkens(yueming@yonyou.com)
-	     * Date	  : 2016-08-09 20:02:50
-	     */
-
-	_compMgr.compMgr.addDataAdapter({
-	  adapter: PercentAdapter,
-	  name: 'percent'
-	});
-	exports.PercentAdapter = PercentAdapter;
-
-/***/ },
-/* 137 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.ProgressAdapter = undefined;
-
-	var _baseAdapter = __webpack_require__(118);
-
-	var _neouiProgress = __webpack_require__(42);
-
-	var _compMgr = __webpack_require__(11);
-
-	var ProgressAdapter = _baseAdapter.BaseAdapter.extend({
-	    initialize: function initialize(options) {
-	        var self = this;
-	        ProgressAdapter.superclass.initialize.apply(this, arguments);
-
-	        this.comp = new _neouiProgress.Progress(this.element);
-	        this.element['u.Progress'] = this.comp;
-
-	        this.dataModel.ref(this.field).subscribe(function (value) {
-	            self.modelValueChange(value);
-	        });
-	    },
-
-	    modelValueChange: function modelValueChange(val) {
-	        this.comp.setProgress(val);
-	    }
-	}); /**
-	     * Module : Kero percent
-	     * Author : Kvkens(yueming@yonyou.com)
-	     * Date	  : 2016-08-09 20:02:50
-	     */
-
-	_compMgr.compMgr.addDataAdapter({
-	    adapter: ProgressAdapter,
-	    name: 'u-progress'
-	});
-
-	exports.ProgressAdapter = ProgressAdapter;
-
-/***/ },
-/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20721,7 +21311,654 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.RadioAdapter = RadioAdapter;
 
 /***/ },
+/* 133 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.UrlAdapter = undefined;
+
+	var _string = __webpack_require__(130);
+
+	var _dom = __webpack_require__(8);
+
+	var _compMgr = __webpack_require__(11);
+
+	var UrlAdapter = _string.StringAdapter.extend({
+	    init: function init() {
+	        UrlAdapter.superclass.init.apply(this);
+	        this.validType = 'url';
+
+	        /*
+	         * 因为需要输入，因此不显示为超链接
+	         */
+	    },
+	    // 如果enable为false则显示<a>标签
+	    setEnable: function setEnable(enable) {
+	        if (enable === true || enable === 'true') {
+	            this.enable = true;
+	            this.element.removeAttribute('readonly');
+	            (0, _dom.removeClass)(this.element.parentNode, 'disablecover');
+	            if (this.aDom) {
+	                this.aDom.style.display = 'none';
+	            }
+	        } else if (enable === false || enable === 'false') {
+	            this.enable = false;
+	            this.element.setAttribute('readonly', 'readonly');
+	            (0, _dom.addClass)(this.element.parentNode, 'disablecover');
+	            if (!this.aDom) {
+	                this.aDom = (0, _dom.makeDOM)('<div style="position:absolute;background:#fff;z-index:999;"><a href="' + this.trueValue + '" target="_blank" style="position:absolue;">' + this.trueValue + '</a></div>');
+	                var left = this.element.offsetLeft;
+	                var width = this.element.offsetWidth;
+	                var top = this.element.offsetTop;
+	                var height = this.element.offsetHeight;
+	                this.aDom.style.left = left + 'px';
+	                this.aDom.style.width = width + 'px';
+	                this.aDom.style.top = top + 'px';
+	                this.aDom.style.height = height + 'px';
+	                this.element.parentNode.appendChild(this.aDom);
+	            }
+	            var $a = $(this.aDom).find('a');
+	            $a.href = this.trueValue;
+	            $a.innerHTML = this.trueValue;
+	            this.aDom.style.display = 'block';
+	        }
+	    }
+	}); /**
+	     * Module : Kero url adapter
+	     * Author : Kvkens(yueming@yonyou.com)
+	     * Date	  : 2016-08-10 13:51:26
+	     */
+
+	_compMgr.compMgr.addDataAdapter({
+	    adapter: UrlAdapter,
+	    name: 'url'
+	});
+	exports.UrlAdapter = UrlAdapter;
+
+/***/ },
+/* 134 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.PassWordAdapter = undefined;
+
+	var _string = __webpack_require__(130);
+
+	var _util = __webpack_require__(5);
+
+	var _env = __webpack_require__(6);
+
+	var _event = __webpack_require__(7);
+
+	var _compMgr = __webpack_require__(11);
+
+	/**
+	 * 密码控件
+	 */
+	var PassWordAdapter = _string.StringAdapter.extend({
+	    init: function init() {
+	        PassWordAdapter.superclass.init.apply(this);
+	        var oThis = this;
+	        if (_env.env.isIE8) {
+	            var outStr = this.element.outerHTML;
+	            var l = outStr.length;
+	            outStr = outStr.substring(0, l - 1) + ' type="password"' + outStr.substring(l - 1);
+	            var newEle = document.createElement(outStr);
+	            var parent = this.element.parentNode;
+	            parent.insertBefore(newEle, this.element.nextSibling);
+	            parent.removeChild(this.element);
+	            this.element = newEle;
+	        } else {
+	            this.element.type = "password";
+	        }
+	        oThis.element.title = '';
+	        this._element = this.element.parentNode;
+	        this.span = this._element.querySelector("span");
+	        if (_env.env.isIE8) {
+	            this.span.style.display = 'none';
+	        }
+	        if (this.span) {
+	            (0, _event.on)(this.span, 'click', function () {
+	                if (oThis.element.type == 'password') {
+	                    oThis.element.type = 'text';
+	                } else {
+	                    oThis.element.type = 'password';
+	                }
+	            });
+	        }
+	    },
+	    setShowValue: function setShowValue(showValue) {
+	        this.showValue = showValue;
+	        this.element.value = showValue;
+	        this.element.title = '';
+	    }
+	}); /**
+	     * Module : Kero password
+	     * Author : Kvkens(yueming@yonyou.com)
+	     * Date	  : 2016-08-09 19:19:33
+	     */
+
+	_compMgr.compMgr.addDataAdapter({
+	    adapter: PassWordAdapter,
+	    name: 'password'
+	});
+
+	exports.PassWordAdapter = PassWordAdapter;
+
+/***/ },
+/* 135 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.PercentAdapter = undefined;
+
+	var _float = __webpack_require__(127);
+
+	var _formater = __webpack_require__(15);
+
+	var _masker = __webpack_require__(16);
+
+	var _core = __webpack_require__(10);
+
+	var _compMgr = __webpack_require__(11);
+
+	/**
+	 * 百分比控件
+	 */
+	var PercentAdapter = _float.FloatAdapter.extend({
+	  init: function init() {
+	    PercentAdapter.superclass.init.apply(this);
+	    this.validType = 'float';
+	    this.maskerMeta = _core.core.getMaskerMeta('percent') || {};
+	    this.maskerMeta.precision = this.getOption('precision') || this.maskerMeta.precision;
+	    if (this.maskerMeta.precision) {
+	      this.maskerMeta.precision = parseInt(this.maskerMeta.precision) + 2;
+	    }
+	    this.formater = new _formater.NumberFormater(this.maskerMeta.precision);
+	    this.masker = new _masker.PercentMasker(this.maskerMeta);
+	  }
+	}); /**
+	     * Module : Kero percent
+	     * Author : Kvkens(yueming@yonyou.com)
+	     * Date	  : 2016-08-09 20:02:50
+	     */
+
+	_compMgr.compMgr.addDataAdapter({
+	  adapter: PercentAdapter,
+	  name: 'percent'
+	});
+	exports.PercentAdapter = PercentAdapter;
+
+/***/ },
+/* 136 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.MonthAdapter = undefined;
+
+	var _baseAdapter = __webpack_require__(118);
+
+	var _neouiMonth = __webpack_require__(53);
+
+	var _compMgr = __webpack_require__(11);
+
+	var MonthAdapter = _baseAdapter.BaseAdapter.extend({
+	    initialize: function initialize(comp, options) {
+	        var self = this;
+	        MonthAdapter.superclass.initialize.apply(this, arguments);
+	        this.validType = 'month';
+
+	        this.comp = new _neouiMonth.Month(this.element);
+
+	        this.comp.on('valueChange', function (event) {
+	            self.slice = true;
+	            self.dataModel.setValue(self.field, event.value);
+	            self.slice = false;
+	            //self.setValue(event.value);
+	        });
+	        this.dataModel.ref(this.field).subscribe(function (value) {
+	            self.modelValueChange(value);
+	        });
+	    },
+	    modelValueChange: function modelValueChange(value) {
+	        if (this.slice) return;
+	        this.comp.setValue(value);
+	    },
+	    setEnable: function setEnable(enable) {}
+	}); /**
+	     * Module : Kero month
+	     * Author : Kvkens(yueming@yonyou.com)
+	     * Date	  : 2016-08-09 18:46:30
+	     */
+
+	_compMgr.compMgr.addDataAdapter({
+	    adapter: MonthAdapter,
+	    name: 'u-month'
+	});
+
+	exports.MonthAdapter = MonthAdapter;
+
+/***/ },
+/* 137 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.NativeCheckAdapter = undefined;
+
+	var _baseAdapter = __webpack_require__(118);
+
+	var _valueMixin = __webpack_require__(120);
+
+	var _enableMixin = __webpack_require__(121);
+
+	var _util = __webpack_require__(5);
+
+	var _event = __webpack_require__(7);
+
+	var _compMgr = __webpack_require__(11);
+
+	/**
+	 * Module : Kero native-checkbox
+	 * Author : Kvkens(yueming@yonyou.com)
+	 * Date	  : 2016-08-09 18:55:51
+	 */
+
+	var NativeCheckAdapter = _baseAdapter.BaseAdapter.extend({
+	    mixins: [_valueMixin.ValueMixin, _enableMixin.EnableMixin],
+	    init: function init() {
+	        var self = this;
+	        this.isGroup = false;
+	        //如果存在datasource，动态创建checkbox
+	        if (this.options['datasource']) {
+	            this.isGroup = true;
+	            var datasource = (0, _util.getJSObject)(this.viewModel, this.options['datasource']);
+
+	            this.checkboxTemplateArray = [];
+	            for (var i = 0, count = this.element.childNodes.length; i < count; i++) {
+	                this.checkboxTemplateArray.push(this.element.childNodes[i]);
+	            }
+	            this.setComboData(datasource);
+	        } else {
+	            this.checkedValue = this.options['checkedValue'] || 'Y';
+	            this.unCheckedValue = this.options["unCheckedValue"] || 'N';
+	            (0, _event.on)(this.element, 'click', function () {
+	                if (this.checked) {
+	                    self.dataModel.setValue(self.field, self.checkedValue);
+	                } else {
+	                    self.dataModel.setValue(self.field, self.unCheckedValue);
+	                }
+	            });
+	        }
+	    },
+	    setComboData: function setComboData(comboData) {
+	        var self = this;
+	        this.element.innerHTML = '';
+	        for (var i = 0, len = comboData.length; i < len; i++) {
+	            for (var j = 0; j < this.checkboxTemplateArray.length; j++) {
+	                try {
+	                    this.element.appendChild(this.checkboxTemplateArray[j].cloneNode());
+	                } catch (e) {}
+	            }
+	            //this.radioTemplate.clone().appendTo(this.element)
+	        }
+
+	        var allCheck = this.element.querySelectorAll('[type=checkbox]');
+	        var allName = this.element.querySelectorAll('[data-role=name]');
+	        for (var k = 0; k < allCheck.length; k++) {
+	            allCheck[k].value = comboData[k].pk || comboData[k].value;
+	            allName[k].innerHTML = comboData[k].name;
+	        }
+
+	        this.element.querySelectorAll('[type=checkbox]').forEach(function (ele) {
+	            (0, _event.on)(ele, 'click', function () {
+	                var modelValue = self.dataModel.getValue(self.field);
+
+	                var valueArr = modelValue == '' ? [] : modelValue.split(',');
+
+	                if (this.checked) {
+	                    valueArr.push(this.value);
+	                } else {
+	                    var index = valueArr.indexOf(this.value);
+	                    valueArr.splice(index, 1);
+	                }
+	                self.slice = true;
+	                self.dataModel.setValue(self.field, valueArr.join(','));
+	                self.slice = false;
+	            });
+	        });
+	    },
+	    modelValueChange: function modelValueChange(val) {
+	        if (this.slice) return;
+	        if (this.isGroup) {
+	            this.element.querySelectorAll('[type=checkbox]').forEach(function (ele) {
+	                if (ele.checked != (val + ',').indexOf(ele.value) > -1) {
+	                    this.slice = true;
+	                    ele.checked = !ele.checked;
+	                    this.slice = false;
+	                }
+	            });
+	        } else {
+	            if (this.element.checked != (val === this.checkedValue)) {
+	                this.slice = true;
+	                this.element.checked = !this.element.checked;
+	                this.slice = false;
+	            }
+	        }
+	    },
+	    setValue: function setValue(value) {
+	        this.trueValue = value;
+	        this.element.querySelectorAll('[type=checkbox]').forEach(function (ele) {
+	            if (ele.value == value) {
+	                ele.checked = true;
+	            } else {
+	                ele.checked = false;
+	            }
+	        });
+	        this.slice = true;
+	        this.dataModel.setValue(this.field, this.trueValue);
+	        this.slice = false;
+	    },
+	    getValue: function getValue() {
+	        return this.trueValue;
+	    }
+
+	});
+
+	_compMgr.compMgr.addDataAdapter({
+	    adapter: NativeCheckAdapter,
+	    name: 'checkbox'
+	});
+	exports.NativeCheckAdapter = NativeCheckAdapter;
+
+/***/ },
+/* 138 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.NativeRadioAdapter = undefined;
+
+	var _baseAdapter = __webpack_require__(118);
+
+	var _valueMixin = __webpack_require__(120);
+
+	var _enableMixin = __webpack_require__(121);
+
+	var _util = __webpack_require__(5);
+
+	var _event = __webpack_require__(7);
+
+	var _compMgr = __webpack_require__(11);
+
+	/**
+	 * Module : Kero native-radio
+	 * Author : Kvkens(yueming@yonyou.com)
+	 * Date	  : 2016-08-09 19:03:30
+	 */
+
+	var NativeRadioAdapter = _baseAdapter.BaseAdapter.extend({
+	    mixins: [_valueMixin.ValueMixin, _enableMixin.EnableMixin],
+	    init: function init() {
+	        this.isDynamic = false;
+	        //如果存在datasource，动态创建radio
+	        if (this.options['datasource']) {
+	            this.isDynamic = true;
+	            var datasource = (0, _util.getJSObject)(this.viewModel, this.options['datasource']);
+	            //if(!u.isArray(datasource)) return;
+
+	            this.radioTemplateArray = [];
+	            for (var i = 0, count = this.element.childNodes.length; i < count; i++) {
+	                this.radioTemplateArray.push(this.element.childNodes[i]);
+	            }
+	            this.setComboData(datasource);
+	        } else {}
+	    },
+	    setComboData: function setComboData(comboData) {
+	        var self = this;
+	        //if(!this.radioTemplate.is(":radio")) return;
+	        this.element.innerHTML = '';
+	        for (var i = 0, len = comboData.length; i < len; i++) {
+	            for (var j = 0; j < this.radioTemplateArray.length; j++) {
+	                try {
+	                    this.element.appendChild(this.radioTemplateArray[j].cloneNode(true));
+	                } catch (e) {}
+	            }
+	            //this.radioTemplate.clone().appendTo(this.element)
+	        }
+
+	        var allRadio = this.element.querySelectorAll('[type=radio]');
+	        var allName = this.element.querySelectorAll('[data-role=name]');
+	        for (var k = 0; k < allRadio.length; k++) {
+	            allRadio[k].value = comboData[k].pk || comboData[k].value;
+	            allName[k].innerHTML = comboData[k].name;
+	        }
+
+	        this.radioInputName = allRadio[0].name;
+
+	        this.element.querySelectorAll('[type=radio][name="' + this.radioInputName + '"]').forEach(function (ele) {
+	            (0, _event.on)(ele, 'click', function () {
+	                if (this.checked) {
+	                    self.setValue(this.value);
+	                }
+	            });
+	        });
+	    },
+	    modelValueChange: function modelValueChange(value) {
+	        if (this.slice) return;
+	        this.setValue(value);
+	    },
+	    setValue: function setValue(value) {
+	        this.trueValue = value;
+	        this.element.querySelectorAll('[type=radio][name="' + this.radioInputName + '"]').forEach(function (ele) {
+	            if (ele.value == value) {
+	                ele.checked = true;
+	            } else {
+	                ele.checked = false;
+	            }
+	        });
+	        this.slice = true;
+	        this.dataModel.setValue(this.field, this.trueValue);
+	        this.slice = false;
+	    },
+	    getValue: function getValue() {
+	        return this.trueValue;
+	    }
+
+	});
+
+	_compMgr.compMgr.addDataAdapter({
+	    adapter: NativeRadioAdapter,
+	    name: 'radio'
+	});
+	exports.NativeRadioAdapter = NativeRadioAdapter;
+
+/***/ },
 /* 139 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.PaginationAdapter = undefined;
+
+	var _baseAdapter = __webpack_require__(118);
+
+	var _extend = __webpack_require__(2);
+
+	var _neouiPagination = __webpack_require__(41);
+
+	var _util = __webpack_require__(5);
+
+	var _compMgr = __webpack_require__(11);
+
+	var PaginationAdapter = _baseAdapter.BaseAdapter.extend({
+	    initialize: function initialize(comp, options) {
+	        var self = this;
+	        PaginationAdapter.superclass.initialize.apply(this, arguments);
+
+	        //var Pagination = function(element, options, viewModel) {
+
+	        if (!this.dataModel.pageSize() && this.options.pageSize) this.dataModel.pageSize(this.options.pageSize);
+	        this.options.pageSize = this.dataModel.pageSize() || this.options.pageSize;
+	        //this.$element.pagination(options);
+	        //this.comp = this.$element.data('u.pagination');
+	        var options = (0, _extend.extend)({}, { el: this.element, jumppage: true }, this.options);
+	        this.comp = new _neouiPagination.pagination(options);
+	        this.element['u.pagination'] = this.comp;
+	        this.comp.dataModel = this.dataModel;
+	        this.pageChange = (0, _util.getFunction)(this.viewModel, this.options['pageChange']);
+	        this.sizeChange = (0, _util.getFunction)(this.viewModel, this.options['sizeChange']);
+
+	        this.comp.on('pageChange', function (pageIndex) {
+	            if (typeof self.pageChange == 'function') {
+	                self.pageChange(pageIndex);
+	            } else {
+	                self.defaultPageChange(pageIndex);
+	            }
+	        });
+	        this.comp.on('sizeChange', function (size, pageIndex) {
+	            if (typeof self.sizeChange == 'function') {
+	                self.sizeChange(size, pageIndex);
+	            } else {
+	                self.defaultSizeChange(size, pageIndex);
+	                // showMessage({msg:"没有注册sizeChange事件"});
+	            }
+	        });
+
+	        this.dataModel.totalPages.subscribe(function (value) {
+	            self.comp.update({ totalPages: value });
+	        });
+
+	        this.dataModel.pageSize.subscribe(function (value) {
+	            self.comp.update({ pageSize: value });
+	        });
+
+	        this.dataModel.pageIndex.subscribe(function (value) {
+	            self.comp.update({ currentPage: value + 1 });
+	        });
+
+	        this.dataModel.totalRow.subscribe(function (value) {
+	            self.comp.update({ totalCount: value });
+	        });
+
+	        if (this.comp.options.pageList.length > 0) {
+	            this.comp.options.pageSize = this.comp.options.pageList[0];
+	            ///this.comp.trigger('sizeChange', options.pageList[0])
+	            this.dataModel.pageSize(this.comp.options.pageList[0]);
+	        }
+
+	        // 如果datatable已经创建则根据datatable设置分页组件
+	        // self.comp.update({totalPages: this.dataModel.totalPages()})
+	        // self.comp.update({pageSize: this.dataModel.pageSize()})
+	        // self.comp.update({currentPage: this.dataModel.pageIndex() + 1})
+	        // self.comp.update({totalCount: this.dataModel.totalRow()})
+	        self.comp.update({ totalPages: this.dataModel.totalPages(), pageSize: this.dataModel.pageSize(), currentPage: this.dataModel.pageIndex() + 1, totalCount: this.dataModel.totalRow() });
+	    },
+
+	    defaultPageChange: function defaultPageChange(pageIndex) {
+	        if (this.dataModel.hasPage(pageIndex)) {
+	            this.dataModel.setCurrentPage(pageIndex);
+	        } else {}
+	    },
+
+	    defaultSizeChange: function defaultSizeChange(size, pageIndex) {
+	        this.dataModel.pageSize(size);
+	    },
+
+	    disableChangeSize: function disableChangeSize() {
+	        this.comp.disableChangeSize();
+	    },
+
+	    enableChangeSize: function enableChangeSize() {
+	        this.comp.enableChangeSize();
+	    }
+	}); /**
+	     * Module : Kero pagination
+	     * Author : Kvkens(yueming@yonyou.com)
+	     * Date	  : 2016-08-09 19:09:39
+	     */
+
+
+	_compMgr.compMgr.addDataAdapter({
+	    adapter: PaginationAdapter,
+	    name: 'pagination'
+	});
+
+	exports.PaginationAdapter = PaginationAdapter;
+
+/***/ },
+/* 140 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.ProgressAdapter = undefined;
+
+	var _baseAdapter = __webpack_require__(118);
+
+	var _neouiProgress = __webpack_require__(42);
+
+	var _compMgr = __webpack_require__(11);
+
+	var ProgressAdapter = _baseAdapter.BaseAdapter.extend({
+	    initialize: function initialize(options) {
+	        var self = this;
+	        ProgressAdapter.superclass.initialize.apply(this, arguments);
+
+	        this.comp = new _neouiProgress.Progress(this.element);
+	        this.element['u.Progress'] = this.comp;
+
+	        this.dataModel.ref(this.field).subscribe(function (value) {
+	            self.modelValueChange(value);
+	        });
+	    },
+
+	    modelValueChange: function modelValueChange(val) {
+	        this.comp.setProgress(val);
+	    }
+	}); /**
+	     * Module : Kero percent
+	     * Author : Kvkens(yueming@yonyou.com)
+	     * Date	  : 2016-08-09 20:02:50
+	     */
+
+	_compMgr.compMgr.addDataAdapter({
+	    adapter: ProgressAdapter,
+	    name: 'u-progress'
+	});
+
+	exports.ProgressAdapter = ProgressAdapter;
+
+/***/ },
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20789,7 +22026,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.SwitchAdapter = SwitchAdapter;
 
 /***/ },
-/* 140 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20843,7 +22080,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.TextAreaAdapter = TextAreaAdapter;
 
 /***/ },
-/* 141 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20861,9 +22098,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _float = __webpack_require__(127);
 
-	var _string = __webpack_require__(135);
+	var _string = __webpack_require__(130);
 
-	var _integer = __webpack_require__(129);
+	var _integer = __webpack_require__(131);
 
 	var _compMgr = __webpack_require__(11);
 
@@ -20906,6 +22143,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            this.comp.change(showValue);
 	            this.element.title = showValue;
 	        };
+	        // 解决初始设置值后，没有走这个setShowValue方法问题
+	        if (this.trueAdpt.enable) {
+	            this.trueAdpt.setShowValue(this.trueAdpt.getValue());
+	        }
 	        return this.trueAdpt;
 	    }
 	}); /**
@@ -20923,7 +22164,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.TextFieldAdapter = TextFieldAdapter;
 
 /***/ },
-/* 142 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21034,76 +22275,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.TimeAdapter = TimeAdapter;
 
 /***/ },
-/* 143 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.UrlAdapter = undefined;
-
-	var _string = __webpack_require__(135);
-
-	var _dom = __webpack_require__(8);
-
-	var _compMgr = __webpack_require__(11);
-
-	var UrlAdapter = _string.StringAdapter.extend({
-	    init: function init() {
-	        UrlAdapter.superclass.init.apply(this);
-	        this.validType = 'url';
-
-	        /*
-	         * 因为需要输入，因此不显示为超链接
-	         */
-	    },
-	    // 如果enable为false则显示<a>标签
-	    setEnable: function setEnable(enable) {
-	        if (enable === true || enable === 'true') {
-	            this.enable = true;
-	            this.element.removeAttribute('readonly');
-	            (0, _dom.removeClass)(this.element.parentNode, 'disablecover');
-	            if (this.aDom) {
-	                this.aDom.style.display = 'none';
-	            }
-	        } else if (enable === false || enable === 'false') {
-	            this.enable = false;
-	            this.element.setAttribute('readonly', 'readonly');
-	            (0, _dom.addClass)(this.element.parentNode, 'disablecover');
-	            if (!this.aDom) {
-	                this.aDom = (0, _dom.makeDOM)('<div style="position:absolute;background:#fff;z-index:999;"><a href="' + this.trueValue + '" target="_blank" style="position:absolue;">' + this.trueValue + '</a></div>');
-	                var left = this.element.offsetLeft;
-	                var width = this.element.offsetWidth;
-	                var top = this.element.offsetTop;
-	                var height = this.element.offsetHeight;
-	                this.aDom.style.left = left + 'px';
-	                this.aDom.style.width = width + 'px';
-	                this.aDom.style.top = top + 'px';
-	                this.aDom.style.height = height + 'px';
-	                this.element.parentNode.appendChild(this.aDom);
-	            }
-	            var $a = $(this.aDom).find('a');
-	            $a.href = this.trueValue;
-	            $a.innerHTML = this.trueValue;
-	            this.aDom.style.display = 'block';
-	        }
-	    }
-	}); /**
-	     * Module : Kero url adapter
-	     * Author : Kvkens(yueming@yonyou.com)
-	     * Date	  : 2016-08-10 13:51:26
-	     */
-
-	_compMgr.compMgr.addDataAdapter({
-	    adapter: UrlAdapter,
-	    name: 'url'
-	});
-	exports.UrlAdapter = UrlAdapter;
-
-/***/ },
-/* 144 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21157,7 +22329,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.YearAdapter = YearAdapter;
 
 /***/ },
-/* 145 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21209,6 +22381,398 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 	exports.YearMonthAdapter = YearMonthAdapter;
+
+/***/ },
+/* 147 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.TreeAdapter = undefined;
+
+	var _baseAdapter = __webpack_require__(118);
+
+	var _neouiYear = __webpack_require__(54);
+
+	var _util = __webpack_require__(5);
+
+	var _indexDataTable = __webpack_require__(74);
+
+	var _compMgr = __webpack_require__(11);
+
+	var TreeAdapter = _baseAdapter.BaseAdapter.extend({
+
+		initialize: function initialize(options) {
+			var opt = options['options'] || {},
+			    viewModel = options['model'];
+			var element = typeof options['el'] === 'string' ? document.querySelector(options['el']) : options['el'];
+			var app = options['app'];
+			this.id = opt['id'];
+			options = opt;
+
+			var oThis = this;
+			this.dataTable = (0, _util.getJSObject)(viewModel, options["data"]);
+			this.element = element;
+			this.$element = $(element);
+			this.id = options['id'];
+			this.element.id = this.id;
+			this.options = options;
+			this.events = $.extend(true, {}, options.events);
+			var treeSettingDefault = {
+				//			async: {  //缓加载
+				//				enable: oThis.options.asyncFlag,
+				//				url: oThis.options.asyncFun
+				//			},
+				data: {
+					simpleData: {
+						enable: true
+					}
+				},
+				check: {
+					chkboxType: {
+						"Y": "",
+						"N": ""
+					}
+				},
+				callback: {
+					//点击前
+					beforeClick: function beforeClick(e, id, node) {
+						if (oThis.events.beforeClick) {
+							(0, _util.getFunction)(viewModel, oThis.events.beforeClick)(e, id, node);
+						}
+					},
+					// 选中/取消选中事件
+					onCheck: function onCheck(e, id, node) {
+
+						var nodes = oThis.tree.getChangeCheckedNodes();
+						for (var i = 0; i < nodes.length; i++) {
+							// 获取到节点的idValue
+							var idValue = nodes[i].id;
+							// 根据idValue查找到对应数据的rowId
+							var rowId = oThis.getRowIdByIdValue(idValue);
+							var index = oThis.dataTable.getIndexByRowId(rowId);
+							if (nodes[i].checked) {
+								// 选中数据行
+								nodes[i].checkedOld = true;
+								if (oThis.tree.setting.view.selectedMulti == true) {
+									oThis.dataTable.addRowsSelect([index]);
+								} else {
+									oThis.dataTable.setRowSelect(index);
+								}
+							} else {
+								nodes[i].checkedOld = false;
+								oThis.dataTable.setRowUnSelect(index);
+							}
+						}
+					},
+					// 单选时点击触发选中
+					onClick: function onClick(e, id, node) {
+						//点击时取消所有超链接效果
+						$('#' + id + ' li').removeClass('focusNode');
+						$('#' + id + ' a').removeClass('focusNode');
+						//添加focusNode样式
+						$('#' + node.tId).addClass('focusNode');
+						$('#' + node.tId + '_a').addClass('focusNode');
+						if (oThis.tree.setting.view.selectedMulti != true) {
+							// 获取到节点的idValue
+							var idValue = node.id;
+							// 根据idValue查找到对应数据的rowId
+							var rowId = oThis.getRowIdByIdValue(idValue);
+							var index = oThis.dataTable.getIndexByRowId(rowId);
+							oThis.dataTable.setRowSelect(index);
+							if (oThis.events.onClick) {
+								(0, _util.getFunction)(viewModel, oThis.events.onClick)(e, id, node);
+							}
+						}
+					}
+				}
+
+			};
+
+			var setting = {};
+			if (this.options.setting) {
+				//if (typeof(JSON) == "undefined")
+				//	setting = eval("(" + this.options.setting + ")");
+				//else
+				setting = (0, _util.getJSObject)(viewModel, this.options.setting) || (0, _util.getJSObject)(window, this.options.setting);
+			}
+
+			// 遍历callback先执行默认之后再执行用户自定义的。
+			var callbackObj = treeSettingDefault.callback;
+			var userCallbackObj = setting.callback;
+			for (var f in callbackObj) {
+				var fun = callbackObj[f],
+				    userFun = userCallbackObj && userCallbackObj[f];
+				if (userFun) {
+					var newF = function newF() {
+						fun.apply(this, arguments);
+						userFun.apply(this, arguments);
+					};
+					userCallbackObj[f] = newF;
+				}
+			}
+
+			var treeSetting = $.extend(true, {}, treeSettingDefault, setting);
+
+			var treeData = [];
+			// 根据idField、pidField、nameField构建ztree所需data
+			var data = this.dataTable.rows();
+			if (data.length > 0) {
+				if (this.options.codeTree) {
+					// 首先按照string进行排序
+					data.sort(function (a, b) {
+						var aObj = a.data;
+						var bObj = b.data;
+						var v1 = aObj[oThis.options.idField].value + '';
+						var v2 = bObj[oThis.options.idField].value + '';
+						try {
+							return v1.localeCompare(v2);
+						} catch (e) {
+							return 0;
+						}
+					});
+					var idArr = new Array();
+					$.each(data, function () {
+						var dataObj = this.data;
+						var idValue = dataObj[oThis.options.idField].value;
+						idArr.push(idValue);
+					});
+					var preValue = '';
+					$.each(data, function () {
+						var value = {};
+						var dataObj = this.data;
+						var idValue = dataObj[oThis.options.idField].value;
+						var nameValue = dataObj[oThis.options.nameField].value;
+						var pidValue = '';
+						var startFlag = -1;
+						// 如果当前值包含上一个值则上一个值为pid
+						if (preValue != '') {
+							var startFlag = idValue.indexOf(preValue);
+						}
+						if (startFlag == 0) {
+							pidValue = preValue;
+						} else {
+							for (var i = 1; i < preValue.length; i++) {
+								var s = preValue.substr(0, i);
+								var f = idValue.indexOf(s);
+								if (f == 0) {
+									var index = $.inArray(s, idArr);
+									if (index > 0 || index == 0) {
+										pidValue = s;
+									}
+								} else {
+									break;
+								}
+							}
+						}
+						value['id'] = idValue;
+						value['pId'] = pidValue;
+						value['name'] = nameValue;
+
+						treeData.push(value);
+						preValue = idValue;
+					});
+				} else {
+					var values = new Array();
+					$.each(data, function () {
+						var value = {};
+						var dataObj = this.data;
+						var idValue = dataObj[oThis.options.idField].value;
+						var pidValue = dataObj[oThis.options.pidField].value;
+						var nameValue = dataObj[oThis.options.nameField].value;
+
+						value['id'] = idValue;
+						value['pId'] = pidValue;
+						value['name'] = nameValue;
+						treeData.push(value);
+					});
+				}
+			}
+
+			this.tree = $.fn.zTree.init(this.$element, treeSetting, treeData);
+
+			// dataTable事件
+			this.dataTable.on(_indexDataTable.DataTable.ON_ROW_SELECT, function (event) {
+				/*index转化为grid的index*/
+				$.each(event.rowIds, function () {
+					var row = oThis.dataTable.getRowByRowId(this);
+					var dataObj = row.data;
+					var idValue = dataObj[oThis.options.idField].value;
+					var node = oThis.tree.getNodeByParam('id', idValue);
+					if (oThis.tree.setting.view.selectedMulti == true && !node.checked) {
+						oThis.tree.checkNode(node, true, false, true);
+					} else {
+						oThis.tree.selectNode(node, false);
+					}
+				});
+			});
+
+			this.dataTable.on(_indexDataTable.DataTable.ON_ROW_UNSELECT, function (event) {
+				/*index转化为grid的index*/
+				$.each(event.rowIds, function () {
+					var row = oThis.dataTable.getRowByRowId(this);
+					var dataObj = row.data;
+					var idValue = dataObj[oThis.options.idField].value;
+					var node = oThis.tree.getNodeByParam('id', idValue);
+					if (oThis.tree.setting.view.selectedMulti == true && node.checked) {
+						oThis.tree.checkNode(node, false, true, true);
+					} else {
+						oThis.tree.cancelSelectedNode(node);
+					}
+				});
+			});
+
+			this.dataTable.on(_indexDataTable.DataTable.ON_INSERT, function (event) {
+				//var gridRows = new Array();
+				var dataArray = [],
+				    nodes = [];
+				var hasChild = false; //是否含有子节点
+				$.each(event.rows, function () {
+					var value = {},
+					    hasPar = false;
+					var dataObj = this.data;
+					var idValue = dataObj[oThis.options.idField].value;
+					var pidValue = dataObj[oThis.options.pidField].value;
+					var nameValue = dataObj[oThis.options.nameField].value;
+					value['id'] = idValue;
+					value['pId'] = pidValue;
+					value['name'] = nameValue;
+					var childNode = oThis.tree.getNodeByParam('pid', idValue);
+					var pNode = oThis.tree.getNodeByParam('id', pidValue);
+					if (childNode && childNode.length > 0) {
+						hasChild = true;
+					}
+					if (pNode && pNode.length > 0) {
+						hasPar = true;
+						//oThis.tree.addNodes(pNode, value, true);
+					}
+					if (!hasChild && hasPar) {
+						//不存在子节点,存在父节点之间插入
+						oThis.tree.addNodes(pNode, value, true);
+					} else {
+						dataArray.push(value);
+					}
+				});
+				if (!hasChild) {
+					//如果没有子节点，将当前节点作为根节点之间插入
+					nodes = oThis.tree.transformTozTreeNodes(dataArray);
+					oThis.tree.addNodes(null, nodes, true);
+				} else {//如果含有子节点,重新渲染
+
+				}
+			});
+
+			this.dataTable.on(_indexDataTable.DataTable.ON_DELETE, function (event) {
+				/*index转化为grid的index*/
+				var gridIndexs = new Array();
+				if (this.deleteRows.length > 0) {
+
+					for (var i = 0; i < this.deleteRows.length; i++) {
+						var row = this.deleteRows[i];
+						var dataObj = row.data;
+						var idValue = dataObj[oThis.options.idField].value;
+						var node = oThis.tree.getNodeByParam('id', idValue);
+						oThis.tree.removeNode(node);
+					}
+				}
+			});
+
+			this.dataTable.on(_indexDataTable.DataTable.ON_DELETE_ALL, function (event) {
+				var nodes = oThis.tree.getNodes();
+				for (var i = 0, l = nodes.length; i < l; i++) {
+					var node = oThis.tree.getNodeByParam('id', nodes[i].id);
+					oThis.tree.removeNode(node);
+					i--;
+					l = nodes.length;
+				}
+			});
+
+			// 加载数据,只考虑viewModel传入grid
+			this.dataTable.on(_indexDataTable.DataTable.ON_LOAD, function (data) {
+				var data = oThis.dataTable.rows();
+				if (data.length > 0) {
+					var values = new Array();
+					$.each(data, function () {
+						var value = {};
+						var dataObj = this.data;
+						var idValue = dataObj[oThis.options.idField].value;
+						var pidValue = dataObj[oThis.options.pidField].value;
+						var nameValue = dataObj[oThis.options.nameField].value;
+
+						value['id'] = idValue;
+						value['pId'] = pidValue;
+						value['name'] = nameValue;
+						treeData.push(value);
+					});
+				}
+
+				this.tree = $.fn.zTree.init(this.$element, treeSetting, treeData);
+			});
+
+			this.dataTable.on(_indexDataTable.DataTable.ON_VALUE_CHANGE, function (event) {
+				var row = oThis.dataTable.getRowByRowId(event.rowId);
+				if (!row) return;
+				var treeArray = oThis.tree.getNodes();
+				var id = row.getValue(oThis.options.idField);
+				var node = oThis.tree.getNodeByParam('id', id);
+				if (!node && treeArray) {
+					//如果node为null则取树数组的最后一个节点
+
+					node = treeArray[treeArray.length - 1];
+				}
+				var field = event.field;
+				var value = event.newValue;
+				if (oThis.options.idField == field && node) {
+					node.id = value;
+					oThis.tree.updateNode(node);
+				}
+				if (oThis.options.nameField == field && node) {
+					node.name = value;
+					oThis.tree.updateNode(node);
+				} else if (oThis.options.pidField == field) {
+					var targetNode = oThis.tree.getNodeByParam('id', value);
+					oThis.tree.moveNode(targetNode, node, "inner");
+				}
+			});
+
+			// 通过树id获取dataTable的rowId
+			this.getRowIdByIdValue = function (idValue) {
+				var oThis = this;
+				var rowId = null;
+				$.each(this.dataTable.rows(), function () {
+					var dataObj = this.data;
+					var id = this.rowId;
+					if (dataObj[oThis.options.idField].value == idValue) {
+						rowId = id;
+					}
+				});
+				return rowId;
+			};
+
+			return this;
+		},
+
+		getName: function getName() {
+			return 'tree';
+		}
+
+	}); /**
+	     * Module : Kero tree adapter
+	     * Author : Kvkens(yueming@yonyou.com)
+	     * Date	  : 2016-08-16 10:44:14
+	     */
+
+
+	_compMgr.compMgr.addDataAdapter({
+		adapter: TreeAdapter,
+		name: 'tree'
+		//dataType: 'float'
+	});
+
+	exports.TreeAdapter = TreeAdapter;
 
 /***/ }
 /******/ ])
