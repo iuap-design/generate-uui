@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "kero": "^3.4.0",
-    "kero-adapter": "^1.4.0",
+    "kero-adapter": "^1.4.1",
     "neoui": "^3.4.0",
     "neoui-sparrow": "^1.4.0"
   }

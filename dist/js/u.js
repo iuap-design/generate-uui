@@ -19325,21 +19325,17 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _compMgr = __webpack_require__(11);
 
+	var _core = __webpack_require__(10);
+
 	/**
 	 * 货币控件
 	 */
-	/**
-	 * Module : Kero currency
-	 * Author : Kvkens(yueming@yonyou.com)
-	 * Date	  : 2016-08-09 13:42:14
-	 */
-
 	var CurrencyAdapter = _float.FloatAdapter.extend({
 	    init: function init() {
 	        var self = this;
 	        CurrencyAdapter.superclass.init.apply(this);
 
-	        this.maskerMeta = iweb.Core.getMaskerMeta('currency') || {};
+	        this.maskerMeta = _core.core.getMaskerMeta('currency') || {};
 	        this.maskerMeta.precision = this.getOption('precision') || this.maskerMeta.precision;
 	        this.maskerMeta.curSymbol = this.getOption('curSymbol') || this.maskerMeta.curSymbol;
 	        this.validType = 'float';
@@ -19395,7 +19391,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        this.setShowValue(focusValue);
 	    }
-	});
+	}); /**
+	     * Module : Kero currency
+	     * Author : Kvkens(yueming@yonyou.com)
+	     * Date	  : 2016-08-09 13:42:14
+	     */
 
 	_compMgr.compMgr.addDataAdapter({
 	    adapter: CurrencyAdapter,
@@ -19838,11 +19838,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _i18n = __webpack_require__(21);
 
-	/**
-	 * Module : Kero Grid Adapter
-	 * Author : Kvkens(yueming@yonyou.com)
-	 * Date	  : 2016-08-09 16:17:17
-	 */
+	var _core = __webpack_require__(10);
 
 	var GridAdapter = _baseAdapter.BaseAdapter.extend({
 		initialize: function initialize(options) {
@@ -20018,7 +20014,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						var row = datatable.getRowByRowId(rowId);
 						if (!row) return;
 						var rprec = row.getMeta(field, 'precision');
-						var maskerMeta = iweb.Core.getMaskerMeta('float') || {};
+						var maskerMeta = _core.core.getMaskerMeta('float') || {};
 						var precision = typeof parseFloat(rprec) == 'number' ? rprec : maskerMeta.precision;
 						maskerMeta.precision = precision;
 
@@ -20052,7 +20048,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						var row = datatable.getRowByRowId(rowId);
 						if (!row) return;
 						var rprec = row.getMeta(field, 'precision') || column.options.precision;
-						var maskerMeta = iweb.Core.getMaskerMeta('float') || {};
+						var maskerMeta = _core.core.getMaskerMeta('float') || {};
 						var precision = typeof parseFloat(rprec) == 'number' ? rprec : maskerMeta.precision;
 						maskerMeta.precision = precision;
 
@@ -20219,7 +20215,7 @@ return /******/ (function(modules) { // webpackBootstrap
 						var row = datatable.getRowByRowId(rowId);
 						if (!row) return;
 						var rprec = row.getMeta(field, 'precision') || column.options.precision;
-						var maskerMeta = iweb.Core.getMaskerMeta('percent') || {};
+						var maskerMeta = _core.core.getMaskerMeta('percent') || {};
 						var precision = typeof parseFloat(rprec) == 'number' ? rprec : maskerMeta.precision;
 						maskerMeta.precision = precision;
 						if (maskerMeta.precision) {
@@ -20246,7 +20242,7 @@ return /******/ (function(modules) { // webpackBootstrap
 					var grid = obj.gridObj;
 					var column = obj.gridCompColumn;
 					var rprec = column.options.precision;
-					var maskerMeta = iweb.Core.getMaskerMeta('float') || {};
+					var maskerMeta = _core.core.getMaskerMeta('float') || {};
 					var precision = rprec == 0 || rprec && typeof parseFloat(rprec) == 'number' ? rprec : maskerMeta.precision;
 					maskerMeta.precision = precision;
 
@@ -20939,6 +20935,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	//if ($.compManager)
 	//	$.compManager.addPlug(Grid)
+
+	/**
+	 * Module : Kero Grid Adapter
+	 * Author : Kvkens(yueming@yonyou.com)
+	 * Date	  : 2016-08-09 16:17:17
+	 */
 
 	_compMgr.compMgr.addDataAdapter({
 		adapter: GridAdapter,
