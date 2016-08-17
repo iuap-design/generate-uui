@@ -2,16 +2,18 @@
 
 ## 使用说明
 
-下载各仓库代码、分支切换、代码更新
+* 准备工作：项目依赖到`npm`,考虑下载困难等问题，依赖源改为`cnpm`,如未安装，请优先执行以下操作
 
 ```
-$ sh fetch.sh
+$ npm install -g cnpm --registry=https://registry.npm.taobao.org
 ```
 
-合并后产出
+> cnpm安装具体可参照[镜像官网](https://npm.taobao.org/)
+
+* 下载各仓库代码、npm依赖安装包、并执行产出
 
 ```
-$ npm run build
+$ npm run deploy
 ```
 
 ## 产出资源
