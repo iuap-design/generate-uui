@@ -71,9 +71,25 @@ gulp.task('copyimg', function(){
         .pipe(gulp.dest(uuiDist + '/images/'));
 })
 
+gulp.task('commit', ['name', 'copycss', 'copyjs','copyfont','copyimg'], function(){
+    version.init([
+        uuiDist + '/js/u.js',
+        uuiDist + '/js/u.min.js',
+        uuiDist + '/js/u-tree.js',
+        uuiDist + '/js/u-tree.min.js',
+        uuiDist + '/js/u-grid.js',
+        uuiDist + '/js/u-grid.min.js',
+        uuiDist + '/css/u.css',
+        uuiDist + '/css/u.min.css',
+        uuiDist + '/css/grid.css',
+        uuiDist + '/css/grid.min.css',
+        uuiDist + '/css/tree.css',
+        uuiDist + '/css/tree.min.css'
+    ]);
+})
 
 
-gulp.task('dist', ['name', 'copycss', 'copyjs','copyfont','copyimg'],function(){
+gulp.task('dist', ['commit'], function(){
     gulp.run('down');
     gulp.run('new');
 });
