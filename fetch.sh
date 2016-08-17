@@ -19,17 +19,17 @@ if [ -d "$moduleDir" ]
     if [ -d "$keroDir" ]
       then
         echo "卸载旧版kero-adapter"
-        cnpm uninstall kero-adapter
+        npm uninstall kero-adapter
         echo "安装新版kero-adapter"
-        cnpm install kero-adapter
+        npm install kero-adapter
         echo "kero-adapter已安装"
     else
         echo "正在安装kero-adapter"
-        cnpm install kero-adapter
+        npm install kero-adapter
         echo "kero-adapter已安装"
     fi
 else
-    cnpm install
+    npm install
 fi
 
 

@@ -2,14 +2,6 @@
 
 ## 使用说明
 
-* 准备工作：项目依赖到`npm`,考虑下载困难等问题，依赖源改为`cnpm`,如未安装，请优先执行以下操作
-
-```
-$ npm install -g cnpm --registry=https://registry.npm.taobao.org
-```
-
-> cnpm安装具体可参照[镜像官网](https://npm.taobao.org/)
-
 * 下载各仓库代码、npm依赖安装包、并执行产出
 
 ```
