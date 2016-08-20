@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var less = require('gulp-less');
 var concat = require('gulp-concat');
 var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
@@ -39,6 +40,32 @@ var pathOfCopyCSS = [
 ]
 
 var notIncludeCss = '!'+ uuiDist + '/css/font-awesome' + '*' + '.css';
+
+
+/**
+ * 公共错误处理函数
+ * 使用示例：
+ *  .pipe(uglify().on('error', errHandle))
+    .pipe(rename('u.min.js'))
+ * @param  {[type]} err [description]
+ * @return {[type]}     [description]
+ */
+var errHandle = function ( err ) {
+    // 报错文件名
+    var fileName = err.fileName;
+    // 报错类型
+    var name = err.name;
+    // 报错信息
+    var message = err.message;
+    // 出错代码位置
+    var loc = err.loc;
+
+    var logInfo = '报错文件：' + fileName + '报错类型：' + name + '出错代码位置：' + loc.line + ',' + loc.column;
+
+    util.log( logInfo );
+
+    this.end();
+}
 
 gulp.task('name', function(){
     gulp.src('node_modules/kero-adapter/dist/css/neoui.css')
@@ -218,3 +245,100 @@ gulp.task("maven", ["install"], function(){
 })
 
 
+
+/* 兼容之前 begin*/
+var originGlobs = {
+    js:[
+        './compatible/biz/knockout-3.2.0.debug.js',
+        uuiDist + '/js/u.js',
+        './compatible/src/dialog_.js',
+        './neoui-grid/dist/js/u-grid.js',
+        './compatible/u/validate.js',
+        './compatible/u/autocomplete.js',
+        './compatible/u/backtop.js',
+        './compatible/u/dialog.js',
+        './compatible/u/moment.js',
+        './compatible/u/neoui-datetimepicker.js',
+        './compatible/u/formater.js',
+        './compatible/u/JsExtensions.js',
+        './compatible/u/loading.js',
+        './compatible/u/message.js',
+        './compatible/biz/compManager.js',
+        './compatible/biz/compatible.js',
+        './compatible/biz/input.js',
+        './compatible/biz/datetime.js',
+        './compatible/biz/checkbox.js',
+        './kero/dist/js/grid.kero.js',
+    ]
+};
+
+gulp.task('originlocales', function() {
+    gulp.src('./compatible/locales/en/*')
+        .pipe(gulp.dest(originDist + '/locales/en'));
+    gulp.src('./compatible/locales/en_US/*')
+        .pipe(gulp.dest(originDist + '/locales/en_US'));
+    gulp.src('./compatible/locales/en-US/*')
+        .pipe(gulp.dest(originDist + '/locales/en-US'));
+    gulp.src('./compatible/locales/zh/*')
+        .pipe(gulp.dest(originDist + '/locales/zh'));
+    gulp.src('./compatible/locales/zh-CN/*')
+        .pipe(gulp.dest(originDist + '/locales/zh-CN'));
+    gulp.src('./compatible/locales/zh_CN/*')
+        .pipe(gulp.dest(originDist + '/locales/zh_CN'));
+});
+
+gulp.task('originexternal', function() {
+    return gulp.src('./compatible/external/*')  /*liuyk需要复制过去*/
+        .pipe(gulp.dest(originDist + '/external'))
+});
+
+
+gulp.task('originassets', ['originlocales', 'originexternal'], function(){
+    return gulp.src('./compatible/assets/**')
+        .pipe(gulp.dest(originDist + ''))
+});
+
+
+/* JS直接使用新的JS加上兼容js*/
+gulp.task('originujs',function(){
+    return gulp.src(originGlobs.js)
+            .pipe(concat('u.js'))
+            .pipe(gulp.dest(originDist + '/js'))
+            .pipe(uglify()).on('error', errHandle)
+            .pipe(rename('u.min.js'))
+            .pipe(gulp.dest(originDist + '/js'));
+});
+
+gulp.task('originjs', ['originujs'],function() {
+
+});
+
+
+/* CSS直接使用新的css*/
+gulp.task('originless:ui', function() {
+    return gulp.src('./compatible/less/import.less')
+        .pipe(less())
+        .pipe(rename('oldu.css'))
+        .pipe(gulp.dest(originDist + '/css'));
+});
+
+gulp.task('originless',['originless:ui'], function() {
+    return gulp.src([uuiDist + '/css/u.css',originDist + '/css/oldu.css','./compatible/css/u.css',uuiDist + '/css/grid.css'])
+            .pipe(concat('u.css'))
+            .pipe(gulp.dest(originDist + '/css'))
+            .pipe(minifycss())
+            .pipe(concat('u.min.css'))
+            .pipe(gulp.dest(originDist + '/css'));
+
+});
+///////////////////////////////////////
+
+gulp.task('origincopy', function() {
+    gulp.src([uuiDist] + '/css/font-awesome' + '*' + '.css')
+        .pipe(gulp.dest(originDist + '/fonts/font-awesome/css'));
+    gulp.src([uuiDist + '/images/**'])
+        .pipe(gulp.dest(originDist + '/images'));
+
+})
+
+gulp.task('origin', ['originassets', 'originjs', 'originless', 'origincopy']);
