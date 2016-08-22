@@ -22,6 +22,8 @@ var distModules = ['neoui', '', 'neoui-datetimepicker', 'neoui-grid', 'tree']
 
 
 var pathcopyjs = [
+    'node_modules/neoui-polyfill/dist/u-polyfill.js',
+    'node_modules/neoui-polyfill/dist/u-polyfill.min.js',
     'node_modules/kero-adapter/dist/js/u.js',
     'node_modules/kero-adapter/dist/js/u.min.js',
     'neoui-grid/dist/js/u-grid.js',
@@ -96,6 +98,8 @@ gulp.task('copyimg', function(){
 
 gulp.task('commit', ['copycss', 'copyjs','copyfont','copyimg'], function(){
     version.init([
+        uuiDist + '/js/u-polyfill.js',
+        uuiDist + '/js/u-polyfill.min.js',
         uuiDist + '/js/u.js',
         uuiDist + '/js/u.min.js',
         uuiDist + '/js/u-tree.js',

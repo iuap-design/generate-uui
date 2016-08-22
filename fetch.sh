@@ -8,30 +8,33 @@ prodName=(
 )
 
 # 安装依赖包 && 最新kero-adapter包
-moduleDir="$cdir/node_modules/"
-echo "$moduleDir"
+modulePre="$cdir/node_modules/"
+moduleName=(
+  "kero-adapter"
+  "neoui-polyfill"
+  )
 
-keroDir="$cdir/node_modules/kero-adapter"
-echo "$keroDir"
-
-if [ -d "$moduleDir" ]
-  then
-    if [ -d "$keroDir" ]
-      then
-        echo "卸载旧版kero-adapter"
-        npm uninstall kero-adapter
-        echo "安装新版kero-adapter"
-        npm install kero-adapter
-        echo "kero-adapter已安装"
+if [ -d "$modulePre" ]
+then
+  for name in ${moduleName[@]}
+  do
+    modulePath="${modulePre}${name}"
+    if [ -d $modulePath ]
+    then
+      echo "卸载旧版$name"
+      npm uninstall $name
+      echo "安装新版$name"
+      npm install $name
+      echo "已安装成功新版$name"
     else
-        echo "正在安装kero-adapter"
-        npm install kero-adapter
-        echo "kero-adapter已安装"
+      echo "安装新版$name"
+      npm install $name
+      echo "已安装成功新版$name"
     fi
+  done
 else
     npm install
 fi
-
 
 # 更新下载
 for name in ${prodName[@]}
