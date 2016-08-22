@@ -31,6 +31,8 @@ var pathcopyjs = [
 ]
 
 var pathOfCopyCSS = [
+    'node_modules/kero-adapter/dist/css/u.css',
+    'node_modules/kero-adapter/dist/css/u.min.css',
     'node_modules/kero-adapter/dist/fonts/font-awesome/css/font-awesome.css',
     'node_modules/kero-adapter/dist/fonts/font-awesome/css/font-awesome.min.css',
     'neoui-grid/dist/css/grid.css',
@@ -68,14 +70,8 @@ var errHandle = function ( err ) {
 }
 
 gulp.task('name', function(){
-    gulp.src('node_modules/kero-adapter/dist/css/neoui.css')
-        .pipe(rename('u.css'))
+    gulp.src('node_modules/kero-adapter/dist/css/*.css')
         .pipe(gulp.dest(uuiDist + '/css'));
-
-    gulp.src('node_modules/kero-adapter/dist/css/neoui.min.css')
-        .pipe(rename('u.min.css'))
-        .pipe(gulp.dest(uuiDist + '/css'));
-
 })
 
 gulp.task('copyjs', function(){
@@ -89,7 +85,7 @@ gulp.task('copycss', function(){
 })
 
 gulp.task('copyfont', function(){
-    gulp.src(['node_modules/kero-adapter/dist/fonts/*.*','node_modules/kero-adapter/dist/fonts/font-awesome/fonts/**'])
+    gulp.src('node_modules/kero-adapter/dist/fonts/**')
         .pipe(gulp.dest(uuiDist + '/fonts/'));
 })
 
@@ -98,7 +94,7 @@ gulp.task('copyimg', function(){
         .pipe(gulp.dest(uuiDist + '/images/'));
 })
 
-gulp.task('commit', ['name', 'copycss', 'copyjs','copyfont','copyimg'], function(){
+gulp.task('commit', ['copycss', 'copyjs','copyfont','copyimg'], function(){
     version.init([
         uuiDist + '/js/u.js',
         uuiDist + '/js/u.min.js',
@@ -119,6 +115,7 @@ gulp.task('commit', ['name', 'copycss', 'copyjs','copyfont','copyimg'], function
 gulp.task('dist', ['commit'], function(){
     gulp.run('down');
     gulp.run('new');
+    gulp.run('origin');
 });
 
 
