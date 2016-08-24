@@ -71,32 +71,12 @@ var errHandle = function ( err ) {
     this.end();
 }
 
-gulp.task('name', function(){
-    gulp.src('node_modules/kero-adapter/dist/css/*.css')
-        .pipe(gulp.dest(uuiDist + '/css'));
+gulp.task('dirdist', function(){
+    gulp.src('./node_modules/kero-adapter/dist/**')
+        .pipe(gulp.dest(uuiDist + '/dist/'));
 })
 
-gulp.task('copyjs', function(){
-    gulp.src(pathcopyjs)
-        .pipe(gulp.dest(uuiDist + '/js/'))
-})
-
-gulp.task('copycss', function(){
-    gulp.src(pathOfCopyCSS)
-        .pipe(gulp.dest(uuiDist + '/css/'))
-})
-
-gulp.task('copyfont', function(){
-    gulp.src('node_modules/kero-adapter/dist/fonts/**')
-        .pipe(gulp.dest(uuiDist + '/fonts/'));
-})
-
-gulp.task('copyimg', function(){
-    gulp.src(['node_modules/kero-adapter/dist/images/**'])
-        .pipe(gulp.dest(uuiDist + '/images/'));
-})
-
-gulp.task('commit', ['copycss', 'copyjs','copyfont','copyimg'], function(){
+gulp.task('commit', ['dirdist'], function(){
     version.init([
         uuiDist + '/js/u-polyfill.js',
         uuiDist + '/js/u-polyfill.min.js',
