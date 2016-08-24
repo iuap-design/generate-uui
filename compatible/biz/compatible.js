@@ -10,7 +10,7 @@ $.NumberFormater = u.NumberFormater;
 $.isDate = u.isDate;
 
 
-ServerEvent.fn.processXHRError = function (self, rsl, state, xhr) {
+ServerEvent.prototype.processXHRError = function (self, rsl, state, xhr) {
     if (typeof rsl === 'string')
         rsl = JSON.parse(rsl)
     if (xhr.getResponseHeader && xhr.getResponseHeader("X-Error")) {
