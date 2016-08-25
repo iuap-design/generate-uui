@@ -10,7 +10,7 @@
 				$(this.element).wrap("<label class='label-switch'></label>").after("<div class='checkbox'></div>").css("display","none")
 				
     		}else{
-				if($(this.element).parent(".checkbox").length === 0 && !iweb.browser.isIE8){
+				if($(this.element).parent(".checkbox").length === 0 && !u.isIE8){
 					$(this.element).wrap("<div class='checkbox check-success'></div>").after("<label for="+element.id+"></label>")
 				}
 			}

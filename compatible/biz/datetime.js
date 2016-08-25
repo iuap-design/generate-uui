@@ -6,7 +6,7 @@
 			this.outerDiv = element
 			element = $(element).find('input')[0]
 			DateTime.superclass.initialize.apply(this, arguments)
-			this.maskerMeta = iweb.Core.getMaskerMeta('datetime') || {}
+			this.maskerMeta = u.core.getMaskerMeta('datetime') || {}
 			this.maskerMeta.format = options['format'] || this.maskerMeta.format
 
 			if (this.dataModel) {
@@ -214,7 +214,7 @@
 			this.outerDiv = element
 			element = $(element).find('input')[0]
 			DateTime.superclass.initialize.apply(this, arguments)
-			this.maskerMeta = iweb.Core.getMaskerMeta('date') || {}
+			this.maskerMeta = u.core.getMaskerMeta('date') || {}
 			this.maskerMeta.format = options['format'] || this.maskerMeta.format
 
 			if (this.dataModel) {
@@ -277,7 +277,7 @@
 			this.outerDiv = element
 			element = $(element).find('input')[0]
 			DateTime.superclass.initialize.apply(this, arguments)
-			this.maskerMeta = iweb.Core.getMaskerMeta('time') || {}
+			this.maskerMeta = u.core.getMaskerMeta('time') || {}
 			this.maskerMeta.format = options['format'] || this.maskerMeta.format
 
 			if (this.dataModel) {
