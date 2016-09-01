@@ -232,6 +232,7 @@ var originGlobs = {
     js:[
         './compatible/biz/knockout-3.2.0.debug.js',
         uuiDist + '/js/u.js',
+        uuiDist + '/js/u-polyfill.js',
         './compatible/src/dialog_.js',
         './neoui-grid/dist/js/u-grid.js',
         './compatible/u/validate.js',
