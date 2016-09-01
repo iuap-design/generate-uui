@@ -22,14 +22,14 @@ var distModules = ['neoui', '', 'neoui-datetimepicker', 'neoui-grid', 'tree']
 
 
 var pathcopyjs = [
-    'node_modules/neoui-polyfill/dist/u-polyfill.js',
-    'node_modules/neoui-polyfill/dist/u-polyfill.min.js',
+    'node_modules/kero-adapter/dist/u-polyfill.js',
+    'node_modules/kero-adapter/dist/u-polyfill.min.js',
     'node_modules/kero-adapter/dist/js/u.js',
     'node_modules/kero-adapter/dist/js/u.min.js',
-    'neoui-grid/dist/js/u-grid.js',
-    'neoui-grid/dist/js/u-grid.min.js',
-    'neoui-tree/dist/js/u-tree.js',
-    'neoui-tree/dist/js/u-tree.min.js'
+    'node_modules/kero-adapter/dist/js/u-grid.js',
+    'node_modules/kero-adapter/dist/js/u-grid.min.js',
+    'node_modules/kero-adapter/dist/js/u-tree.js',
+    'node_modules/kero-adapter/dist/js/u-tree.min.js'
 ]
 
 var pathOfCopyCSS = [
@@ -37,10 +37,10 @@ var pathOfCopyCSS = [
     'node_modules/kero-adapter/dist/css/u.min.css',
     'node_modules/kero-adapter/dist/fonts/font-awesome/css/font-awesome.css',
     'node_modules/kero-adapter/dist/fonts/font-awesome/css/font-awesome.min.css',
-    'neoui-grid/dist/css/grid.css',
-    'neoui-grid/dist/css/grid.min.css',
-    'neoui-tree/dist/css/tree.css',
-    'neoui-tree/dist/css/tree.min.css'
+    'node_modules/kero-adapter/dist/css/grid.css',
+    'node_modules/kero-adapter/dist/css/grid.min.css',
+    'node_modules/kero-adapter/dist/css/tree.css',
+    'node_modules/kero-adapter/dist/css/tree.min.css'
 ]
 
 var notIncludeCss = '!'+ uuiDist + '/css/font-awesome' + '*' + '.css';
