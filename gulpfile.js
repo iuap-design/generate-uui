@@ -231,8 +231,8 @@ gulp.task("maven", ["install"], function(){
 var originGlobs = {
     js:[
         './compatible/biz/knockout-3.2.0.debug.js',
-        uuiDist + '/js/u.js',
         uuiDist + '/js/u-polyfill.js',
+        uuiDist + '/js/u.js',
         './compatible/src/dialog_.js',
         './neoui-grid/dist/js/u-grid.js',
         './compatible/u/validate.js',
