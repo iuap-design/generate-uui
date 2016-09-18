@@ -20,6 +20,9 @@ var originDist = 'dist/uui/' + originVersion;
 
 var distModules = ['neoui', '', 'neoui-datetimepicker', 'neoui-grid', 'tree']
 
+var Stream = require('stream');
+
+
 
 var pathcopyjs = [
     'node_modules/kero-adapter/dist/u-polyfill.js',
@@ -72,8 +75,8 @@ var errHandle = function ( err ) {
 }
 
 gulp.task('dirdist', function(){
-    gulp.src('./node_modules/kero-adapter/dist/**')
-        .pipe(gulp.dest(uuiDist + '/'));
+    return gulp.src('./node_modules/kero-adapter/dist/**')
+        .pipe(gulp.dest(uuiDist + '/'))
 })
 
 gulp.task('commit', ['dirdist'], function(){

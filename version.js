@@ -23,7 +23,7 @@ module.exports = {
 
 
 		for (var i = 0; i < filesArr.length; i++){
-			var filePath = filesArr[i]
+			var filePath = filesArr[i];
 			var data = fs.readFileSync(filePath, 'utf8');
 			data = headerStr  + data;
 			fs.writeFileSync(filePath, data);
