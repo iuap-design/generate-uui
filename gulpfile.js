@@ -304,6 +304,9 @@ gulp.task('originless:ui', function() {
     return gulp.src('./compatible/less/import.less')
         .pipe(less())
         .pipe(rename('oldu.css'))
+        .pipe(gulp.dest(originDist + '/css'))
+        .pipe(minifycss())
+        .pipe(concat('oldu.min.css'))
         .pipe(gulp.dest(originDist + '/css'));
 });
 
