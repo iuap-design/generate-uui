@@ -307,8 +307,24 @@ gulp.task('originless:ui', function() {
         .pipe(gulp.dest(originDist + '/css'));
 });
 
-gulp.task('originless',['originless:ui'], function() {
-    return gulp.src([uuiDist + '/css/u.css',originDist + '/css/oldu.css','./compatible/css/u.css',uuiDist + '/css/grid.css'])
+gulp.task('originlessgrid', function(){
+    return gulp.src([uuiDist + '/css/grid.css',uuiDist + '/css/grid.min.css'])
+        .pipe(gulp.dest(originDist + '/css'))
+});
+
+gulp.task('originlesstree', function(){
+    return gulp.src([uuiDist + '/css/tree.css',uuiDist + '/css/tree.min.css'])
+        .pipe(gulp.dest(originDist + '/css'))
+});
+
+gulp.task('originlessucore', function(){
+    return gulp.src([uuiDist + '/css/u.core.css',uuiDist + '/css/u.core.min.css'])
+        .pipe(gulp.dest(originDist + '/css'))
+});
+
+
+gulp.task('originless',['originless:ui','originlessucore','originlesstree','originlessgrid'], function() {
+    return gulp.src([uuiDist + '/css/u.css','./compatible/css/u.css'])
             .pipe(concat('u.css'))
             .pipe(gulp.dest(originDist + '/css'))
             .pipe(minifycss())
