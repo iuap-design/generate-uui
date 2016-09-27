@@ -253,7 +253,6 @@ var originGlobs = {
         './compatible/biz/input.js',
         './compatible/biz/datetime.js',
         './compatible/biz/checkbox.js',
-        './kero/dist/js/grid.kero.js',
     ]
 };
 
