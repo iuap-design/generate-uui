@@ -326,6 +326,10 @@ gulp.task('originlessucore', function(){
 
 
 gulp.task('originless',['originless:ui','originlessucore','originlesstree','originlessgrid'], function() {
+    var data = fs.readFileSync(uuiDist + '/css/u.css', 'utf8');
+    data = data.replace('@import \'u.core.css\';','');
+    fs.writeFileSync(uuiDist + '/css/u.css', data);
+
     return gulp.src([uuiDist + '/css/u.css','./compatible/css/u.css'])
             .pipe(concat('u.css'))
             .pipe(gulp.dest(originDist + '/css'))
@@ -344,4 +348,14 @@ gulp.task('origincopy', function() {
 
 })
 
-gulp.task('origin', ['originassets', 'originjs', 'originless', 'origincopy']);
+gulp.task('origin', ['originassets', 'originjs', 'originless', 'origincopy'],function(){
+    var data = fs.readFileSync(originDist + '/css/u.css', 'utf8');
+    cssheaderStr = '@import \'u.core.css\';\r\n@import \'grid.css\';\r\n@import \'tree.css\';\r\n';
+    data = cssheaderStr + data;
+    fs.writeFileSync(originDist + '/css/u.css', data);
+
+    var data = fs.readFileSync(originDist + '/css/u.min.css', 'utf8');
+    cssheaderStr = '@import \'u.core.min.css\';\r\n@import \'grid.min.css\';\r\n@import \'tree.min.css\';\r\n';
+    data = cssheaderStr + data;
+    fs.writeFileSync(originDist + '/css/u.min.css', data);
+});
