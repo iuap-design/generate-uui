@@ -237,7 +237,7 @@ var originGlobs = {
         uuiDist + '/js/u-polyfill.js',
         uuiDist + '/js/u.js',
         './compatible/src/dialog_.js',
-        './neoui-grid/dist/js/u-grid.js',
+        uuiDist + '/js/u-grid.js',
         './compatible/u/validate.js',
         './compatible/u/autocomplete.js',
         './compatible/u/backtop.js',
