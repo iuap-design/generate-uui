@@ -38,7 +38,6 @@
     "less": "^2.7.1"
   },
   "dependencies": {
-    "kero-adapter": "^1.5.1",
-    "neoui-polyfill": "^1.2.1"
+    "kero-adapter": "^1.5.1"
   }
 }
