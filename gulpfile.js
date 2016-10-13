@@ -102,7 +102,7 @@ gulp.task('commit', ['dirdist'], function(){
 gulp.task('dist', ['commit'], function(){
     gulp.run('down');
     gulp.run('new');
-    gulp.run('origin');
+    // gulp.run('origin');
 });
 
 
