@@ -75,7 +75,7 @@ var errHandle = function ( err ) {
 }
 
 gulp.task('dirdist', function(){
-    return gulp.src('./node_modules/kero-adapter/dist/**')
+    return gulp.src(['./node_modules/kero-adapter/dist/**','./node_modules/kero-adapter/CHANGELOG-ALL.md'])
         .pipe(gulp.dest(uuiDist + '/'))
 })
 
