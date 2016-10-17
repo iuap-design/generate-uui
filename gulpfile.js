@@ -236,8 +236,8 @@ var originGlobs = {
         './compatible/biz/knockout-3.2.0.debug.js',
         uuiDist + '/js/u-polyfill.js',
         uuiDist + '/js/u.js',
-        './compatible/src/dialog_.js',
         uuiDist + '/js/u-grid.js',
+        './compatible/src/dialog_.js',
         './compatible/u/validate.js',
         './compatible/u/autocomplete.js',
         './compatible/u/backtop.js',
@@ -350,12 +350,12 @@ gulp.task('origincopy', function() {
 
 gulp.task('origin', ['originassets', 'originjs', 'originless', 'origincopy'],function(){
     var data = fs.readFileSync(originDist + '/css/u.css', 'utf8');
-    cssheaderStr = '@import \'u.core.css\';\r\n@import \'grid.css\';\r\n@import \'tree.css\';\r\n';
+    cssheaderStr = '@import \'oldu.css\';\r\n@import \'u.core.css\';\r\n@import \'grid.css\';\r\n@import \'tree.css\';\r\n';
     data = cssheaderStr + data;
     fs.writeFileSync(originDist + '/css/u.css', data);
 
     var data = fs.readFileSync(originDist + '/css/u.min.css', 'utf8');
-    cssheaderStr = '@import \'u.core.min.css\';\r\n@import \'grid.min.css\';\r\n@import \'tree.min.css\';\r\n';
+    cssheaderStr = '@import \'oldu.min.css\';\r\n@import \'u.core.min.css\';\r\n@import \'grid.min.css\';\r\n@import \'tree.min.css\';\r\n';
     data = cssheaderStr + data;
     fs.writeFileSync(originDist + '/css/u.min.css', data);
 });
