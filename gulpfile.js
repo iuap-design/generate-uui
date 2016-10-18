@@ -148,7 +148,7 @@ var publishConfig = {
     repositoryURL: "http://172.16.51.12:8081/nexus/content/repositories/iUAP-Stagings",
     artifactId: "iuap-design",
     groupId: "com.yonyou.iuap",
-    version: "3.1.0"
+    version: uuiPkg.version
 };
 
 
