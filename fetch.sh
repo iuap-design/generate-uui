@@ -1,12 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
 cdir=`pwd`
 
 # 安装依赖包 && 最新kero-adapter包
 modulePre="$cdir/node_modules/"
-moduleName=(
-  "kero-adapter"
-  )
+moduleName=("kero-adapter")
 
 if [ -d "$modulePre" ]
 then
@@ -29,4 +27,3 @@ then
 else
     npm install
 fi
-
