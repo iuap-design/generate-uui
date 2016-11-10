@@ -10,7 +10,7 @@ module.exports = {
 
 	init: function(filesArr) {
 		// 读取package.json，将里面内容生成头信息
-		var data = fs.readFileSync('./package.json', 'utf8');
+		var data = fs.readFileSync('./node_modules/kero-adapter/package.json', 'utf8');
 		var packageObj = JSON.parse( data );
 
 		var headerStr = '/** \r\n';
