@@ -4,26 +4,23 @@ cdir=`pwd`
 
 # 安装依赖包 && 最新kero-adapter包
 modulePre="$cdir/node_modules/"
-moduleName=("kero-adapter")
+moduleName="kero-adapter"
+modulePath="${modulePre}${moduleName}"
 
 if [ -d "$modulePre" ]
 then
-  for name in ${moduleName[@]}
-  do
-    modulePath="${modulePre}${name}"
     if [ -d $modulePath ]
     then
-      echo "卸载旧版$name"
-      npm uninstall $name
-      echo "安装新版$name"
-      npm install $name
-      echo "已安装成功新版$name"
+      echo "卸载旧版$moduleName"
+      npm uninstall $moduleName
+      echo "安装新版$moduleName"
+      npm install $moduleName
+      echo "已安装成功新版$moduleName"
     else
-      echo "安装新版$name"
-      npm install $name
-      echo "已安装成功新版$name"
+      echo "安装新版$moduleName"
+      npm install $moduleName
+      echo "已安装成功新版$moduleName"
     fi
-  done
 else
     npm install
 fi
