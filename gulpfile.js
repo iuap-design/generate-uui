@@ -9,12 +9,12 @@ var zip = require('gulp-zip');
 var flatmap = require('gulp-flatmap');
 var del = require('del');
 var fs = require('fs');
-var uuiPkg = require('./package.json');
+// var uuiPkg = require('./package.json');
+var uuiPkg = require('./node_modules/kero-adapter/package.json');
 var process = require('child_process');
 var originVersion = '2.0.1';
 
 var version = require('./version.js');
-
 var uuiDist = 'dist/uui/' + uuiPkg.version;
 var originDist = 'dist/uui/' + originVersion;
 
