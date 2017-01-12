@@ -282,6 +282,28 @@ gulp.task('originassets', ['originlocales', 'originexternal'], function(){
         .pipe(gulp.dest(originDist + ''))
 });
 
+/* 替换knockoutjs*/
+gulp.task('replaceko',['originujs'], function(){
+    var fs = require('fs');
+    fs.readFile( originDist + '/js/u.js',function(err,data){
+        if(err) throw err;
+        var data = data.toString(),
+            replace_str = 'factory(window["ko"] = {});',
+            index = data.indexOf('// Support three module loading scenarios');
+        if(index>0){
+            var string = data.substring(index,data.indexOf('}(function(koExports, require){'))
+            data = data.replace(string,replace_str);
+            fs.writeFile(originDist + '/js/u.js',data,function(err){
+                if(err) throw err;
+                console.log('has finished');
+            });   
+        }
+    });
+    return gulp.src(originDist + '/js/u.js')
+            .pipe(uglify()).on('error', errHandle)
+            .pipe(rename('u.min.js'))
+            .pipe(gulp.dest(originDist + '/js'));
+});
 
 /* JS直接使用新的JS加上兼容js*/
 gulp.task('originujs',function(){
@@ -293,7 +315,7 @@ gulp.task('originujs',function(){
             .pipe(gulp.dest(originDist + '/js'));
 });
 
-gulp.task('originjs', ['originujs'],function() {
+gulp.task('originjs', ['replaceko'],function() {
 
 });
 
